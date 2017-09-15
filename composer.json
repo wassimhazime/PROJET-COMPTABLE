@@ -1,0 +1,24 @@
+{
+    "name": "awa/app_comptable",
+    "description": "app comotable facture achats vente",
+    "authors": [
+        {
+            "name": "wassimhazime",
+            "email": "wassim.hazime@gmail.com"
+        }
+    ],
+    "require": {
+        "nette/forms": "^2.4",
+        "filp/whoops": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+           
+            "core\\": "src/core/",
+            "app\\": "src/app/"
+        }
+        ,
+    "classmap":["mapsclass"]
+    }
+    
+}
