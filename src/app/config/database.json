@@ -1,0 +1,12 @@
+{
+   
+    
+                         "$DB":"mysql",
+                        "$dbhost" : "localhost",
+                        "$dbuser" : "comptable", 
+                        "$dbpass" : "achrafwassim", 
+                        "$dbname" :"awacomptable"
+    
+    
+    
+}
