@@ -4,8 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita104ce155248923042bfdf23d69f32cd
+class ComposerStaticInit1d17eee377304cd3997e65e87a91b166
 {
+    public static $files = array (
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'c' => 
         array (
@@ -19,9 +23,23 @@ class ComposerStaticInita104ce155248923042bfdf23d69f32cd
         array (
             'Whoops\\' => 7,
         ),
+        'S' => 
+        array (
+            'Slim\\' => 5,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
+        ),
+        'I' => 
+        array (
+            'Interop\\Container\\' => 18,
+        ),
+        'F' => 
+        array (
+            'FastRoute\\' => 10,
         ),
     );
 
@@ -38,9 +56,39 @@ class ComposerStaticInita104ce155248923042bfdf23d69f32cd
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
         ),
+        'Slim\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/slim/slim/Slim',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Interop\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
+        ),
+        'FastRoute\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/fast-route/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'Pimple' => 
+            array (
+                0 => __DIR__ . '/..' . '/pimple/pimple/src',
+            ),
         ),
     );
 
@@ -140,15 +188,15 @@ class ComposerStaticInita104ce155248923042bfdf23d69f32cd
         'Nette\\Utils\\Strings' => __DIR__ . '/..' . '/nette/utils/src/Utils/Strings.php',
         'Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
-        'wassim\\wassimtest' => __DIR__ . '/../..' . '/mapsclass/test.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita104ce155248923042bfdf23d69f32cd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita104ce155248923042bfdf23d69f32cd::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita104ce155248923042bfdf23d69f32cd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$classMap;
 
         }, null, ClassLoader::class);
     }
