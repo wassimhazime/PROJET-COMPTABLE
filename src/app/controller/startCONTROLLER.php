@@ -36,8 +36,6 @@ class startCONTROLLER extends controller{
          $data= $this->model->getInfo($condition,$link,$select);
          return $this->html->getInfo($data);
     } 
-    
-    
      protected function getTableHTML( $select, $link) {
        $data= $this->model->getTableSQL($select);
         return $this->html->createTableHTML($data, $link='recherche');
