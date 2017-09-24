@@ -6,33 +6,29 @@ class Session
 {
 
    
-    public function __construct()
-    {
-        session_start();
-        
-    }
+ 
 
-    public function detruire()
+    public static function destroy()
     {
         session_destroy();
     }
 
-    
-    public function setAttribut($nom, $valeur)
+
+    public static function set($nom, $valeur)
     {
         $_SESSION[$nom] = $valeur;
     }
 
     
-    public function existeAttribut($nom)
+    public static function has($nom)
     {
         return (isset($_SESSION[$nom]) && $_SESSION[$nom] != "");
     }
 
    
-    public function getAttribut($nom)
+    public static function get($nom)
     {
-        if ($this->existeAttribut($nom)) {
+        if (self::has($nom)) {
             return $_SESSION[$nom];
         }
         else {

@@ -1,6 +1,7 @@
 <?php
 
 namespace core\model\entitys;
+use core\routeur\Session;
 
 class entity {
     private $enfant=array();
@@ -33,12 +34,9 @@ class entity {
     }
    
        public function gethref($key,$link) {
-        return $_SESSION['url'] . $link . ':' . $key . '=' .$this->getValueSyntaxeSql($key) . '';
+           
+        return  Session::get('url') . $link . ':' . $key . '=' .$this->getValueSyntaxeSql($key) . '';
       }
-      public function __toString() {
-          echo  'P';  
-          return 'kkk';
-      }
-
+      
 
 }
