@@ -33,7 +33,8 @@ class startCONTROLLER extends controller{
     
     
      protected function getInfo($condition, $link='recherche',$select='*') {
-         $data= $this->model->getInfo($condition,$link,$select);
+         $data= $this->model->getData($condition,$link,$select);
+         
          return $this->html->getInfo($data);
     } 
      protected function getTableHTML( $select, $link) {

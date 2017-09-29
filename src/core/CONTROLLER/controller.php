@@ -33,13 +33,11 @@ class  controller {
              self::NotFound('controler not found');
         }
         }
-    public function render( $variable = [],$page=null) {
-        if($page==null){
+    public function render( $variable = []) {
+        
             $page=$this->url;
           $this->startTHEMES($page, $variable);  
-        } else {
-           $this->startajax($page, $variable); 
-        }
+       
         
     }
     public function __call($nom, $arguments) {
@@ -59,39 +57,8 @@ class  controller {
                 'templete' . D_S .
                 'themes.php';
     }
-    private function startajax($page, $variable) {
-
-        ob_start();
-
-        $this->charge_page_ajax($page, $variable);
-        $container = ob_get_clean();
-        require ROOT .
-                'src' . D_S .
-                'app' . D_S .
-                'views' . D_S .
-                'templete' . D_S .
-                'ajax.php';
-    }
-    private function charge_page_ajax($page, $variable) {
-        
    
-        if (is_array($variable)) {
-            extract($variable);
-        }
-        $chemin = ROOT .
-                'src' . D_S .
-                'app' . D_S .
-                'views' . D_S .
-                'service_ajax' . D_S .
-                
-                $page . '.php';
-           
-        if (is_file($chemin)) {
-            require $chemin;
-        } else {
-            self::NotFound('action not found');
-        }
-    }
+  
     private function charge_page($page, $variable) {
         
    

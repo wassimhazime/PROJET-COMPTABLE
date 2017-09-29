@@ -33,6 +33,7 @@ class model {
         try {
             if ($select) {
                 $Statement = $this->db->query($sql);
+                
                 $Statement->setFetchMode( PDO::FETCH_CLASS, get_class($this->entity));
             return $Statement->fetchAll();
            } else {
@@ -100,7 +101,7 @@ class model {
        
     }
 
-    public function getInfo($condition,$link,$select) {
+    public function getData($condition,$link,$select) {
      if ($condition == null or isset($condition['vide-null']) )
          {return null;}
     $sql= $this->table->select($select, $condition);
