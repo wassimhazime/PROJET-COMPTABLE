@@ -17,7 +17,6 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
 
-
 dispatcher::load();
 
 $fin= round(microtime(true)-$start,5);

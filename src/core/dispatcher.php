@@ -9,20 +9,46 @@ class dispatcher {
  
 
    public static function load(){
-       
+       Session::set('url', (new  Requete())->getURL());
        $request =new  Requete();
-       Session::set('url', $request->getURL());
-       $parst=Routeur::parst($request) ;
+      $parst=Routeur::parst($request) ;
+     controller::executer($parst);
        
-//       $app = new \Slim\App();
-//
-//$app->get('/hello/{name}', function ($request, $response, $args) {
-//    return $response->write("Hello, " . $args['name']);
+      
+       
+ $app = new \Slim\App([
+       'settings' => ['displayErrorDetails' => true, ],
+]);
+
+//$app->get('/', 
+//        function ($request, $response, $args) {
+//    
+//       $_GET['controleur']="index";
+//      $request =new  Requete();
+//      $parst=Routeur::parst($request) ;
+//     controller::executer($parst);
+//     
+//   return $response->write("Hello, " );
+//     
 //});
 //
+//
+//
+//$app->get('/{controleur}/{action}',
+//        function ($request, $response, $args) {
+//    
+//       $_GET['controleur']=$args['controleur'];
+//       $_GET['action']=$args['action'];
+//      $request =new  Requete();
+//      $parst=Routeur::parst($request) ;
+//     controller::executer($parst);
+//     
+//   return $response->write("Hello, " );
+//     
+//});
 //$app->run();
        
-        controller::executer($parst);
+       
       
    }
     
