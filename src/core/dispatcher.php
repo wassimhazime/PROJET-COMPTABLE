@@ -14,11 +14,11 @@ class dispatcher {
       $parst=Routeur::parst($request) ;
      controller::executer($parst);
        
-      
-       
- $app = new \Slim\App([
-       'settings' => ['displayErrorDetails' => true, ],
-]);
+//      
+//       
+// $app = new \Slim\App([
+//       'settings' => ['displayErrorDetails' => true, ],
+//]);
 
 //$app->get('/', 
 //        function ($request, $response, $args) {

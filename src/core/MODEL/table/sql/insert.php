@@ -1,7 +1,9 @@
 <?php
 namespace core\model\table\sql;
-class insert{
+class Insert{
     
+    public $table;
+    public $value;
   public static function syntaxeSQL($data,$table) {
        
         $id='id_'.$table;
@@ -13,6 +15,34 @@ class insert{
         $sql .= " VALUES ('" . implode("', '", $data) . "') ";
         return $sql;
     }
+    
+    
+    
+    public function insertInto($table) {
+        
+            $this->table = $table;
+        
+        return $this;
+    }
+
+    public function value($data) {
+        
+        $this->value= " (`" . implode("`, `", array_keys($data)) . "`)".
+        " VALUES ('" . implode("', '", $data) . "') ";
+        return $this;
+    }
+
+    function query() {
+        $insert = "INSERT INTO $this->table";
+        $into = $this->value ;
+
+        return $insert . $into ;
+    }
+
+    public function __toString() {
+        return $this->query();
+    }
+
     
     
 }

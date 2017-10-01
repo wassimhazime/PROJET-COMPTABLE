@@ -24,7 +24,7 @@ class controller_commande extends startCONTROLLER{
             $info = $this->getInfo($att);
         }
        
-         $table=$this->getTableHTML(null,'recherche');
+         $table=$this->getTableHTML(null);
          $form= $this->getFormHTML('');
          $this->render(compact('title','info','table','form'));
          

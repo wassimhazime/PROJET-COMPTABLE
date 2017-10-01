@@ -20,7 +20,7 @@ class controller_avoir extends startCONTROLLER{
          $pereSelect=null;
          $enfantSelect=array('id_bl,N_bl,raison_sociale_bl');
          
-         $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect, 'recherche');
+         $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
         
          $this->render(compact('title','info','table'));
          

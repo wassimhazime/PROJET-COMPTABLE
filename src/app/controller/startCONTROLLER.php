@@ -14,15 +14,15 @@ class startCONTROLLER extends controller{
     
     
     
-    function __construct($url,$nom) {
+    function __construct(string $url,string $nom) {
         parent::__construct($url);
         
         $this->nom=$nom;
         if($nom!='index'){
-        $this->cahrge_liaison($nom);}
+        $this->cahrge_liaison( $nom);}
     }
     
-    protected function cahrge_liaison($model,$html='default'){
+    protected function cahrge_liaison(string $model,string $html='default'){
             $this->title=$model;
            $_model= '\\app\\model\\model_'. $model ; 
            $_html='\\app\\html\\html_'. $html; 
@@ -32,23 +32,34 @@ class startCONTROLLER extends controller{
     
     
     
-     protected function getInfo($condition, $link='recherche',$select='*') {
+     protected function getInfo($condition, $link='',$select='*') {
          $data= $this->model->getData($condition,$link,$select);
-         
+        
          return $this->html->getInfo($data);
     } 
-     protected function getTableHTML( $select, $link) {
+     protected function getTableHTML( $select, $link="reche") {
        $data= $this->model->getTableSQL($select);
-        return $this->html->createTableHTML($data, $link='recherche');
+        return $this->html->createTableHTML($data, $link);
         
     } 
-     protected function getTableHTMLrelation( $enfantTable,$enfantSelect,$pereSelect, $link) {
+     protected function getTableHTMLrelation( $enfantTable,$enfantSelect,$pereSelect, $link="reche") {
               
          $data =  $this->model->getTableSQLrelation($enfantTable,$enfantSelect,$pereSelect);
+         
+         var_dump($data);
          
          return $this->html->createTableHTMLrelation($data, $link,$enfantTable);
         
     } 
+    
+    
+    
+    
+    
+    
+    
+    
+    
      public function formEnfant($enfant,$index) {
      
          
@@ -57,10 +68,7 @@ class startCONTROLLER extends controller{
          $Enfant['index']= $index;
        return $Enfant;
      }
-     
-     
-    
-    
+
      protected function getFormHTML($enfant=null,$index=0) {
           
           $metaFORM= $this->model->getMetaFORM(); // object meta

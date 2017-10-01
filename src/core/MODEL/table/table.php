@@ -15,12 +15,15 @@
 //Annulation :rollback
 
 namespace core\model\table;
+use core\model\table\sql\SQL;
 
-use core\model\table\sql\insert;
+
+
 use core\model\table\sql\update;
-use core\model\table\sql\delete;
-use core\model\table\sql\select;
+
+
 use core\model\table\sql\join;
+
 class table {
 
     private $nom;
@@ -46,38 +49,42 @@ class table {
         if ($table == null) {
             $table = $this->nom;
         }
+        return SQL::delete($condition)->from($table);
+        
     }
 
     public function insert($data, $table = null) {
         if ($table == null) {
             $table = $this->nom;
         }
-        $sql = insert::syntaxeSQL($data, $table);
-        return $sql;
+//        $sql = Insert::syntaxeSQL($data, $table);
+//        return $sql;
+        $id='id_'.$table;
+        
+        unset($data[$id]);
+        
+       
+        return SQL::insertInto($table)->value($data);
     }
 
-    public function select($champ, $condition, $table = null) {
-        if ($table == null) {
-            $table = $this->nom;
-        }
-        
-        $sql = select::syntaxeSQL($champ, $condition, $table);
-        
-        return $sql;
+    public function Select($champ, $condition, $table = null) {
+        if ($table == null) {$table = $this->nom;}
+
+          return SQL::select($champ)->from($table);
     }
 
-   public function join($select,$TABLEpere,$TABLEenfant,$condition) {
+   public function join($Select,$TABLEpere,$TABLEenfant,$condition) {
       
         
-        $sql = join::syntaxeSQL($select,$TABLEpere,$TABLEenfant,$condition);
+        $sql = Join::syntaxeSQL($Select,$TABLEpere,$TABLEenfant,$condition);
         
         return $sql;
     } 
     
-     public function joinOrphelins($select,$TABLEpere,$TABLEenfant) {
+     public function joinOrphelins($Select,$TABLEpere,$TABLEenfant) {
       
         
-        $sql = join::orphelins($select,$TABLEpere,$TABLEenfant);
+        $sql = Join::orphelins($Select,$TABLEpere,$TABLEenfant);
         
         return $sql;
     }
@@ -89,8 +96,12 @@ class table {
             $table = $this->nom;
         }
         
-        $sql = select::syntaxeSchemaSQL( $table);
-        return $sql;
+        
+        
+        return SQL::select("COLUMN_NAME")
+                            ->from(" INFORMATION_SCHEMA.COLUMNS ")
+                             ->where("TABLE_SCHEMA = 'comptable'", "TABLE_NAME = '$table'");
+       
     }
 
     

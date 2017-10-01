@@ -27,6 +27,7 @@ class  controller {
           
         $controller= new $controller($url,$nomcontroller);  
         $controller->action = $action;
+        
         $controller->{$controller->action}($param);
         } else {
            

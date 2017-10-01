@@ -35,6 +35,8 @@ class model {
                 $Statement = $this->db->query($sql);
                 
                 $Statement->setFetchMode( PDO::FETCH_CLASS, get_class($this->entity));
+                
+               
             return $Statement->fetchAll();
            } else {
                  $this->db->exec($sql);
@@ -101,7 +103,7 @@ class model {
        
     }
 
-    public function getData($condition,$link,$select) {
+    public function getData($condition,$link,$select) { // error
      if ($condition == null or isset($condition['vide-null']) )
          {return null;}
     $sql= $this->table->select($select, $condition);
@@ -109,6 +111,10 @@ class model {
          return $this->requete($sql);
            
     }
+    
+    
+    
+    
     
     
     public function getTableSQLrelation( $tableEnfant,$selectEnfant,$selectPere = null) {
@@ -119,11 +125,13 @@ class model {
         foreach ($datapere as $row) {
             for ($index = 0; $index < count($tableEnfant); $index++) {
             $sql = $this->table->join($selectEnfant[$index],$TABLEpere,$tableEnfant[$index],$row->$idpere);
+            
             $row->setEnfant($tableEnfant[$index],$this->requete($sql));  
             }
         }
         return $datapere;
     }
+    
     public function getTableSQL($colunne = null, $table = null,$condition=null) {
         if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$table);}
         $sql = $this->table->select($colunne, $condition, $table);
@@ -144,6 +152,8 @@ class model {
           return $data;
           
     }
+   
+    
     
     public function getTableSQL_Orphelin($colunne = null,$TABLEpere=null,$TABLEenfant=null) {
       if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$TABLEenfant);}  
@@ -164,6 +174,17 @@ class model {
           return $data;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public function getMetaFORM() {
         $metaform = array();
         

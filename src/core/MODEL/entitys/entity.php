@@ -8,7 +8,7 @@ class entity {
   
            
     function __construct() {
-        
+      
     }
     
 //add item enfant
@@ -30,13 +30,18 @@ class entity {
     public function getValueSyntaxeSql($key) {
         
         $value =$this->$key;
-        return str_replace(' ', '+', $value);
+        return "'".str_replace(' ', '+', $value)."'";
     }
    
        public function gethref($key,$link) {
            
-        return  Session::get('url') . $link . ':' . $key . '=' .$this->getValueSyntaxeSql($key) . '';
+        return  Session::get('url') . $key . '=' .$this->getValueSyntaxeSql($key) . '';
       }
       
+      
+  public function  toJson(){
+      return  json_encode((array)$this);
+      
+  }
 
 }
