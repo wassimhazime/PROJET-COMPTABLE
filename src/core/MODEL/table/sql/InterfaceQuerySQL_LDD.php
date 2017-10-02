@@ -23,13 +23,13 @@ namespace core\model\table\sql;
 interface InterfaceQuerySQL_LDD {
     public function select() ;
 
-    public function from($table, $alias = null) ;
+    public function from(string $table, string $alias = '') ;
 
     public function where() ;
 
-    public function join($tablejoin, $type = "INNER", $relation = false) ;
+    public function join(string $tablejoin, string $type = "INNER",bool $relation = false) ;
 
-    public function independent($master);
+    public function independent(string $master);
 
     
   

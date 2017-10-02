@@ -22,7 +22,7 @@ namespace core\model\table\sql;
 interface InterfaceQuerySQL_LMD {
     
 
-    public function from($table, $alias = null) ;
+    public function from(string $table, string $alias = '') ;
 
     public function where() ;
 
@@ -33,15 +33,15 @@ interface InterfaceQuerySQL_LMD {
 
     //insert
 
-    public function insertInto($table) ;
+    public function insertInto(string $table) ;
 
-    public function value($data);
+    public function value(array $data);
 
     //update
 
-    public function update($table) ;
+    public function update(string $table) ;
 
-    public function set($data) ;
+    public function set(array $data) ;
 
    
     

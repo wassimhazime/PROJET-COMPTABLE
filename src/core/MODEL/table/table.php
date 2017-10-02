@@ -47,6 +47,9 @@ class table {
         if ($table == null) {
             $table = $this->nom;
         }
+        
+        
+      
         return (new QuerySQL())->select($champ)
                         ->from($table)
                         ->where($condition);

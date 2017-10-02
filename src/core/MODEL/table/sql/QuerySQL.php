@@ -21,24 +21,46 @@ namespace core\model\table\sql;
  *
  * @author Wassim Hazime
  */
-class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, InterfaceQuerySQL_LCT{
+class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, InterfaceQuerySQL_LCT {
 
-   
     private $select = ["*"];
     private $table = [];
     private $conditions = ["1"];
     private $join = [];
     private $action = "";
     private $value;
- /// select query
+
+    /// select query
+    //
+    //select|where(["id","nom"],"age")
+    //from("client_table")|from("client_table","client")
+    
     public function select() {
         $this->action = "select";
-        $this->select = func_get_args();
+        if (func_get_args() != null or ! empty(func_get_args())) {
+            $this->select = [];
+
+            foreach (func_get_args() as $args) {
+
+                
+                    if (is_array($args)) {
+                        foreach ($args as $arg) {
+
+                            $this->select[] = $arg;
+                        }
+                    } else {
+                        
+
+                        $this->select[] = $args;
+                    }
+                
+            }
+        }
         return $this;
     }
 
-    public function from($table, $alias = null) {
-        if (is_null($alias)) {
+    public function from(string $table, string $alias = '') {
+        if ($alias=='') {
             $this->table[] = $table;
         } else {
             $this->table[] = "$table AS $alias";
@@ -47,22 +69,24 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
     }
 
     public function where() {
-        foreach (func_get_args() as $args) {
+        if (func_get_args() != null or ! empty(func_get_args())) {
+            foreach (func_get_args() as $args) {
 
-            if ($args != null and $args[0] !== '') {
+                if ($args != null and $args[0] !== '') {
 
-                if ($this->conditions == ["1"]) {
-                    $this->conditions = [];
-                }
-
-                if (is_array($args)) {
-                    foreach ($args as $arg) {
-
-                        $this->conditions[] = $arg;
+                    if ($this->conditions == ["1"]) {
+                        $this->conditions = [];
                     }
-                } else {
 
-                    $this->conditions[] = $args;
+                    if (is_array($args)) {
+                        foreach ($args as $arg) {
+
+                            $this->conditions[] = $arg;
+                        }
+                    } else {
+
+                        $this->conditions[] = $args;
+                    }
                 }
             }
         }
@@ -70,7 +94,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
         return $this;
     }
 
-    public function join($tablejoin, $type = "INNER", $relation = false) {
+    public function join(string $tablejoin, string $type = "INNER",bool $relation = false) {
 
 
 
@@ -95,7 +119,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
         return $this;
     }
 
-    public function independent($master) {
+    public function independent(string $master) {
         $TABLE = $this->table[0];
 
         $RD = 'd_' . $master . '_' . $TABLE;
@@ -116,14 +140,15 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
     //insert
 
-    public function insertInto($table) {
+    public function insertInto(string $table) {
         $this->action = "insert";
+        $this->table=[];
 
         $this->table[] = $table;
         return $this;
     }
 
-    public function value($data) {
+    public function value(array $data) {
 
         $this->value = " (`" . implode("`, `", array_keys($data)) . "`)" .
                 " VALUES ('" . implode("', '", $data) . "') ";
@@ -132,14 +157,14 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
     //update
 
-    public function update($table) {
+    public function update(string $table) {
         $this->action = "update";
-
+           $this->table=[];
         $this->table[] = $table;
         return $this;
     }
 
-    public function set($data) {
+    public function set(array $data) {
         $id = 'id_' . $this->table[0];
         $l = "";
         foreach ($data as $x => $x_value) {
@@ -168,6 +193,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
         switch ($this->action) {
             case "select":
                 $action = ' SELECT ' . implode(', ', $this->select) . "  FROM  ";
+               
                 return $action . $table . $join . $where;
 
                 break;
