@@ -11,8 +11,8 @@ class dispatcher {
    public static function load(){
        Session::set('url', (new  Requete())->getURL());
        $request =new  Requete();
-      $parst=Routeur::parst($request) ;
-     controller::executer($parst);
+      $route=Routeur::parst($request) ;
+     controller::executer($route);
        
 //      
 //       

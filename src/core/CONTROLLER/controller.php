@@ -2,54 +2,46 @@
 
 namespace core\Controller;
 
-class  controller {
+class controller {
 
     /** Action à réaliser */
-    protected $url;
-    protected $action;
-    function __construct($url,$nom=null) {
-        $this->url = $url;
-    }
-    
-    
-    
+    protected $route;
 
-    public static function executer($parst) {
-        $nomcontroller = $parst['controleur'];
-        $action = $parst['action'];
-        $param = $parst['param'];
-       
+    function __construct($route) {
+        $this->route = $route;
+    }
+
+    public static function executer($route) {
+        $nomcontroller = $route['controleur'];
+        $action = $route['action'];
+        $param = $route['param'];
+
         $controller = '\\app\\controller\\controller_' . $nomcontroller;
-        
-        if (is_file(ROOT.$controller.'.php')or is_file(ROOT.'\\src'.$controller.'.php')) {
-          $url=$nomcontroller.D_S.$action;  
-          
-          
-        $controller= new $controller($url,$nomcontroller);  
-        $controller->action = $action;
-        
-        $controller->{$controller->action}($param);
-        } else {
-           
-             self::NotFound('controler not found');
-        }
-        }
-    public function render( $variable = []) {
-        
-            $page=$this->url;
-          $this->startTHEMES($page, $variable);  
-       
-        
+
+        if (is_file(ROOT . '\\src' . $controller . '.php')) {
+            
+            $obController = new $controller($route);
+            if (is_callable(array($obController, $action))) {
+                
+                call_user_func(array($obController, $action), $param);
+                
+            } else {self::NotFound("action  <b> $action </b>  not found");}
+        } else {self::NotFound("controler  <b> $nomcontroller</b> not found");}
     }
-    public function __call($nom, $arguments) {
-        $this->render($nom, $arguments);//action NotFound()  
+
+
+    public function render($variable = []) {
+
+        
+        
+        $this->startTHEMES($variable);
     }
-    
-    private function startTHEMES($page, $variable) {
+
+    private function startTHEMES( $variable) {
 
         ob_start();
 
-        $this->charge_page($page, $variable);
+        $this->charge_page( $variable);
         $container = ob_get_clean();
         require ROOT .
                 'src' . D_S .
@@ -58,11 +50,10 @@ class  controller {
                 'templete' . D_S .
                 'themes.php';
     }
-   
-  
-    private function charge_page($page, $variable) {
-        
-   
+
+    private function charge_page( $variable) {
+
+$page = $this->route['controleur'].D_S.$this->route['action'];
         if (is_array($variable)) {
             extract($variable);
         }
@@ -71,23 +62,26 @@ class  controller {
                 'app' . D_S .
                 'views' . D_S .
                 'pages_web' . D_S .
-                
                 $page . '.php';
-           
+
         if (is_file($chemin)) {
-            
+
             require $chemin;
         } else {
-            
-            self::NotFound('action not found');
+
+            self::NotFound("erreur chemin page $chemin ");
         }
     }
+
     
     
-    public static function NotFound($msg='not found') {
+    
+    
+    
+    public static function NotFound($msg = 'not found') {
         echo $msg;
         header("HTTP/1.0 404 Not Found");
-        // header("Location: http://www.example.com/");
+       
         require ROOT .
                 'src' . D_S .
                 'app' . D_S .

@@ -149,6 +149,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
     }
 
     public function value(array $data) {
+        
 
         $this->value = " (`" . implode("`, `", array_keys($data)) . "`)" .
                 " VALUES ('" . implode("', '", $data) . "') ";

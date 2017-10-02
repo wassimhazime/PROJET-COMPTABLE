@@ -14,15 +14,16 @@ class startCONTROLLER extends controller{
     
     
     
-    function __construct(string $url,string $nom) {
-        parent::__construct($url);
+    function __construct($route) {
+        parent::__construct($route);
         
-        $this->nom=$nom;
-        if($nom!='index'){
-        $this->cahrge_liaison( $nom);}
+        $this->nom=$route['controleur'];
+        if($route['controleur']!='index'){
+        $this->charge_liaison( $route['controleur']);
+         }
     }
     
-    protected function cahrge_liaison(string $model,string $html='default'){
+    protected function charge_liaison(string $model,string $html='default'){
             $this->title=$model;
            $_model= '\\app\\model\\model_'. $model ; 
            $_html='\\app\\html\\html_'. $html; 
