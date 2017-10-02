@@ -44,12 +44,12 @@ class Routeur
     }
 
     
-    private static function getparam($requete,$default='vide-null=" "'){
-       // echo '<br><br><br><br><br><br><br><br><br>';
-        
-        $param = $requete->getParametreGET('param',1);
+    private static function getparam($requete,$default=null){
+   
        
+        $param = $requete->getParametreGET('param',$default);
         
+        $param = explode("/", $param);
      
         
         return $param ;

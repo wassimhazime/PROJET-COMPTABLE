@@ -1,108 +1,80 @@
 <?php
 
-//– LDD, LMD & LCT
-//LDD : langage de< définition> des données
-//Colonnes
-//Tables
-//Contraintes
-//Tables et contraintes
-//LMD : langage de <manipulation> des données
-//Insertion :insert
-//Mise à jour :update
-//Suppression :delete
-//LCT : langage de< contrôle> des transactions
-//Validation :commit
-//Annulation :rollback
+
 
 namespace core\model\table;
-use core\model\table\sql\SQL;
 
+use core\model\table\sql\QuerySQL;
 
-
-use core\model\table\sql\update;
-
-
-use core\model\table\sql\join;
 
 class table {
 
     private $nom;
+    private $id;
+
     function getNom() {
         return $this->nom;
     }
 
-    
-    public function __construct($nom ) {
+    public function __construct($nom) {
         $this->nom = $nom;
+        $this->id = 'id_' . $nom;
     }
 
-    public function update($data, $table = null) {
+    public function update($data, $condeion, $table = null) {
         if ($table == null) {
             $table = $this->nom;
         }
-
-        $sql = update::syntaxeSQL($data, $table);
-        return $sql;
+        return (new QuerySQL())->update($table)->set($data)->where($condeion);
     }
 
     public function delete($condition, $table = null) {
         if ($table == null) {
             $table = $this->nom;
         }
-        return SQL::delete($condition)->from($table);
-        
+        return (new QuerySQL())->delete($condition)->from($table);
     }
 
     public function insert($data, $table = null) {
         if ($table == null) {
             $table = $this->nom;
         }
-//        $sql = Insert::syntaxeSQL($data, $table);
-//        return $sql;
-        $id='id_'.$table;
-        
-        unset($data[$id]);
-        
-       
-        return SQL::insertInto($table)->value($data);
+        unset($data[$this->id]);
+        return (new QuerySQL())->insertInto($table)->value($data);
     }
 
     public function Select($champ, $condition, $table = null) {
-        if ($table == null) {$table = $this->nom;}
-
-          return SQL::select($champ)->from($table);
-    }
-
-   public function join($Select,$TABLEpere,$TABLEenfant,$condition) {
-      
-        
-        $sql = Join::syntaxeSQL($Select,$TABLEpere,$TABLEenfant,$condition);
-        
-        return $sql;
-    } 
-    
-     public function joinOrphelins($Select,$TABLEpere,$TABLEenfant) {
-      
-        
-        $sql = Join::orphelins($Select,$TABLEpere,$TABLEenfant);
-        
-        return $sql;
-    }
-    
-    
-    
-    public function selectSchema( $table = null) {
         if ($table == null) {
             $table = $this->nom;
         }
-        
-        
-        
-        return SQL::select("COLUMN_NAME")
-                            ->from(" INFORMATION_SCHEMA.COLUMNS ")
-                             ->where("TABLE_SCHEMA = 'comptable'", "TABLE_NAME = '$table'");
-       
+        return (new QuerySQL())->select($champ)
+                        ->from($table)
+                        ->where($condition);
     }
 
-    
+    public function join($Select, $TABLEpere, $TABLEenfant, $condition) {
+        return (new QuerySQL())->select($Select)
+                        ->from($TABLEpere)
+                        ->join($TABLEenfant, "LEFT", true)
+                        ->join("raison_sociale")
+                        ->where($condition);
+    }
+
+    public function independent($Select, $TABLEpere, $TABLEenfant) {
+
+        return (new QuerySQL())->select($Select)
+                        ->from($TABLEenfant)
+                        ->join("raison_sociale")
+                        ->independent($TABLEpere);
+    }
+
+    public function selectSchema($table = null) {
+        if ($table == null) {
+            $table = $this->nom;
+        }
+        return (new QuerySQL())->select("COLUMN_NAME")
+                        ->from(" INFORMATION_SCHEMA.COLUMNS ")
+                        ->where("TABLE_SCHEMA = 'comptable'", "TABLE_NAME = '$table'");
+    }
+
 }

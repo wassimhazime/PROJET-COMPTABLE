@@ -104,10 +104,11 @@ class model {
     }
 
     public function getData($condition,$link,$select) { // error
-     if ($condition == null or isset($condition['vide-null']) )
+        
+     if ($condition[0] == "" or $condition == ""  )
          {return null;}
     $sql= $this->table->select($select, $condition);
-    $sql = str_replace($link.':', '', $sql);
+    
          return $this->requete($sql);
            
     }
@@ -124,7 +125,7 @@ class model {
 
         foreach ($datapere as $row) {
             for ($index = 0; $index < count($tableEnfant); $index++) {
-            $sql = $this->table->join($selectEnfant[$index],$TABLEpere,$tableEnfant[$index],$row->$idpere);
+            $sql = $this->table->join($selectEnfant[$index],$TABLEpere,$tableEnfant[$index],$idpere ." = ". $row->$idpere);
             
             $row->setEnfant($tableEnfant[$index],$this->requete($sql));  
             }
@@ -157,7 +158,7 @@ class model {
     
     public function getTableSQL_Orphelin($colunne = null,$TABLEpere=null,$TABLEenfant=null) {
       if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$TABLEenfant);}  
-      $sql = $this->table->joinOrphelins($colunne, $TABLEpere, $TABLEenfant);
+      $sql = $this->table->independent($colunne, $TABLEpere, $TABLEenfant);
         $data = $this->requete($sql);
           //si les champs de la table et vide  
         if ($data == null) {

@@ -33,6 +33,7 @@ class startCONTROLLER extends controller{
     
     
      protected function getInfo($condition, $link='',$select='*') {
+        
          $data= $this->model->getData($condition,$link,$select);
         
          return $this->html->getInfo($data);
@@ -46,7 +47,7 @@ class startCONTROLLER extends controller{
               
          $data =  $this->model->getTableSQLrelation($enfantTable,$enfantSelect,$pereSelect);
          
-         var_dump($data);
+        
          
          return $this->html->createTableHTMLrelation($data, $link,$enfantTable);
         
