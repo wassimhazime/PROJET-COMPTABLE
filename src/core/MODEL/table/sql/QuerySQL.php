@@ -23,44 +23,92 @@ namespace core\model\table\sql;
  */
 class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, InterfaceQuerySQL_LCT {
 
-    private $select = ["*"];
+    private $column = ["*"];
     private $table = [];
     private $conditions = ["1"];
     private $join = [];
     private $action = "";
     private $value;
 
-    /// select query
-    //
-    //select|where(["id","nom"],"age")
-    //from("client_table")|from("client_table","client")
-    
-    public function select() {
-        $this->action = "select";
-        if (func_get_args() != null or ! empty(func_get_args())) {
-            $this->select = [];
+    // outils
+    private function isAssoc(array $arr) {
+        if (array() === $arr)
+            return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
 
-            foreach (func_get_args() as $args) {
+    private function setColumn(array $columns) {
+        if ($columns != null or ! empty($columns)) {
+            if ($this->column[0] == "*") {
+                $this->column = [];
+            }
 
-                
-                    if (is_array($args)) {
-                        foreach ($args as $arg) {
+            foreach ($columns as $args) {
 
-                            $this->select[] = $arg;
+
+                if (is_array($args)) {
+
+                    if ($this->isAssoc($args)) {
+                        foreach ($args as $column => $alias) {
+
+                            $this->column[] = "`$column` AS `$alias`";
                         }
                     } else {
-                        
+                        foreach ($args as $column) {
 
-                        $this->select[] = $args;
+                            $this->column[] = " `$column` ";
+                        }
                     }
-                
+                } else {
+
+
+                    $this->column[] = $args;
+                }
             }
         }
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function column() {
+        /// column query
+//(new QuerySQL())->select()->
+        // ->column("nom,age,adress") or 
+        // ->column("nom")->column("age")->column("adress as ADRESS") or 
+        // ->column("nom","age","adress") or
+        // ->column(["nom","age","adress"])or 
+        // ->column(["nom","age"],["adress"],"prenom")
+        //**** alias
+        //->column("nom",["age"=>"age Client"],["adress"])
+        //->column("nom",["age as `age Client`"],["adress"])
+        $this->setColumn(func_get_args());
         return $this;
     }
 
+    public function select() {
+        /// select query
+        //(new QuerySQL())->
+        // ->select("nom,age,adress as ADRESS ") or 
+        // ->select("nom) ->select("age") ->select("adress as ADRESS") or 
+        // ->select("nom","age","adress") or
+        // ->select(["nom","age","adress"])or 
+        // ->select(["nom","age"],["adress"],"prenom")
+        //**** alias
+        //->select("nom",["age"=>"age Client"],["adress"])
+        //->select("nom",["age as `age Client`"],["adress"]) 
+        $this->action = "select";
+        $this->setColumn(func_get_args());
+        return $this;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function from(string $table, string $alias = '') {
-        if ($alias=='') {
+        /// form query
+        //from("client_table")
+        //**** alias
+        //from("client_table","client")
+
+        if ($alias == '') {
             $this->table[] = $table;
         } else {
             $this->table[] = "$table AS $alias";
@@ -68,24 +116,53 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
         return $this;
     }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function where() {
+        /// query where
+//
+//select()
+//                        ->from("test")
+//                        ->where(["id_mode_paiement"=>"38"])
+//                        ->where("id=5")
+//                        ->where("nom=achraf","age=26")
+//                        ->where(["ville=bm","d=12/6/9"],"jour=77")
+//                        ->where(["client"=>"c66"])
+//                        
+// SELECT *  FROM  test 
+// WHERE ( id_mode_paiement = 38 ) 
+// AND ( id=5 ) 
+// AND ( nom=achraf ) AND ( age=26 ) 
+// AND ( ville=bm ) AND ( d=12/6/9 ) AND ( jour=77 ) 
+// AND ( client = c66 )
+//                        
+//
+
         if (func_get_args() != null or ! empty(func_get_args())) {
             foreach (func_get_args() as $args) {
 
-                if ($args != null and $args[0] !== '') {
+                if ($args != null or ! empty($args)) {
 
                     if ($this->conditions == ["1"]) {
                         $this->conditions = [];
                     }
 
                     if (is_array($args)) {
-                        foreach ($args as $arg) {
+                        if ($this->isAssoc($args)) {
+                            foreach ($args as $column => $condition) {
 
-                            $this->conditions[] = $arg;
+                                $this->conditions[] = "( $column = $condition )";
+                            }
+                        } else {
+
+
+                            foreach ($args as $arg) {
+
+                                $this->conditions[] = "( $arg )";
+                            }
                         }
                     } else {
 
-                        $this->conditions[] = $args;
+                        $this->conditions[] = "( $args )";
                     }
                 }
             }
@@ -94,11 +171,120 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
         return $this;
     }
 
-    public function join(string $tablejoin, string $type = "INNER",bool $relation = false) {
+    public function whereBETWEEN(string $column, $valeur1, $valeur2) {
+        //query BETWEEN
+        //L’intervalle peut être constitué de chaînes de caractères, de nombres ou de dates
+        //new QuerySQL())->select()
+        //                  ->from('test')
+        //                  ->whereBETWEEN("id", 6, 10)
+        //SELECT *  FROM  test WHERE ( id BETWEEN '6' AND '10' ) 
+        //
+        
+        $this->where("$column BETWEEN '$valeur1' AND '$valeur2'");
+        return $this;
+    }
+
+    public function whereIn(string $column, array $range) {
+        //query IN
+        //
+        //(new QuerySQL())->select()
+        //  ->from("test")
+        // ->whereIn("id", [37,38,48])
+        //SELECT *  FROM  test WHERE ( id IN  ( 37 , 38 , 48 )  )
+        $range = ' ( ' . implode(' , ', $range) . ' )';
+
+        $this->where("$column IN $range ");
+        return $this;
+    }
+
+    public function whereLike(string $column, $LIKE) {
+        //query Like
+        //Ce mot-clé permet d’effectuer une recherche sur un modèle 
+        //particulier. Il est par exemple possible de rechercher les 
+        //enregistrements dont la valeur d’une colonne commence par
+        // telle ou telle lettre. Les modèles de recherches sont multiple.
+        // 
+        //(new QuerySQL())->select()
+        //               ->from('test')
+        //               ->whereLike("id",["3%","4%"] )
+        //              ->whereLike("nom",["a%","A%"] )
+        //              ->whereLike("age","2_" )
+        //SELECT *  FROM  test WHERE (
+        // ( `id`  LIKE '3%'  )         OR ( `id`  LIKE '4%'  )  ) 
+        // AND ( ( `nom`  LIKE 'a%'  )  OR ( `nom`  LIKE 'A%'  )  )
+        //  AND ( age Like '2_'  )
+
+        if (is_array($LIKE)) {
+
+            $liks = [];
+            foreach ($LIKE as $link) {
+
+                $liks[] = "( `$column`  LIKE '$link'  ) ";
+            }
 
 
 
-        if ($relation) {
+            $this->where(implode(' OR ', $liks));
+        } else {
+            $this->where("$column Like '$LIKE' ");
+        }
+        return $this;
+    }
+
+    public function whereNot(string $column, string $value) {
+        // qury not
+        //
+        //new QuerySQL())->
+        // select()->from('test')
+        //->whereNot("age","20" )
+        //SELECT *  FROM  test WHERE ( age != 20  )
+        //
+        $this->where("$column != $value ");
+        return $this;
+    }
+
+    public function whereNotBETWEEN(string $column, $valeur1, $valeur2) {
+        // query notbetwen inverst betwin
+
+        $this->where("$column NOT BETWEEN '$valeur1' AND '$valeur2'");
+        return $this;
+    }
+
+    public function whereNULL(string $column) {
+        // is null 
+        $this->where("$column IS NULL");
+        return $this;
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function join(string $tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
+
+//
+//( new QuerySQL())->select()
+                       // ->from('produit')
+                       // ->join("categorie")
+                      
+//SELECT *  FROM  produit INNER JOIN categorie ON id_categorie  = categorie_produit
+        
+//or
+//select()
+                       // ->from('produit')
+                       // ->join("categorie","INNER",FALSE,"id_categorie=pro_categorie")
+                       
+//    SELECT *  FROM  produit INNER JOIN categorie ON  id_categorie=pro_categorie     
+        
+        
+//or 
+//                      select() ->from('produit')
+                        //->join("categorie","INNER",true)
+//
+//SELECT *  FROM  produit 
+// INNER JOIN d_produit_categorie ON id_produit=id_produit_detail     
+// INNER JOIN categorie           ON id_categorie=id_categorie_detail
+//        
+        
+  if ($relation) {
             $TABLEpere = $this->table[0];
             $TABLEenfant = $tablejoin;
             $RD = 'd_' . $TABLEpere . '_' . $TABLEenfant;
@@ -110,25 +296,58 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
                     . " $type JOIN $TABLEenfant         ON id_" . $TABLEenfant . "=id_" . $TABLEenfant . "_detail     ";
         } else {
             //INNER JOIN raison_sociale ON id_raison_sociale = raison_sociale_facture
+            if ($conditions == '') {
 
-            $this->join[] = " $type JOIN $tablejoin ON"
-                    . " id_" . $tablejoin . "  = " . $tablejoin . "_" . $this->table[0];
+                $this->join[] = " $type JOIN $tablejoin ON"
+                        . " id_" . $tablejoin . "  = " . $tablejoin . "_" . $this->table[0];
+            } else {
+                $join = " $type JOIN $tablejoin ON  "
+                        . $conditions ;
+
+                $this->join[] = $join;
+            }
         }
 
 
         return $this;
     }
+    public function joinAlias(string $tablejoin, string $alias,string $conditions, $type = "INNER") {
+    
+        //select()
+                       // ->from('produit')
+                       // ->joinAlias("Categorie","c","c.id_categorie=pro_categorie")
+        //
+        //SELECT *  FROM  produit INNER JOIN Categorie AS c ON  c.id_categorie=pro_categorie
+        //
+      $join = " $type JOIN $tablejoin AS $alias ON  "
+                    . $conditions ;
 
-    public function independent(string $master) {
-        $TABLE = $this->table[0];
-
-        $RD = 'd_' . $master . '_' . $TABLE;
-        //LEFT JOIN d_facture_bl ON id_bl_detail =id_bl
-        $this->join[] = "LEFT JOIN  $RD ON id_" . $TABLE . "_detail =id_" . $TABLE;
-        // WHERE id_bl_detail IS NULL
-        $this->where("id_" . $TABLE . "_detail IS NULL");
+            $this->join[] = $join;
+        
         return $this;
     }
+
+    public function independent(string $master) {
+        //
+        //select()
+                //        ->from('produit')
+                //        ->independent("categorie")
+        //SELECT *  FROM  produit 
+        //LEFT JOIN d_categorie_produit ON id_produit_detail =id_produit 
+        //WHERE (  id_produit_detail IS NULL )
+        //
+        
+        $TABLE = $this->table[0];
+
+        $RD = ' d_' . $master . '_' . $TABLE;
+        //LEFT JOIN d_facture_bl ON id_bl_detail =id_bl
+        $this->join[] = " LEFT JOIN  $RD ON id_" . $TABLE . "_detail =id_" . $TABLE;
+        // WHERE id_bl_detail IS NULL
+        $this->where(" id_" . $TABLE . "_detail IS NULL");
+        return $this;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     ///delete
     public function delete() {
@@ -142,14 +361,14 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
     public function insertInto(string $table) {
         $this->action = "insert";
-        $this->table=[];
+        $this->table = [];
 
         $this->table[] = $table;
         return $this;
     }
 
     public function value(array $data) {
-        
+
 
         $this->value = " (`" . implode("`, `", array_keys($data)) . "`)" .
                 " VALUES ('" . implode("', '", $data) . "') ";
@@ -160,7 +379,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
     public function update(string $table) {
         $this->action = "update";
-           $this->table=[];
+        $this->table = [];
         $this->table[] = $table;
         return $this;
     }
@@ -193,8 +412,8 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
         switch ($this->action) {
             case "select":
-                $action = ' SELECT ' . implode(', ', $this->select) . "  FROM  ";
-               
+                $action = ' SELECT ' . implode(', ', $this->column) . "  FROM  ";
+
                 return $action . $table . $join . $where;
 
                 break;
@@ -218,7 +437,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
                 break;
 
             default:
-                $action = ' SELECT ' . implode(', ', $this->select) . "  FROM  ";
+                $action = ' SELECT ' . implode(', ', $this->column) . "  FROM  ";
                 return $action . $table . $join . $where;
                 break;
         }

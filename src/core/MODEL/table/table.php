@@ -47,12 +47,21 @@ class table {
         if ($table == null) {
             $table = $this->nom;
         }
-        
-        
+     ///////test query sql   
+        var_dump(
+                
+                
+               ( new QuerySQL())->
+                select()
+                        ->from('produit')
+                        ->independent("categorie")
+               
+                
+                ."");
       
         return (new QuerySQL())->select($champ)
                         ->from($table)
-                        ->where($condition);
+                         ->where($condition);
     }
 
     public function join($Select, $TABLEpere, $TABLEenfant, $condition) {
@@ -60,7 +69,8 @@ class table {
                         ->from($TABLEpere)
                         ->join($TABLEenfant, "LEFT", true)
                         ->join("raison_sociale")
-                        ->where($condition);
+                        ->where($condition)
+                ;
     }
 
     public function independent($Select, $TABLEpere, $TABLEenfant) {
