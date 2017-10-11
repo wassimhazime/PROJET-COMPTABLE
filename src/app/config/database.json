@@ -5,7 +5,7 @@
                         "$dbhost" : "localhost",
                         "$dbuser" : "comptable", 
                         "$dbpass" : "achrafwassim", 
-                        "$dbname" :"awacomptable"
+                        "$dbname" :"comptable"
     
     
     

@@ -16,7 +16,7 @@ class AbstractHTML {
  
     public function chargeListHtml($item,$filds, $param = '', $balis = 'option ') {
         
-       $id='id_'.$filds;
+       $id='id';
        
         $option = "<$balis $param " . " value =rien>select champ</$balis>";
         foreach ($item as $c) {

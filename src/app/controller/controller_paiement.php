@@ -17,7 +17,7 @@ class controller_paiement extends startCONTROLLER{
          $info = $this->getInfo($att);
          $enfantTable=array('facture');
          $pereSelect=null;
-         $enfantSelect=array('id_facture,N_facture,raison_sociale_facture');
+         $enfantSelect=['id,N,raison_sociale'];
          
          $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
         

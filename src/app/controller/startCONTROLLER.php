@@ -48,7 +48,13 @@ class startCONTROLLER extends controller{
               
          $data =  $this->model->getTableSQLrelation($enfantTable,$enfantSelect,$pereSelect);
          
-        
+         
+         
+        $this->model->show(['id','N',
+                    ['raison_sociale'=>'raison_sociale'], // automatique
+                    ['bl'=>['id ','N']],
+                    ['facture'=>['id','N']]
+                 ]);
          
          return $this->html->createTableHTMLrelation($data, $link,$enfantTable);
         
@@ -66,6 +72,7 @@ class startCONTROLLER extends controller{
      
          
          $dataEnfant= $this->model->getTableSQL_Orphelin(null,$this->nom,$enfant);
+         
          $Enfant['data']= $this->html->multiselect($dataEnfant,$enfant);
          $Enfant['index']= $index;
        return $Enfant;
@@ -74,8 +81,7 @@ class startCONTROLLER extends controller{
      protected function getFormHTML($enfant=null,$index=0) {
           
           $metaFORM= $this->model->getMetaFORM(); // object meta
-          
-        
+      
          return $this->html->getFormHTML($metaFORM,$enfant,$index) ;
          
     }

@@ -13,13 +13,13 @@
 //Validation :commit
 //Annulation :rollback
 
-namespace core\model\table\sql;
+namespace core\model\Query;
 
 /**
  *
  * @author Wassim Hazime
  */
-interface InterfaceQuerySQL_LMD {
+interface I_QuerySQL_LMD {
     
 
     public function from(string $table, string $alias = '') ;

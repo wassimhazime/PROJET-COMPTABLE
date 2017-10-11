@@ -14,7 +14,7 @@ class controller_bl extends startCONTROLLER{
          $info = $this->getInfo($att);
          $enfantTable=['commande'];
          $pereSelect=null;//'id_facture,N_facture,raison_sociale_facture';
-         $enfantSelect=['id_commande,objectif_commande,raison_sociale_commande,date_commande']; 
+         $enfantSelect=['id,objectif,raison_sociale']; 
          
          $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
         

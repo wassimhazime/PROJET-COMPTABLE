@@ -14,9 +14,12 @@ class controller_facture extends startCONTROLLER{
          $title = $this->html->getTitle($this->title);
          $info = $this->getInfo($att);
          $enfantTable=['bl'];
-         $enfantSelect=['id_bl,N_bl,RAISON_SOCIALE_raison_sociale as raison_sociale'];
+         $enfantSelect=['id,N,raison_sociale'];
          $pereSelect=null;//'id_facture,N_facture,raison_sociale_facture';
-          
+         $select=['id','N'
+             ,['raison_sociale'=>'raison_sociale'],
+              ['bl'=>['id','N']]
+         ] ;
          
          $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
         

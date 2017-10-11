@@ -18,7 +18,7 @@ class controller_avoir extends startCONTROLLER{
          $info = $this->getInfo($att);
          $enfantTable=array('bl');
          $pereSelect=null;
-         $enfantSelect=array('id_bl,N_bl,raison_sociale_bl');
+         $enfantSelect=array('id,N,raison_sociale');
          
          $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
         

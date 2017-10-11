@@ -91,10 +91,9 @@ class  FormHTML  extends AbstractHTML{
                        //$filde =str_replace($suffixe, '', $metaHTML['name']);
                    
                        
-                        $len=strlen($suffixe);
-                        $delete=($len)*-1;
-                        $filde = substr($metaHTML['name'], 0, $delete);
-                       
+                        
+                        $filde = $metaHTML['name'];
+                        
                         $option = $this->chargeListHtml($metaFORM[$filde],$filde);
                         
                         $metaHTML['inputf'] = $option . "</" . $metaHTML['balise'] . ">";

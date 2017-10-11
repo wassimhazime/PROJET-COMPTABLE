@@ -14,13 +14,13 @@
 //Validation :commit
 //Annulation :rollback
 
-namespace core\model\table\sql;
+namespace core\model\Query;
 
 /**
  *
  * @author Wassim Hazime
  */
-interface InterfaceQuerySQL_LCT {
+interface I_QuerySQL_LCT {
 
 
     

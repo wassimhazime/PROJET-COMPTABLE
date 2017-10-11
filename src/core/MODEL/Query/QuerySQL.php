@@ -14,14 +14,14 @@
 //Validation :commit
 //Annulation :rollback
 
-namespace core\model\table\sql;
+namespace core\model\Query;
 
 /**
  * Description of QuerySQL
  *
  * @author Wassim Hazime
  */
-class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, InterfaceQuerySQL_LCT {
+class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT {
 
     private $column = ["*"];
     private $table = [];
@@ -51,12 +51,12 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
                     if ($this->isAssoc($args)) {
                         foreach ($args as $column => $alias) {
 
-                            $this->column[] = "`$column` AS `$alias`";
+                            $this->column[] = "$column AS `$alias`";
                         }
                     } else {
                         foreach ($args as $column) {
 
-                            $this->column[] = " `$column` ";
+                            $this->column[] = " $column ";
                         }
                     }
                 } else {
@@ -104,7 +104,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
     public function from(string $table, string $alias = '') {
         /// form query
-        //from("client_table")
+        //from("client_table")->from("adress_table")
         //**** alias
         //from("client_table","client")
 
@@ -257,9 +257,10 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public function join(string $tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
-
+    private function joinstring( $tablejoin, string $type = "INNER", bool $relation = false, string $conditions = ''){
+     
+        
+        
 //
 //( new QuerySQL())->select()
                        // ->from('produit')
@@ -283,31 +284,49 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 // INNER JOIN d_produit_categorie ON id_produit=id_produit_detail     
 // INNER JOIN categorie           ON id_categorie=id_categorie_detail
 //        
+        $TABLEpere = $this->table[0];
+        
         
   if ($relation) {
-            $TABLEpere = $this->table[0];
+            
             $TABLEenfant = $tablejoin;
-            $RD = 'd_' . $TABLEpere . '_' . $TABLEenfant;
+            $RD = 'R_' . $TABLEpere . '_' . $TABLEenfant;
 
 
             //LEFT JOIN d_facture_bl     ON id_facture              =id_facture_detail
-            $this->join[] = "  $type JOIN $RD     ON id_" . $TABLEpere . "=id_" . $TABLEpere . "_detail    "
-                    // LEFT      JOIN  bl             on id_bl                        =id_bl_detail
-                    . " $type JOIN $TABLEenfant         ON id_" . $TABLEenfant . "=id_" . $TABLEenfant . "_detail     ";
+            $this->join[] = "  $type JOIN $RD      ON $TABLEpere.id =$RD.id_" . $TABLEpere 
+            // LEFT      JOIN  bl             on id_bl                        =id_bl_detail
+                    . " $type JOIN $TABLEenfant   ON $TABLEenfant.id =$RD.id_" . $TABLEenfant ;
         } else {
             //INNER JOIN raison_sociale ON id_raison_sociale = raison_sociale_facture
             if ($conditions == '') {
 
-                $this->join[] = " $type JOIN $tablejoin ON"
-                        . " id_" . $tablejoin . "  = " . $tablejoin . "_" . $this->table[0];
+                $this->join[] = " $type JOIN $tablejoin ON  $tablejoin.id  = $TABLEpere.$tablejoin" ;
             } else {
-                $join = " $type JOIN $tablejoin ON  "
-                        . $conditions ;
+                $join = " $type JOIN $tablejoin ON  " . $conditions ;
 
                 $this->join[] = $join;
             }
-        }
+        }   
+        
+    }
 
+    public function join( $tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') {
+
+        
+        
+    if(is_array($tablejoin))  {
+        
+        foreach ($tablejoin as $tableJ) {
+            
+            $this->joinstring($tableJ, $type, $relation, $conditions) ;  
+            
+        }
+        
+    } else {
+        
+         $this->joinstring($tablejoin, $type, $relation, $conditions) ; 
+        }  
 
         return $this;
     }
@@ -339,16 +358,19 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
         
         $TABLE = $this->table[0];
 
-        $RD = ' d_' . $master . '_' . $TABLE;
+        $RD = ' R_' . $master . '_' . $TABLE;
         //LEFT JOIN d_facture_bl ON id_bl_detail =id_bl
-        $this->join[] = " LEFT JOIN  $RD ON id_" . $TABLE . "_detail =id_" . $TABLE;
+        $this->join[] = " LEFT JOIN  $RD ON $RD.id_" . $TABLE . " =$TABLE.id";
         // WHERE id_bl_detail IS NULL
-        $this->where(" id_" . $TABLE . "_detail IS NULL");
+        $this->where(" $RD.id_" . $TABLE . " IS NULL");
         return $this;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
+  
     
-
+ public function group($column, $direction = null) {
+        
+    }
     ///delete
     public function delete() {
         $this->action = "delete";
@@ -396,7 +418,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
                 }
             }
         }
-        $this->value = $l;
+        $this->value =" SET ". $l;
         return $this;
     }
 
@@ -431,7 +453,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
 
             case "update":
                 $action = 'UPDATE  ';
-                $set = " SET " . $this->value;
+                $set = " " . $this->value;
                 return $action . $table . $set . $where;
 
                 break;
@@ -449,5 +471,7 @@ class QuerySQL implements InterfaceQuerySQL_LDD, InterfaceQuerySQL_LMD, Interfac
     public function __toString() {
         return $this->query();
     }
+
+   
 
 }

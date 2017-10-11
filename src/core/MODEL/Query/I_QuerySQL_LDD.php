@@ -14,13 +14,13 @@
 //Validation :commit
 //Annulation :rollback
 
-namespace core\model\table\sql;
+namespace core\model\Query;
 
 /**
  *
  * @author Wassim Hazime
  */
-interface InterfaceQuerySQL_LDD {
+interface I_QuerySQL_LDD {
     public function select() ;
 
     public function from(string $table, string $alias = '') ;
@@ -37,10 +37,12 @@ interface InterfaceQuerySQL_LDD {
  
     
 //join
-    public function join(string $tablejoin, string $type = "INNER",bool $relation = false,string $conditions='') ;
+    public function join( $tablejoin, string $type = "INNER",bool $relation = false,string $conditions='') ;
     public function joinAlias(string $table,string $alias,string $conditions, $type = "INNER");
     public function independent(string $master);
 
+   // group 
+public function group($column, $direction = null);
     
    //having
 //public function having($column, $value);
@@ -52,7 +54,7 @@ interface InterfaceQuerySQL_LDD {
     
 
 
-//public function group($column, $direction = null);
+
 
 
 
