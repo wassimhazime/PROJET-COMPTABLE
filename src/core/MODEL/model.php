@@ -1,56 +1,28 @@
 <?php
 namespace core\model;
-use core\model\base_donnee\database;
+
 use core\model\entitys\entity;
 use core\model\Statement\Statement;
-use \PDO;
-use \PDOException;
 
-
-use core\notify\notify;
 
 class model {
-    private $db;
-    public $table;
-    public $entity;
-    
 
-            
-    public function __construct( $table, $db = null) {
+   
+    public $entity;
+    private $statement;
+
+
+
+    public function __construct( $table) {
 
         
         $this->statement = new Statement($table);
-        $this->entity=new entity(); 
-        if ($db === null) {
-            $this->db = database::getDB();
-        } else {
-            $this->db = $db;
+        
+    
+        
         }
-    }
     
-    public function requete($sql, $select = true) {
-      
-        try {
-            if ($select) {
-                $Statement = $this->db->query($sql);
-                
-                $Statement->setFetchMode( PDO::FETCH_CLASS, get_class($this->entity));
-                
-               
-            return $Statement->fetchAll();
-           } else {
-                 $this->db->exec($sql);
-                 return $this->db->lastInsertId(); 
-            }
-        } catch (PDOException $exc) {
-            notify::send_Notify($exc->getMessage());
-        }
-    }
-    
-    public function getNameTable() {
-        return $this->requete("SHOW TABLES WHERE Tables_in_comptable not  LIKE 'r\_%'");
-    }
-    
+
     public function setData($data,$relation=null) {
         unset($data['ajout_data']);
 
@@ -76,7 +48,7 @@ class model {
 
         if ($data[$id] == '') {
            
-            $idPere = $this->requete($this->statement->insert($data), false);
+            $idPere = $this->execute($this->statement->insert($data), false);
             
             if ($dataRelation != null) {
                 if (is_array($RL)) {
@@ -88,20 +60,20 @@ class model {
                             $item[$id . '_detail'] = $idPere;
                             $item['id_' . $RD . '_detail'] = $enfant;
                             
-                            $this->requete($this->statement->insert($item, $nomTableRelation[$RD]), false);
+                            $this->execute($this->statement->insert($item, $nomTableRelation[$RD]), false);
                         }
                     }
                 } else {
                     foreach ($dataRelation as $enfant) {
                         $item[$id . '_detail'] = $idPere;
                         $item['id_' . $relation . '_detail'] = $enfant;
-                        $this->requete($this->statement->insert($item, $nomTableRelation), false);
+                        $this->execute($this->statement->insert($item, $nomTableRelation), false);
                     }
                 }
             }
         } else {
             
-             $this->requete($this->statement->update($data), false);
+             $this->execute($this->statement->update($data), false);
         }
 
        
@@ -112,15 +84,16 @@ class model {
        
      if ($condition[0] == "" or $condition == ""  )
          {return null;}
-    $sql= $this->statement->select($select, $condition);
+
     
-         return $this->requete($sql);
+         return $this->statement->select($select, $condition);
            
     }
    
     
-    public function show(array $show) {
-        $TABLEpere=$this->statement->getNom();
+    public function show(array $show,$condition=null) {
+
+        $TABLEpere=$this->statement->getTable();
         $TABLEenfant=[];
         $TABLEalias=[];
         $select['enfant'] = [];
@@ -148,23 +121,27 @@ class model {
         
         $SHOW=['select'=>$select,'pere'=>$TABLEpere,'enfant'=>$TABLEenfant,'alias'=>$TABLEalias ];
           $sql=$this->statement->show($SHOW);
-          $data = $this->requete($sql["pere"]);
+          var_dump($sql );
+        die();
+          $data = $this->statement->execute($sql["pere"]);
           
           foreach ($data as $v) {
               $id=$v->id;
               $sql=$this->statement->show($SHOW,"avoir.id=$id");
-              $dataEnfant = $this->requete($sql["enfant"]);
+              $dataEnfant = $this->statement->execute($sql["enfant"]);
               $v->setEnfant("ok",$dataEnfant);
           }
-          var_dump($data);
-          die();
-    }
+          
+          
+          
+          
+             }
 
     
     
     
     public function getTableSQLrelation( $tableEnfant,$selectEnfant,$selectPere = null) {
-         $TABLEpere=$this->statement->getNom();
+         $TABLEpere=$this->statement->getTable();
          $datapere= $this->getTableSQL($selectPere,$TABLEpere);
          $idpere='id';
 
@@ -175,7 +152,7 @@ class model {
                     $tableEnfant[$index]
                     ,"$TABLEpere.$idpere  =  {$row->$idpere}");
             
-            $row->setEnfant($tableEnfant[$index],$this->requete($sql));  
+            $row->setEnfant($tableEnfant[$index],$this->statement->execute($sql));  
             }
         }
         
@@ -183,14 +160,15 @@ class model {
     }
     
     public function getTableSQL($colunne = null, $table = null,$condition=null) {
-        if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$table);}
-        $sql = $this->statement->select($colunne, $condition, $table);
-        $data = $this->requete($sql);
-
+        //if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$table);}
+        
+        
+          
+        $data = $this->statement->Select_Data_NotNull();
         //si les champs de la table et vide  
         if ($data == null) {
-            $sql = $this->statement->selectSchema($table);
-            $data = $this->requete($sql);
+           
+            $data = $this->statement->selectSchema($table);
             $entity = new entity();
             $table = array();
             foreach ($data as $value) {
@@ -202,24 +180,18 @@ class model {
           return $data;
           
     }
-   
-    
-    
-    
-    
-    
-    
+
     
     
     
     public function getTableSQL_Orphelin($colunne = null,$TABLEpere=null,$TABLEenfant=null) {
       if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$TABLEenfant);}  
       $sql = $this->statement->independent($colunne, $TABLEpere, $TABLEenfant);
-        $data = $this->requete($sql);
+        $data = $this->execute($sql);
           //si les champs de la table et vide  
         if ($data == null) {
             $sql = $this->statement->selectSchema($TABLEenfant);
-            $data = $this->requete($sql);
+            $data = $this->execute($sql);
             $entity = new entity();
             $table = array();
             foreach ($data as $value) {
@@ -230,61 +202,30 @@ class model {
 
           return $data;
     }
+  
+    
+    
+ public function getMetaFORM() {
+        $metaform = [];
+        $metaform = $this->statement->SHOW_COLUMNS();
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public function getMetaFORM() {
-        $metaform = array();
-        
-       
-        $metaform['meta'] = $this->getMetaTable();
-
-        foreach ($this->getMetaTable() as $champ) {
-            if ($champ->Key == 'MUL') {
-                
-                $table = $champ->Field;
-             $metaform[$table] = $this->getItemImportant($table);
+        foreach ($metaform as $champ) {
+            if ($champ->Key == 'MUL') { // FOREIGN KEY
+               $champ->Data = (
+                       new Statement($champ->Field))
+                       ->Select_Data_NotNull();
+              
             }
+            
         }
        
         return $metaform;
     }
-    private function getMetaTable($nomTable=null){
-       if($nomTable==null){
-           $nomTable=$this->statement->getTable();}
-       return $this->requete('DESCRIBE  ' . $nomTable);
- }
-    private function getItemImportant($nomTable=null) { // table item iportant
-        $_meta = $this->getMetaTable($nomTable);
-        $select = $this->getSelectColunneImportant($_meta);
-        $item = $this->getTableSQL($select, $nomTable);
-        return $item;
-    }
+   
+
     
     
-    private function getSelectColunneImportant($_meta,$nomTable=null) { // string item important
-        if($_meta==null){$_meta = $this->getMetaTable($nomTable); }
-        $_select = '';
-        
-        foreach ($_meta as $key) {
-            if ($key->Null == "NO" && $key->Type != "varchar(201)" && $key->Type != "varchar(20)") {
-                $_select .= $key->Field . ' , ';
-            }
-        }
-        $_select = rtrim($_select, ' , ');
-        return $_select;
-    }
-    
-    
+ 
 
     
     

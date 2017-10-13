@@ -38,7 +38,7 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT {
     }
 
     private function setColumn(array $columns) {
-        if ($columns != null or ! empty($columns)) {
+        if ($columns != null or ! empty($columns)  ) {
             if ($this->column[0] == "*") {
                 $this->column = [];
             }

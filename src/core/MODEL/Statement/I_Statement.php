@@ -17,8 +17,11 @@ interface I_Statement {
     
 
     public function __construct($nom);
+    
+    
+    public function execute($param) ;
 
-    public function update($data, $condeion);
+    public function update($data, $condeion) ;
 
     public function delete($condition); 
    
@@ -33,6 +36,8 @@ interface I_Statement {
     public function independent($Select, $TABLEenfant);
 
     public function selectSchema() ;
+    
+    public function SHOW_COLUMNS() ;
     
     
     

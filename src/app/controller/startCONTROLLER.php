@@ -41,6 +41,7 @@ class startCONTROLLER extends controller{
     } 
      protected function getTableHTML( $select, $link="reche") {
        $data= $this->model->getTableSQL($select);
+       
         return $this->html->createTableHTML($data, $link);
         
     } 
@@ -50,9 +51,9 @@ class startCONTROLLER extends controller{
          
          
          
-        $this->model->show(['id','N',
-                    ['raison_sociale'=>'raison_sociale'], // automatique
-                    ['bl'=>['id ','N']],
+        $this->model->show(['id','N', // 
+                    ['raison_sociale'=>'raison_sociale'], // automatique MUL
+                    ['bl'=>['id ','N']],   // table relation
                     ['facture'=>['id','N']]
                  ]);
          

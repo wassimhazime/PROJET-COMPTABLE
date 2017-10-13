@@ -14,7 +14,7 @@ class  FormHTML  extends AbstractHTML{
     public function createFormHTML($metaFORM,$formEnfant=null,$index=0) {
         $suffixe='';
         
-       $meta=$metaFORM['meta'];
+       $meta=$metaFORM;
         $form=[];
         foreach ($meta as $champ) {
             $Field = $champ->Field; //name champ
@@ -23,6 +23,7 @@ class  FormHTML  extends AbstractHTML{
             $Null = $champ->Null; // yes no
             $Type = $champ->Type; //date varchar int .....
             $Default = $champ->Default; // default value
+            $Data = $champ->Data; // data si  $champ->Key MUL (FOREIGN KEY)
             $metaHTML = array(
                 'balise' => ' ', // nom de balise
                 'name' => ' ', // attr name 
@@ -94,7 +95,7 @@ class  FormHTML  extends AbstractHTML{
                         
                         $filde = $metaHTML['name'];
                         
-                        $option = $this->chargeListHtml($metaFORM[$filde],$filde);
+                        $option = $this->chargeListHtml($Data);
                         
                         $metaHTML['inputf'] = $option . "</" . $metaHTML['balise'] . ">";
                         break;

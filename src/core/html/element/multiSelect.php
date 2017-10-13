@@ -21,18 +21,18 @@ class multiSelect extends AbstractHTML{
 
    
     
-    public function multiselect($item,$filds, $param = '', $balis = 'option ') {
+    public function multiselect($item, $param = '', $balis = 'option ') {
      
    return'<div class="ROOTmultiSelectItem">'
         .'<button type="button" class="close"><span aria-hidden="true">&times;</span></button>'
            . '<select multiple  class="multiSelectItemwassim" name="'.$filds.'[]">'. 
-           $this->chargeListHtml($item, $filds, $param, $balis).' </select>'
+           $this->chargeListHtml($item,  $param, $balis).' </select>'
          . '</div>';
  }
  
- public function chargeListHtml($item,$filds, $param = '', $balis = 'option ') {
+ public function chargeListHtml($item, $param = '', $balis = 'option ') {
         
-       $id='id_'.$filds;
+       $id='id_';
        
         $option = "";
         foreach ($item as $c) {
@@ -40,7 +40,7 @@ class multiSelect extends AbstractHTML{
             $op = '';
 
             foreach ($c as $key => $value) {
-                $key =str_replace('_'.$filds, '', $key);
+                
                 $op .= $key . '$$$' . $value . ' £££ ';
             }
             $popover='data-container="body" data-toggle="popover" data-placement="top" data-content="' .$op.'"' ;

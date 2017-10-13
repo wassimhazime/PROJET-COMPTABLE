@@ -5,8 +5,8 @@ use core\routeur\Session;
 
 class entity {
     private $enfant=array();
-  
-           
+    public $Data=null;
+            
     function __construct() {
       
     }
