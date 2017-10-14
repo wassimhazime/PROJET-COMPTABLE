@@ -41,13 +41,13 @@ class startCONTROLLER extends controller{
     } 
      protected function getTableHTML( $select, $link="reche") {
        $data= $this->model->getTableSQL($select);
-       
+     
         return $this->html->createTableHTML($data, $link);
         
     } 
      protected function getTableHTMLrelation( $enfantTable,$enfantSelect,$pereSelect, $link="reche") {
               
-         $data =  $this->model->getTableSQLrelation($enfantTable,$enfantSelect,$pereSelect);
+        // $data =  $this->model->getTableSQLrelation($enfantTable,$enfantSelect,$pereSelect);
          
          
          
@@ -81,7 +81,7 @@ class startCONTROLLER extends controller{
 
      protected function getFormHTML($enfant=null,$index=0) {
           
-          $metaFORM= $this->model->getMetaFORM(); // object meta
+        $metaFORM= $this->model->getMetaFORM(); // object meta
       
          return $this->html->getFormHTML($metaFORM,$enfant,$index) ;
          

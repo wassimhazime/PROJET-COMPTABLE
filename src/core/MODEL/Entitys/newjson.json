@@ -1,0 +1,20 @@
+[{
+         "columns":[["id","N","date","raison_sociale","la_somme"]]
+        ,"FOREIGN_KEY":["raison_sociale"]
+        ,"tables_child":["bl","facture"]
+        ,"tables_main":"avoir"}
+    
+    
+    ,{
+        "columns":[["id","N","raison_sociale","date_de_livraison","la_somme"]]
+        ,"FOREIGN_KEY":["raison_sociale"]
+        ,"tables_child":["commande"]
+        ,"tables_main":"bl"},
+    
+    {
+        "columns":[["id","raison_sociale","objectif","date"]]
+        ,"FOREIGN_KEY":["raison_sociale"]
+        ,"tables_child":[]
+        ,"tables_main":"commande"}
+    
+ ]

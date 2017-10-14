@@ -3,19 +3,21 @@ namespace core\model;
 
 use core\model\entitys\entity;
 use core\model\Statement\Statement;
-
+use core\MODEL\Outils\Outils;
 
 class model {
 
    
     public $entity;
     private $statement;
+    private $table;
+    private $schema;
 
 
 
     public function __construct( $table) {
-
-        
+        $this->schema=Outils::getschema( $table);
+        $this->table=$table;
         $this->statement = new Statement($table);
         
     
@@ -93,48 +95,12 @@ class model {
     
     public function show(array $show,$condition=null) {
 
-        $TABLEpere=$this->statement->getTable();
-        $TABLEenfant=[];
-        $TABLEalias=[];
-        $select['enfant'] = [];
-        $select['pere'] = [];
         
-        foreach ($show as $value) {
-
-            if (is_array($value)) {
-
-                foreach ($value as $key => $val) {
-                    if (is_array($val)) {
-                        foreach ($val as $v) {
-                            $select['enfant'][] = $key . "." . $v;
-                            $TABLEenfant[$key]=$key;
-                        }
-                    } else {
-                        $select['pere'][] = $key . "." . $val;
-                        $TABLEalias[$key]=$key;
-                    }
-                }
-            } else {
-                $select['pere'][] =$TABLEpere  . "." . $value;
-            }
-        }
+          
+         
+         
+          
         
-        $SHOW=['select'=>$select,'pere'=>$TABLEpere,'enfant'=>$TABLEenfant,'alias'=>$TABLEalias ];
-          $sql=$this->statement->show($SHOW);
-          var_dump($sql );
-        die();
-          $data = $this->statement->execute($sql["pere"]);
-          
-          foreach ($data as $v) {
-              $id=$v->id;
-              $sql=$this->statement->show($SHOW,"avoir.id=$id");
-              $dataEnfant = $this->statement->execute($sql["enfant"]);
-              $v->setEnfant("ok",$dataEnfant);
-          }
-          
-          
-          
-          
              }
 
     
@@ -161,21 +127,23 @@ class model {
     
     public function getTableSQL($colunne = null, $table = null,$condition=null) {
         //if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$table);}
-        
-        
+       
+       
           
-        $data = $this->statement->Select_Data_NotNull();
+        $data =  $this->statement->select($this->schema );
+        
+      
         //si les champs de la table et vide  
-        if ($data == null) {
-           
-            $data = $this->statement->selectSchema($table);
-            $entity = new entity();
-            $table = array();
-            foreach ($data as $value) {
-                $entity->{$value->COLUMN_NAME} = 'vide';
-            }
-           return array($entity);
-        }
+//        if ($data == null) {
+//           
+//            $data = $this->statement->selectSchema($table);
+//            $entity = new entity();
+//            $table = array();
+//            foreach ($data as $value) {
+//                $entity->{$value->COLUMN_NAME} = 'vide';
+//            }
+//           return array($entity);
+//        }
 
           return $data;
           

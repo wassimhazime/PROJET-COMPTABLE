@@ -8,8 +8,9 @@ use \PDO;
 use \PDOException;
 use core\model\base_donnee\database;
 use core\notify\notify;
+use core\model\entitys\EntitysSchema;
 
-class Statement implements I_Statement {
+class Statement  {
 
     private $db;
     private $table;
@@ -19,37 +20,16 @@ class Statement implements I_Statement {
         return $this->table;
     }
 
-    public function __construct($nom) {
+    public function __construct($table) {
         $this->db = database::getDB();
-        $this->table = $nom;
+        $this->table = $table;
         $this->entity = new entity();
     }
 
 
     
-    public static function getshema() {
-        $tables_main= (new self(''))->execute('SHOW TABLE STATUS WHERE name not LIKE("r\_%") ');
-          $table_main=[];
-          foreach ($tables_main as $table) {
-           $table_main[$table->Name]=(new self($table->Name))->SHOW_COLUMNS_auto();
-        }
-       
-        
-         $tables_relation= (new self(''))->execute('SHOW TABLE STATUS WHERE name  LIKE("r\_%") ');
-        $table_relation=[];
-        foreach ($tables_relation as $table) {
-            $table_relation[]=$table->Name;
-        }
-   
-          
-          
-          foreach ($table_relation as $RD) {
-          $merge=explode("_", ltrim($RD,"r_"));
-          $table_main[$merge[0]][$merge[1]]=$table_main[$merge[1]];
-          }
-          return $table_main;
-          
-    }
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     
     
@@ -78,11 +58,12 @@ class Statement implements I_Statement {
                         ->value($data);
     }
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select($COLUMNS, $condition = 1) {
+    public function Select(EntitysSchema $schema , $condition = 1) {
 
 
-        return $this->execute((new QuerySQL())->select($COLUMNS)
-                                ->from($this->table)
+        return $this->execute((new QuerySQL())->select($schema->getCOLUMNS())
+                             //    ->join($schema->getFOREIGN_KEY())
+                                ->from($schema->getPARENT())
                                 ->where($condition));
     }
 
@@ -93,26 +74,7 @@ class Statement implements I_Statement {
         return $this->Select($COLUMNS);
     }
 
-    public function show(array $show, $condition = " 1 ") {
-
-        $Select = $show["select"];
-        $TABLEpere = $show["pere"];
-        $TABLEenfant = $show["enfant"];
-        $TABLEalias = $show["alias"];
-        $sqlpere = (new QuerySQL())->select($Select['pere'])
-                ->from($TABLEpere)
-                ->join($TABLEalias)
-                ->where($condition)
-        ;
-
-        $sqlenfant = (new QuerySQL())->select($Select['enfant'])
-                ->from($TABLEpere)
-                ->join($TABLEenfant, "LEFT", true)
-                ->where($condition)
-        ;
-
-        return ["pere" => $sqlpere, "enfant" => $sqlenfant];
-    }
+   
 
     public function join($Select, $TABLEpere, $TABLEenfant, $condition) {
         $selectarry = explode(",", $Select);
@@ -127,7 +89,7 @@ class Statement implements I_Statement {
                 ->join("raison_sociale")
                 ->where($condition)
         ;
-        var_dump($sql . "");
+    
         return $sql;
     }
 
@@ -187,7 +149,7 @@ class Statement implements I_Statement {
         }
         return $COLUMNS;
     }
- public function SHOW_COLUMNS_auto() {
+    public function SHOW_COLUMNS_auto() {
 
         $describe = $this->execute("SHOW COLUMNS FROM " .
                 $this->table .

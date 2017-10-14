@@ -28,7 +28,7 @@ interface I_Statement {
     public function Select($champ, $condition) ;
 
     
-    public function show(array $champ,$option =" 1 ");
+   
     
     
     public function join($Select, $TABLEpere, $TABLEenfant, $condition); 
