@@ -56,12 +56,62 @@ class Statement extends RUN {
     public function Select(EntitysSchema $schema=null , $condition = 1) {
 if($schema==null){$schema= $this->schema;}
 
-        return $this->run((new QuerySQL())->select($schema->getCOLUMNS_master())
-                             //    ->join($schema->getFOREIGN_KEY())
+
+
+        return $this->run((new QuerySQL())->select($schema->select_master())
+                                 
                                 ->from($schema->getPARENT())
+                                ->join($schema->getFOREIGN_KEY())
+                
                                 ->where($condition));
+        
+        
     }
 
+      public function Selectchild(EntitysSchema $schema=null , $condition = 1) {
+if($schema==null){$schema= $this->schema;}
+                 echo (((new QuerySQL())->select($schema->select_master())
+                                   ->column($schema->select_CHILDREN())
+                                 
+                                ->from($schema->getPARENT())
+                
+                                ->join($schema->getFOREIGN_KEY())
+                                ->join($schema->getCHILDREN(), " INNER ", TRUE)
+                                
+                
+                
+                
+                
+                                ->where($condition)));
+                 
+
+
+        return $this->run((new QuerySQL())->select($schema->select_master())
+                                   ->column($schema->select_CHILDREN())
+                                 
+                                ->from($schema->getPARENT())
+                
+                                ->join($schema->getFOREIGN_KEY())
+                                ->join($schema->getCHILDREN(), " INNER ", TRUE)
+                                
+                
+                
+                
+                
+                                ->where($condition));
+       
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public function Select_Data_NotNull($COLUMNS = null) {
         if ($COLUMNS == null) {
             $COLUMNS = implode(' , ', $this->SHOW_COLUMNS_NotNull());

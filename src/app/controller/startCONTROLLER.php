@@ -40,9 +40,9 @@ class startCONTROLLER extends controller{
          return $this->html->getInfo($data);
     } 
      protected function getTableHTML( $select, $link="reche") {
-       $data= $this->model->getTableSQL($select);
-     
-        return $this->html->createTableHTML($data, $link);
+       $data= $this->model->show();
+     return $this->html->createTableHTML($data, $link);
+       // return $this->html->createTableHTML($data, $link);
         
     } 
      protected function getTableHTMLrelation( $enfantTable,$enfantSelect,$pereSelect, $link="reche") {
@@ -51,13 +51,11 @@ class startCONTROLLER extends controller{
          
          
          
-        $this->model->show(['id','N', // 
-                    ['raison_sociale'=>'raison_sociale'], // automatique MUL
-                    ['bl'=>['id ','N']],   // table relation
-                    ['facture'=>['id','N']]
-                 ]);
-         
-         return $this->html->createTableHTMLrelation($data, $link,$enfantTable);
+        $data= $this->model->show();
+         return $this->html->createTableHTML($data, $link);
+        
+        
+       //  return $this->html->createTableHTMLrelation($data, $link,$enfantTable);
         
     } 
     

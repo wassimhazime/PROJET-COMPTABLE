@@ -59,15 +59,33 @@ class EntitysSchema extends Entitys {
     
     
     
-     function get_select_CHILDREN() {
-        return $this->CHILDREN;
-    }
 
-    function get_select_PARENT() {
-        return $this->PARENT;
+   
+    
+    function select_master() {
+        
+        $select=[];
+        foreach ($this->COLUMNS_master as $colom) {
+          $select[]= $this->PARENT.".".$colom; 
+        }
+        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+            $select[]= $FOREIGN.".".$FOREIGN;
+        }
+        return $select;
     }
-    
-    
-    
+    function select_CHILDREN() {
+        
+        $select=[];
+        
+        foreach ($this->CHILDREN as $table => $colums) {
+            
+            foreach ($colums as $colum) {
+              $select[]= $table.".".$colum ." as $table"."_".$colum;  
+            }
+            
+        }
+      
+        return $select;
+    }
     
 }

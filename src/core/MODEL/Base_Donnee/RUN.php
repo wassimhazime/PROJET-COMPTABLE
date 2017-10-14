@@ -33,6 +33,9 @@ class RUN {
     
     
     public function run($sql, $select = true) {
+        
+        
+        
 
         try {
             if ($select) {
@@ -40,14 +43,18 @@ class RUN {
 
                 $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
 
-
+             
                 return $Statement->fetchAll();
             } else {
                 $this->db->exec($sql);
+                
                 return $this->db->lastInsertId();
             }
+           
+            
+            
         } catch (PDOException $exc) {
-            notify::send_Notify($exc->getMessage());
+            notify::send_Notify($exc->getMessage() ."querySQL ERROR ==> </br> $sql");
         }
     }
 }

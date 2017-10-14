@@ -316,12 +316,18 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT {
         
         
     if(is_array($tablejoin))  {
-        
+        if($this->isAssoc($tablejoin))
+        {
+            foreach ($tablejoin as $tableJ => $colums) {
+                $this->joinstring($tableJ, $type, $relation, $conditions) ;  
+            }  
+            
+        }else{
         foreach ($tablejoin as $tableJ) {
             
             $this->joinstring($tableJ, $type, $relation, $conditions) ;  
             
-        }
+        }}
         
     } else {
         

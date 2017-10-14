@@ -95,11 +95,16 @@ class model {
     }
    
     
-    public function show(array $show,$condition=null) {
+    public function show(array $show=null) {
 
         
           
+         $data =  $this->statement->Selectchild($this->schema );
          
+         
+         
+        
+         return $data;
          
           
         
@@ -128,27 +133,9 @@ class model {
     }
     
     public function getTableSQL($colunne = null, $table = null,$condition=null) {
-        //if ($colunne == null) {$colunne = $this->getSelectColunneImportant(null,$table);}
-       
-       
-          
-        $data =  $this->statement->select($this->schema );
-        
-      
-        //si les champs de la table et vide  
-//        if ($data == null) {
-//           
-//            $data = $this->statement->selectSchema($table);
-//            $EntitysTable = new EntitysTable();
-//            $table = array();
-//            foreach ($data as $value) {
-//                $EntitysTable->{$value->COLUMN_NAME} = 'vide';
-//            }
-//           return array($EntitysTable);
-//        }
 
-          return $data;
-          
+          $data =  $this->statement->select($this->schema );
+         return $data;
     }
 
     
