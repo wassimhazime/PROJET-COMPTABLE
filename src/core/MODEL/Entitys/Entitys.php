@@ -9,13 +9,10 @@
 namespace core\model\entitys;
 
 /**
- * Description of newPHPClass
+ * Description of Entitys
  *
  * @author Wassim Hazime
  */
-class newPHPClass {
- var $prototyp=['avoir' =>["colums"=>["id","N","somme"],
-                          "alias"=>[],
-                           "cheld"
-                          ]];
+class Entitys {
+    //put your code here
 }

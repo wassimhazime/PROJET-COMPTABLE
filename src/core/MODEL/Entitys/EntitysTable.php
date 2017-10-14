@@ -3,9 +3,9 @@
 namespace core\model\entitys;
 use core\routeur\Session;
 
-class entity {
+class EntitysTable extends Entitys{
     private $enfant=array();
-    public $Data=null;
+   
             
     function __construct() {
       

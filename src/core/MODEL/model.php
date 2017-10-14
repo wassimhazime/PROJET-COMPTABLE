@@ -1,14 +1,15 @@
 <?php
 namespace core\model;
 
-use core\model\entitys\entity;
+use core\model\Entitys\EntitysTable;
 use core\model\Statement\Statement;
-use core\MODEL\Outils\Outils;
+use core\MODEL\Outils\Schema;
+use core\MODEL\Outils\Form;
 
 class model {
 
    
-    public $entity;
+    public $EntitysTable;
     private $statement;
     private $table;
     private $schema;
@@ -16,9 +17,10 @@ class model {
 
 
     public function __construct( $table) {
-        $this->schema=Outils::getschema( $table);
+        $this->schema=Schema::getschema( $table);
+        var_dump($this->schema);
         $this->table=$table;
-        $this->statement = new Statement($table);
+        $this->statement = new Statement($this->schema);
         
     
         
@@ -88,7 +90,7 @@ class model {
          {return null;}
 
     
-         return $this->statement->select($select, $condition);
+         return $this->statement->select($this->schema, $condition);
            
     }
    
@@ -137,12 +139,12 @@ class model {
 //        if ($data == null) {
 //           
 //            $data = $this->statement->selectSchema($table);
-//            $entity = new entity();
+//            $EntitysTable = new EntitysTable();
 //            $table = array();
 //            foreach ($data as $value) {
-//                $entity->{$value->COLUMN_NAME} = 'vide';
+//                $EntitysTable->{$value->COLUMN_NAME} = 'vide';
 //            }
-//           return array($entity);
+//           return array($EntitysTable);
 //        }
 
           return $data;
@@ -160,12 +162,12 @@ class model {
         if ($data == null) {
             $sql = $this->statement->selectSchema($TABLEenfant);
             $data = $this->execute($sql);
-            $entity = new entity();
+            $EntitysTable = new EntitysTable();
             $table = array();
             foreach ($data as $value) {
-                $entity->{$value->COLUMN_NAME} = '';
+                $EntitysTable->{$value->COLUMN_NAME} = '';
             }
-           return array($entity);
+           return array($EntitysTable);
         }
 
           return $data;
@@ -173,21 +175,8 @@ class model {
   
     
     
- public function getMetaFORM() {
-        $metaform = [];
-        $metaform = $this->statement->SHOW_COLUMNS();
-
-        foreach ($metaform as $champ) {
-            if ($champ->Key == 'MUL') { // FOREIGN KEY
-               $champ->Data = (
-                       new Statement($champ->Field))
-                       ->Select_Data_NotNull();
-              
-            }
-            
-        }
-       
-        return $metaform;
+    public function getMetaFORM() {
+      return Form::getForm($this->schema);;
     }
    
 

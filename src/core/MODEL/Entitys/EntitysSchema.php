@@ -4,17 +4,25 @@
 namespace core\model\entitys;
 
 
-class EntitysSchema {
-    public $COLUMNS=[];
-    public $FOREIGN_KEY;
-    public $CHILDREN;
-    public $PARENT ;
+class EntitysSchema extends Entitys {
+    private $COLUMNS_master;
+    private $COLUMNS_all;
+    private $FOREIGN_KEY;
+    private $CHILDREN;
+    private $PARENT ;
      
 
+    function getCOLUMNS_all() {
+        return $this->COLUMNS_all;
+    }
 
+    function setCOLUMNS_all($COLUMNS_all) {
+        $this->COLUMNS_all = $COLUMNS_all;
+    }
 
-    function getCOLUMNS() {
-        return $this->COLUMNS;
+    
+    function getCOLUMNS_master() {
+        return $this->COLUMNS_master;
     }
 
     function getFOREIGN_KEY() {
@@ -29,8 +37,8 @@ class EntitysSchema {
         return $this->PARENT;
     }
 
-    function setCOLUMNS($COLUMNS) {
-        $this->COLUMNS = $COLUMNS;
+    function setCOLUMNS_master($COLUMNS) {
+        $this->COLUMNS_master = $COLUMNS;
     }
 
     function setFOREIGN_KEY($FOREIGN_KEY) {
@@ -47,16 +55,7 @@ class EntitysSchema {
 
     
 
-     public function addColumns($columns) {
-        $this->COLUMNS[]= $columns;
-    }
-     public function addFOREIGN_KEY($FOREIGN_KEY) {
-        $this->FOREIGN_KEY[]= $FOREIGN_KEY;
-    }
-    
-    public function addTables_CHILDREN($CHILDREN) {
-        $this->CHILDREN[]= $CHILDREN;
-    }
+ 
     
     
     

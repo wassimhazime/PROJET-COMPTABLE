@@ -1,29 +1,24 @@
 <?php
 
 namespace core\model\Statement;
+use core\model\base_donnee\RUN;
 
 use core\model\Query\QuerySQL;
-use core\model\entitys\entity;
-use \PDO;
-use \PDOException;
-use core\model\base_donnee\database;
-use core\notify\notify;
-use core\model\entitys\EntitysSchema;
+use core\model\Entitys\EntitysTable;
 
-class Statement  {
+use core\model\Entitys\EntitysSchema;
 
-    private $db;
-    private $table;
-    private $entity;
+class Statement extends RUN {
+
+   
  
             function getTable() {
-        return $this->table;
+        return $this->schema->getPARENT();
     }
 
-    public function __construct($table) {
-        $this->db = database::getDB();
-        $this->table = $table;
-        $this->entity = new entity();
+    public function __construct(EntitysSchema $schema) {
+        parent::__construct(new EntitysTable(),$schema);
+      
     }
 
 
@@ -37,7 +32,7 @@ class Statement  {
     public function update($data, $condition) {
 
         return (new QuerySQL())
-                        ->update($this->table)
+                        ->update($this->getTable())
                         ->set($data)
                         ->where($condition);
     }
@@ -46,7 +41,7 @@ class Statement  {
 
         return (new QuerySQL())
                         ->delete($condition)
-                        ->from($this->table);
+                        ->from($this->getTable());
     }
 
     public function insert($data) {
@@ -54,14 +49,14 @@ class Statement  {
         unset($data['id']);
 
         return (new QuerySQL())->
-                        insertInto($this->table)
+                        insertInto($this->getTable())
                         ->value($data);
     }
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(EntitysSchema $schema , $condition = 1) {
+    public function Select(EntitysSchema $schema=null , $condition = 1) {
+if($schema==null){$schema= $this->schema;}
 
-
-        return $this->execute((new QuerySQL())->select($schema->getCOLUMNS())
+        return $this->run((new QuerySQL())->select($schema->getCOLUMNS_master())
                              //    ->join($schema->getFOREIGN_KEY())
                                 ->from($schema->getPARENT())
                                 ->where($condition));
@@ -101,75 +96,8 @@ class Statement  {
                         ->independent($TABLEpere);
     }
 ////////////////////////////////////////////////////////////////////////////////
-    public function execute($sql, $select = true) {
 
-        try {
-            if ($select) {
-                $Statement = $this->db->query($sql);
-
-                $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
-
-
-                return $Statement->fetchAll();
-            } else {
-                $this->db->exec($sql);
-                return $this->db->lastInsertId();
-            }
-        } catch (PDOException $exc) {
-            notify::send_Notify($exc->getMessage());
-        }
-    }
-////////////////////////////////////////////////////////////////////////////////
-
-    
-    public function selectSchema() {
-
-        return (new QuerySQL())->select("COLUMN_NAME")
-                        ->from(" INFORMATION_SCHEMA.COLUMNS ")
-                        ->where("TABLE_SCHEMA = 'comptable'", "TABLE_NAME = '" . $this->table . "'");
-    }
-
-    public function SHOW_COLUMNS() {
-
-        ///  DESCRIBE === SHOW COLUMNS FROM
-        return $this->execute("DESCRIBE  " . $this->table);
-    }
-
-    public function SHOW_COLUMNS_NotNull() {
-
-        $describe = $this->execute("SHOW COLUMNS FROM " .
-                $this->table .
-                " WHERE `null`='no' and "
-                . "`Type` !='varchar(201)' and"
-                . " `Type` !='varchar(20)' ");
-
-        $COLUMNS = [];
-        foreach ($describe as $champ) {
-            $COLUMNS[] = $champ->Field; //name COLUMNS 
-        }
-        return $COLUMNS;
-    }
-    public function SHOW_COLUMNS_auto() {
-
-        $describe = $this->execute("SHOW COLUMNS FROM " .
-                $this->table .
-                " WHERE `null`='no' and "
-                . "`Type` !='varchar(201)' and"
-                . " `Type` !='varchar(20)' ");
-        $select=[];
-
-        foreach ($describe as $champ) {
-            
-            if ($champ->Key == 'MUL') { // FOREIGN KEY
-                $champ->MUL = ($champ->Field);
-              $select[]=[$champ->Field=>$champ->Field];
-            } else {
-             $select[]= $champ->Field;  
-            }
-        
-                }
-                return $select;
-            }
+  
             
             
 }

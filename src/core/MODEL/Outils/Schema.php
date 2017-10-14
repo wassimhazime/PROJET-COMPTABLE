@@ -3,18 +3,15 @@
 namespace core\MODEL\Outils;
 
 use core\model\entitys\EntitysSchema;
-use \PDO;
-use \PDOException;
-use core\model\base_donnee\database;
-use core\notify\notify;
+use core\model\base_donnee\RUN;
 
-class Outils {
+class Schema extends RUN {
 
-    private $db, $EntitysShema;
+    
 
     function __construct() {
-        $this->db = database::getDB();
-        $this->EntitysShema = new EntitysSchema();
+        parent::__construct(new EntitysSchema());
+        
     }
 
     public static function getschema($parent = null) :EntitysSchema {
@@ -24,11 +21,10 @@ class Outils {
         foreach ($PARENT as $table) {
 
 
-            $table->setCOLUMNS((new self())->columns_master($table));
-
-            $table->setFOREIGN_KEY((new self())->FOREIGN_KEY($table));
-
-            $table->setCHILDREN((new self())->tables_CHILDREN($table));
+             $table->setCOLUMNS_master((new self())->columns_master($table));
+             $table->setCOLUMNS_all((new self())->columns_all($table));
+             $table->setFOREIGN_KEY((new self())->FOREIGN_KEY($table));
+             $table->setCHILDREN((new self())->tables_CHILDREN($table));
            
         }
 
@@ -38,40 +34,28 @@ class Outils {
             return $PARENT;
         } else {
             foreach ($PARENT as $TABLE) {
-                if ($TABLE->PARENT == $parent) {
+                if ($TABLE->getPARENT() == $parent) {
                     return $TABLE;
                 }
             }
         }
     }
+    
+    
+    
+    
 
-    public function run($sql, $select = true) {
+    
 
-        try {
-            if ($select) {
-                $Statement = $this->db->query($sql);
-
-
-                $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->EntitysShema));
-
-
-                return $Statement->fetchAll();
-            } else {
-                $this->db->exec($sql);
-                return $this->db->lastInsertId();
-            }
-        } catch (PDOException $exc) {
-            notify::send_Notify($exc->getMessage()."   ".$sql);
-        }
-    }
-
-    public function columns_master($table) {
+private function columns_master($table) {
 
         $describe = $this->run("SHOW COLUMNS FROM " .
-                $table->PARENT .
+                $table->getPARENT() .
                 " WHERE `null`='no' and "
                 . "`Type` !='varchar(201)' and"
-                . " `Type` !='varchar(20)' ");
+                . " `Type` !='varchar(20)' and "
+                . "`Key`!='MUL' "
+                );
         $select = [];
 
         foreach ($describe as $champ) {
@@ -81,8 +65,23 @@ class Outils {
         }
         return $select;
     }
+private function columns_all($table) {
 
-    public function columns_master_CHILDREN($table) {
+        $describe = $this->run("SHOW COLUMNS FROM " .
+                $table->getPARENT() .
+                " WHERE "
+                . 1
+                );
+        $select = [];
+
+        foreach ($describe as $champ) {
+
+
+            $select[] = $champ->Field;
+        }
+        return $select;
+    }
+private function columns_master_CHILDREN($table) {
 
         $describe = $this->run("SHOW COLUMNS FROM " . $table .
                 " WHERE `null`='no' and "
@@ -99,11 +98,10 @@ class Outils {
 
         return $colums;
     }
-
-    public function FOREIGN_KEY($table) {
+private function FOREIGN_KEY($table) {
 
         $describe = $this->run("SHOW COLUMNS FROM " .
-                $table->PARENT .
+                $table->getPARENT() .
                 " WHERE `Key`='MUL'");
         $FOREIGN_KEY = [];
 
@@ -112,15 +110,14 @@ class Outils {
         }
         return $FOREIGN_KEY;
     }
-
-    public function tables_CHILDREN($mainTable) {
+private function tables_CHILDREN($mainTable) {
         $tables_relation = (new self(''))->run('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "comptable" '
-                . 'and  table_name  LIKE("r\_' . $mainTable->PARENT . '%")  ');
+                . 'and  table_name  LIKE("r\_' . $mainTable->getPARENT() . '%")  ');
         $tables_CHILDREN = [];
 
         foreach ($tables_relation as $champ) {
-            $table=str_replace("r_{$mainTable->PARENT}_",
+            $table=str_replace("r_{$mainTable->getPARENT()}_",
                     "",
                     $champ->tables_relation );
             
