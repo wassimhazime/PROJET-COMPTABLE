@@ -97,9 +97,9 @@ class model {
     
     public function show(array $show=null) {
 
-        
+  
           
-         $data =  $this->statement->Selectchild($this->schema );
+         $data =  $this->statement->Selectchild($this->schema);
          
          
          

@@ -5,12 +5,19 @@ namespace core\model\entitys;
 
 
 class EntitysSchema extends Entitys {
-    private $COLUMNS_master;
-    private $COLUMNS_all;
-    private $FOREIGN_KEY;
-    private $CHILDREN;
-    private $PARENT ;
+    private $COLUMNS_master=["*"];
+    private $COLUMNS_all=["*"];
+    private $FOREIGN_KEY=[];
+    private $CHILDREN=[];
+    private  $PARENT="" ;
      
+    function set(string $PARENT,array $COLUMNS_master=["*"],array $COLUMNS_all=["*"],array $FOREIGN_KEY=[],array $CHILDREN=[] ) {
+        $this->COLUMNS_master = $COLUMNS_master;
+        $this->COLUMNS_all = $COLUMNS_all;
+        $this->FOREIGN_KEY = $FOREIGN_KEY;
+        $this->CHILDREN = $CHILDREN;
+        $this->PARENT = $PARENT;
+    }
 
     function getCOLUMNS_all() {
         return $this->COLUMNS_all;
