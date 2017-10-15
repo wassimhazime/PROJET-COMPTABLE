@@ -8,13 +8,13 @@
 
 namespace core\MODEL\Outils;
 
-use core\model\base_donnee\RUN;
-use core\model\entitys\EntityForm;
-use core\model\entitys\EntitysSchema;
+use core\MODEL\base_donnee\RUN;
+use core\MODEL\entitys\EntityForm;
+use core\MODEL\entitys\EntitysSchema;
 
 class Form extends RUN {
 
-    public static function getForm(EntitysSchema $schem) {
+    public static function getForm(EntitysSchema $schem): array {
 
         $DESCRIBE = ((new self())->run("DESCRIBE  " . $schem->getPARENT()));
 
@@ -24,7 +24,7 @@ class Form extends RUN {
                 $input->setData(Autocomplete::getAutocomplete($field));
             }
         }
-
+       
         return $DESCRIBE;
     }
 

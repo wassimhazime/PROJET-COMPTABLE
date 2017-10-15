@@ -1,5 +1,5 @@
 <?php
-use core\dispatcher;
+use core\Dispatcher;
 
 
 
@@ -17,7 +17,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
 
-dispatcher::load();
+Dispatcher::load();
 
 $fin= round(microtime(true)-$start,5);
 

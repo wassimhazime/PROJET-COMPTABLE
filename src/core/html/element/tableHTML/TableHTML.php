@@ -9,6 +9,10 @@ class TableHTML extends AbstractHTML{
     }
 
     public function createTableHTML($data,$suffixe, $link = null) {
+        echo 'class TableHTML  =>createTableHTML';
+        var_dump($data);
+        
+        
          if (isset($data) && !empty($data)) {
             $thead = $this->thead($data,$suffixe);
             $tbody = $this->tbody($data, $link);
@@ -37,8 +41,9 @@ class TableHTML extends AbstractHTML{
                         }elseif ($link == 'relation') {
                             $TD .= $this->td($value, ' class="info" ');
                         } else {
-                            $href=$row->gethref($key,$link);
-                            $TD .= $this->td($this->a($href, $value));
+                            //$href=$row->gethref($key,$link);
+                           // $TD .= $this->td($this->a($href, $value));
+                            $TD .= $this->td($value);
                         }
                 
                 }

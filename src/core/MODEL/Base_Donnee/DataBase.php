@@ -1,12 +1,12 @@
 <?php
 
-namespace core\model\base_donnee;
+namespace core\MODEL\Base_Donnee;
 
 use \PDO;
 use \Exception;
 use core\notify\notify;
 
-class database {
+class DataBase {
 
     private static $dbConnection = null;
 
@@ -14,7 +14,7 @@ class database {
 
         if (self::$dbConnection === null) {
 
-            $config = new config();
+            $config = new Config();
 
             try {
                 $dbConnection = new PDO("$config->DB:host=$config->dbhost;dbname=$config->dbname", $config->dbuser, $config->dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));

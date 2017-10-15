@@ -1,6 +1,6 @@
 <?php
 
-namespace core\model\entitys;
+namespace core\MODEL\Entitys;
 
 use core\routeur\Session;
 

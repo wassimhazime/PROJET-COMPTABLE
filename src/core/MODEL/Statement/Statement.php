@@ -1,34 +1,26 @@
 <?php
 
-namespace core\model\Statement;
-use core\model\base_donnee\RUN;
+namespace core\MODEL\Statement;
 
-use core\model\Query\QuerySQL;
-use core\model\Entitys\EntitysTable;
-
-use core\model\Entitys\EntitysSchema;
+use core\MODEL\Base_Donnee\RUN;
+use core\MODEL\Query\QuerySQL;
+use core\MODEL\Entitys\EntitysTable;
+use core\MODEL\Entitys\EntitysSchema;
 
 class Statement extends RUN {
 
-   
- 
-            function getTable() {
+    function getTable() {
         return $this->schema->getPARENT();
     }
 
     public function __construct(EntitysSchema $schema) {
-        parent::__construct(new EntitysTable(),$schema);
-      
+        parent::__construct(new EntitysTable(), $schema);
     }
 
-
-    
-    
-    
     ////////////////////////////////////////////////////////////////////////////
-    
-    
-    
+
+
+
     public function update($data, $condition) {
 
         return (new QuerySQL())
@@ -38,6 +30,8 @@ class Statement extends RUN {
     }
 
     public function delete($condition) {
+
+
 
         return (new QuerySQL())
                         ->delete($condition)
@@ -52,90 +46,38 @@ class Statement extends RUN {
                         insertInto($this->getTable())
                         ->value($data);
     }
+
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(EntitysSchema $schema=null , $condition = 1) {
-if($schema==null){$schema= $this->schema;}
-
-
-
-        return $this->run((new QuerySQL())->select($schema->select_master())
-                                 
-                                ->from($schema->getPARENT())
-                                ->join($schema->getFOREIGN_KEY())
-                
-                                ->where($condition));
-        
-        
-    }
-
-      public function Selectchild(EntitysSchema $schema=null , $condition = 1) {
-if($schema==null){$schema= $this->schema;}
-                 echo (((new QuerySQL())->select($schema->select_master())
-                                   ->column($schema->select_CHILDREN())
-                                 
-                                ->from($schema->getPARENT())
-                
-                                ->join($schema->getFOREIGN_KEY())
-                                ->join($schema->getCHILDREN(), " INNER ", TRUE)
-                                
-                
-                
-                
-                
-                                ->where($condition)));
-                 
-
-
-        return $this->run((new QuerySQL())->select($schema->select_master())
-                                   ->column($schema->select_CHILDREN())
-                                 
-                                ->from($schema->getPARENT())
-                
-                                ->join($schema->getFOREIGN_KEY())
-                                ->join($schema->getCHILDREN(), " INNER ", TRUE)
-                                
-                
-                
-                
-                
-                                ->where($condition));
-       
-        
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public function Select_Data_NotNull($COLUMNS = null) {
-        if ($COLUMNS == null) {
-            $COLUMNS = implode(' , ', $this->SHOW_COLUMNS_NotNull());
+    public function Select(EntitysSchema $schema = null, $condition = 1): array {
+        if ($schema == null) {
+            $schema = $this->schema;
         }
-        return $this->Select($COLUMNS);
+        $Entitys = $this->run((new QuerySQL())
+                        ->select($schema->select_master())
+                        ->from($schema->getPARENT())
+                        ->join($schema->getFOREIGN_KEY())
+                        ->where($condition));
+        return $this->dataJoin($Entitys, $schema);
     }
 
-   
+    private function dataJoin(array $Entitys,EntitysSchema $schema): array {
 
-    public function join($Select, $TABLEpere, $TABLEenfant, $condition) {
-        $selectarry = explode(",", $Select);
-        $sele = [];
-        foreach ($selectarry as $sele) {
-            $s[] = "$TABLEenfant.$sele";
+        foreach ($Entitys as $Entity) {
+            if (!empty($schema->get_table_CHILDREN())) {
+                foreach ($schema->get_table_CHILDREN() as $tablechild) {
+                    $Entity->setDataJOIN($tablechild, $this->run((
+                                            new QuerySQL())
+                                            ->select($schema->select_CHILDREN($tablechild))
+                                            ->from($schema->getPARENT())
+                                            ->join($tablechild, " INNER ", TRUE)
+                                            ->where($schema->getPARENT() . ".id = " . $Entity->id)));
+                }
+            } else {
+
+                $Entity->setDataJOIN("empty", []);
+            }
         }
-
-        $sql = (new QuerySQL())->select(implode(",", $s), "raison_sociale.raison_sociale")
-                ->from($TABLEpere)
-                ->join($TABLEenfant, "LEFT", true)
-                ->join("raison_sociale")
-                ->where($condition)
-        ;
-    
-        return $sql;
+        return $Entitys;
     }
 
     public function independent($Select, $TABLEenfant) {
@@ -145,9 +87,6 @@ if($schema==null){$schema= $this->schema;}
                         ->join("raison_sociale")
                         ->independent($TABLEpere);
     }
-////////////////////////////////////////////////////////////////////////////////
 
-  
-            
-            
+////////////////////////////////////////////////////////////////////////////////
 }

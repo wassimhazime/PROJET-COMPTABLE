@@ -14,7 +14,7 @@
 //Validation :commit
 //Annulation :rollback
 
-namespace core\model\Query;
+namespace core\MODEL\Query;
 
 /**
  * Description of QuerySQL

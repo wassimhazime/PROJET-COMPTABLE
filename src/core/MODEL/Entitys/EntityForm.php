@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace core\model\entitys;
+namespace core\MODEL\Entitys;
 
 /**
  * Description of EntityForm

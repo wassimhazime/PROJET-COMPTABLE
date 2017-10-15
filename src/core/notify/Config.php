@@ -5,7 +5,7 @@ namespace core\notify;
 use core\notify\outilsnotify\archive;
 use core\notify\outilsnotify\mail;
 
-class config {
+class Config {
 
     private static $outisnotify;
     static function setOutisnotify($outisnotify) {

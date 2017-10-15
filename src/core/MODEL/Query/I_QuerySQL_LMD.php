@@ -1,19 +1,13 @@
 <?php
-//– LDD, LMD & LCT
-//LDD : langage de< définition> des données
-//Colonnes
-//Tables
-//Contraintes
-//Tables et contraintes
-//LMD : langage de <manipulation> des données
-//Insertion :insert
-//Mise à jour :update
-//Suppression :delete
-//LCT : langage de< contrôle> des transactions
-//Validation :commit
-//Annulation :rollback
+/*
+LMD : langage de <manipulation> des données
+SELECT : sélection de données dans une table ;
+INSERT : insertion de données dans une table ;
+DELETE : suppression de données d'une table ;
+UPDATE : mise à jour de données d'une table.
+ */
 
-namespace core\model\Query;
+namespace core\MODEL\Query;
 
 /**
  *

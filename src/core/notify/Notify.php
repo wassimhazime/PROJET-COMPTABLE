@@ -4,13 +4,13 @@ namespace core\notify;
 
 use \SplObserver;
 use \SplSubject;
-use core\notify\config;
+use core\notify\Config;
 
-class notify implements SplSubject {
+class Notify implements SplSubject {
 
     function __construct(array $config=null) {
         if ($config === null) {
-            $config = config::getOutilsnotify();
+            $config = Config::getOutilsnotify();
         }
         foreach ($config as $outil) {
             $this->attach($outil);
@@ -19,9 +19,9 @@ class notify implements SplSubject {
 
     static function send_Notify($msg, $config = null) {
         if ($config === null) {
-            $config = config::getOutilsnotify();
+            $config = Config::getOutilsnotify();
         }
-        $notify = new notify($config);
+        $notify = new self($config);
 
         $notify->setFormation($msg);
     }

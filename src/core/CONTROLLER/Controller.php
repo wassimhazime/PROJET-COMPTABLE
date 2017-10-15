@@ -1,8 +1,8 @@
 <?php
 
-namespace core\Controller;
+namespace core\CONTROLLER;
 
-class controller {
+class Controller {
 
     /** Action à réaliser */
     protected $route;

@@ -1,8 +1,8 @@
 <?php
 
-namespace core\model\base_donnee;
+namespace core\MODEL\Base_Donnee;
 
-class config {
+class Config {
 
     public $DB;
     public $dbhost;

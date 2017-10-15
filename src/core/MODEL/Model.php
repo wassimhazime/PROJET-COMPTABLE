@@ -1,12 +1,12 @@
 <?php
-namespace core\model;
+namespace core\MODEL;
 
-use core\model\Entitys\EntitysTable;
-use core\model\Statement\Statement;
+use core\MODEL\Entitys\EntitysTable;
+use core\MODEL\Statement\Statement;
 use core\MODEL\Outils\Schema;
 use core\MODEL\Outils\Form;
 
-class model {
+class Model {
 
    
     public $EntitysTable;
@@ -18,7 +18,7 @@ class model {
 
     public function __construct( $table) {
         $this->schema=Schema::getschema( $table);
-        var_dump($this->schema);
+        
         $this->table=$table;
         $this->statement = new Statement($this->schema);
         
@@ -96,18 +96,14 @@ class model {
    
     
     public function show(array $show=null) {
-
-  
-          
-         $data =  $this->statement->Selectchild($this->schema);
-         
-         
-         
-        
-         return $data;
+       
+     $data =  $this->statement->Select();
+     
+      
+     return $data;
          
           
-        
+      
              }
 
     
@@ -163,10 +159,12 @@ class model {
     
     
     public function getMetaFORM() {
-      return Form::getForm($this->schema);;
+        
+       return Form::getForm($this->schema);
+      
     }
    
-
+   
     
     
  

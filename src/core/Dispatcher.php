@@ -2,17 +2,17 @@
 namespace core;
 use core\routeur\Requete;
 use core\routeur\Routeur;
-use core\Controller\controller;
+use core\CONTROLLER\Controller;
 use core\routeur\Session;
 
-class dispatcher {
+class Dispatcher {
  
 
    public static function load(){
        Session::set('url', (new  Requete())->getURL());
        $request =new  Requete();
       $route=Routeur::parst($request) ;
-     controller::executer($route);
+     Controller::executer($route);
        
 //      
 //       

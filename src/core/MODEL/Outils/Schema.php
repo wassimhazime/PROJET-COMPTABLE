@@ -2,8 +2,8 @@
 
 namespace core\MODEL\Outils;
 
-use core\model\entitys\EntitysSchema;
-use core\model\base_donnee\RUN;
+use core\MODEL\entitys\EntitysSchema;
+use core\MODEL\base_donnee\RUN;
 
 class Schema extends RUN {
 
@@ -70,7 +70,7 @@ private function columns_all($table) {
         $describe = $this->run("SHOW COLUMNS FROM " .
                 $table->getPARENT() .
                 " WHERE "
-                . 1
+                . "`Key`!='MUL' "
                 );
         $select = [];
 

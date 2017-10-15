@@ -7,20 +7,18 @@
  */
 
 namespace core\MODEL\Outils;
-use core\model\Entitys\EntitysTable;
+use core\MODEL\Entitys\EntitysTable;
+use core\MODEL\Base_Donnee\RUN;
 
-use \PDO;
-use \PDOException;
-use core\model\base_donnee\database;
-use core\notify\notify;
-class Autocomplete {
-     private $db, $entity;
+
+class Autocomplete extends RUN{
+     
     
-    
-   function __construct() {
-        $this->db = database::getDB();
-        $this->entity = new EntitysTable();
+     function __construct() {
+        parent::__construct(new EntitysTable());
     }
+    
+ 
     
     public static function getAutocomplete($table) {
         $describe = (new self)->run("SHOW COLUMNS FROM " .
@@ -43,24 +41,6 @@ class Autocomplete {
     }
     
   
-     private function run($sql, $select = true) {
-
-        try {
-            if ($select) {
-                $Statement = $this->db->query($sql);
-
-
-                $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
-
-
-                return $Statement->fetchAll();
-            } else {
-                $this->db->exec($sql);
-                return $this->db->lastInsertId();
-            }
-        } catch (PDOException $exc) {
-            notify::send_Notify($exc->getMessage()."   ".$sql);
-        }
-    }
+    
     
 }

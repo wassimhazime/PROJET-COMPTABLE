@@ -1,17 +1,16 @@
 <?php
 
-
-namespace core\model\entitys;
-
+namespace core\MODEL\Entitys;
 
 class EntitysSchema extends Entitys {
-    private $COLUMNS_master=["*"];
-    private $COLUMNS_all=["*"];
-    private $FOREIGN_KEY=[];
-    private $CHILDREN=[];
-    private  $PARENT="" ;
-     
-    function set(string $PARENT,array $COLUMNS_master=["*"],array $COLUMNS_all=["*"],array $FOREIGN_KEY=[],array $CHILDREN=[] ) {
+
+    private $COLUMNS_master = ["*"];
+    private $COLUMNS_all = ["*"];
+    private $FOREIGN_KEY = [];
+    private $CHILDREN = [];
+    private $PARENT = "";
+
+    function set(string $PARENT, array $COLUMNS_master = ["*"], array $COLUMNS_all = ["*"], array $FOREIGN_KEY = [], array $CHILDREN = []) {
         $this->COLUMNS_master = $COLUMNS_master;
         $this->COLUMNS_all = $COLUMNS_all;
         $this->FOREIGN_KEY = $FOREIGN_KEY;
@@ -27,7 +26,6 @@ class EntitysSchema extends Entitys {
         $this->COLUMNS_all = $COLUMNS_all;
     }
 
-    
     function getCOLUMNS_master() {
         return $this->COLUMNS_master;
     }
@@ -39,7 +37,14 @@ class EntitysSchema extends Entitys {
     function getCHILDREN() {
         return $this->CHILDREN;
     }
-
+   function get_table_CHILDREN() {
+       $TABLE=[];
+       foreach ($this->CHILDREN as $table => $columns) {
+          $TABLE[]=$table; 
+       }
+       
+        return $TABLE;
+    }
     function getPARENT() {
         return $this->PARENT;
     }
@@ -61,38 +66,63 @@ class EntitysSchema extends Entitys {
     }
 
     
-
- 
     
-    
-    
-
-   
     
     function select_master() {
-        
-        $select=[];
+
+        $select = [];
         foreach ($this->COLUMNS_master as $colom) {
-          $select[]= $this->PARENT.".".$colom; 
+            $select[] = $this->PARENT . "." . $colom;
         }
         foreach ($this->FOREIGN_KEY as $FOREIGN) {
-            $select[]= $FOREIGN.".".$FOREIGN;
+            $select[] = $FOREIGN . "." . $FOREIGN;
         }
-        return $select;
-    }
-    function select_CHILDREN() {
-        
-        $select=[];
-        
-        foreach ($this->CHILDREN as $table => $colums) {
-            
-            foreach ($colums as $colum) {
-              $select[]= $table.".".$colum ." as $table"."_".$colum;  
-            }
-            
-        }
-      
         return $select;
     }
     
+       function select_all() {
+
+        $select = [];
+        foreach ($this->COLUMNS_all as $colom) {
+            $select[] = $this->PARENT . "." . $colom;
+        }
+        foreach ($this->FOREIGN_KEY as $FOREIGN) {
+            $select[] = $FOREIGN . "." . $FOREIGN;
+        }
+        return $select;
+    }
+    
+    
+    
+
+    function select_CHILDREN($TABLE = null) {
+
+        $select = [];
+
+        if ($TABLE == null) {
+
+            foreach ($this->CHILDREN as $table => $colums) {
+
+                foreach ($colums as $colum) {
+                    $select[] = $table . "." . $colum . " as $table" . "_" . $colum;
+                }
+            }
+        } else {
+            
+              foreach ($this->CHILDREN[$TABLE] as  $colum) {
+
+                
+                    $select[] = $TABLE . "." . $colum . " as $TABLE" . "_" . $colum;
+                
+            }
+            
+            
+        }
+
+
+
+
+        return $select;
+    }
+
 }

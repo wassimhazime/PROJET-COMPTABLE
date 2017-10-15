@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace core\model\base_donnee;
-use core\model\entitys\Entitys;
+namespace core\MODEL\Base_Donnee;
+use core\MODEL\Entitys\Entitys;
 
 use \PDO;
 use \PDOException;
-use core\model\base_donnee\database;
-use core\model\Entitys\EntitysSchema;
-use core\notify\notify;
+use core\MODEL\Base_Donnee\DataBase;
+use core\MODEL\Entitys\EntitysSchema;
+use core\notify\Notify;
 
 /**
  * Description of RUN
@@ -26,7 +26,7 @@ class RUN {
     public $entity;
   
      public function __construct(Entitys $entity ,EntitysSchema $schema=null) {
-        $this->db = database::getDB();
+        $this->db = DataBase::getDB();
         $this->schema = $schema;
         $this->entity = $entity;
     }
@@ -54,7 +54,8 @@ class RUN {
             
             
         } catch (PDOException $exc) {
-            notify::send_Notify($exc->getMessage() ."querySQL ERROR ==> </br> $sql");
+            Notify::send_Notify($exc->getMessage() ."querySQL ERROR ==> </br> $sql");
+            die();
         }
     }
 }
