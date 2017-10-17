@@ -2,13 +2,9 @@
 
 namespace core\MODEL\Entitys;
 
-use core\routeur\Session;
-
 class EntitysTable extends Entitys {
 
     private $DataJOIN = array();
-
-    
 
 //add item enfant
 
@@ -16,22 +12,27 @@ class EntitysTable extends Entitys {
         $this->DataJOIN[$key] = $enfant;
     }
 
-    public function getDataJOIN($key=null) {
-        if($key==null){
+    public function getDataJOIN($key = null) {
+        if ($key == null) {
             return $this->DataJOIN;
-        }else{
-        return $this->DataJOIN[$key];}
+        } else {
+            return $this->DataJOIN[$key];
+        }
     }
 
-    public function getValueSyntaxeSql($key) {
-
-        $value = $this->$key;
-        return "'" . str_replace(' ', '+', $value) . "'";
+    public function set(array $data): array {
+        if ($this->isAssoc($data)) {
+            foreach ($data as $key => $value) {
+                $this->$key = $value;
+            }
+        }
+        return [$this];
     }
 
-    public function gethref($key, $link) {
-
-        return Session::get('url') . $key . '=' . $this->getValueSyntaxeSql($key) . '';
+    public static function isAssoc(array $arr): bool {
+        if (array() === $arr)
+            return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
 }

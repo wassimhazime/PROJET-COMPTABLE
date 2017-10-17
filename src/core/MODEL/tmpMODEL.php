@@ -91,6 +91,9 @@ class tmpMODEL {
 
        
     }
+    
+    
+    
      public function getData($condition,$link,$select) { // error
         
        

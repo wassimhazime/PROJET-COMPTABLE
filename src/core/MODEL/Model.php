@@ -21,12 +21,27 @@ class Model {
         $this->statement = new Statement($this->schema);
     }
 
+    public function setData($data){
+        if(isset($data) && !empty($data)){
+            unset($data["ajout_data"]);
+       $intent= Intent::parse($data,$this->schema);
+        
+        $this->statement->insert($intent);
+        
+        }
+    }
+
+
+    
+    
+    
     public function show(int $mode = Intent::MODE_SELECT_MASTER, $condition = 1) :Intent{
 
-
+        
+       
         $intent = $this->statement->Select($mode, $condition);
        
-        
+      
         return $intent;
     }
 

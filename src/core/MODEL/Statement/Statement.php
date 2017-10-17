@@ -41,13 +41,20 @@ class Statement extends RUN {
                         ->from($this->getTable());
     }
 
-    public function insert($data) {
+    public function insert(Intent $intent) {
+        $data=($intent->getEntitysTable()[0]);
+       $insert=[];
+        foreach ($data as $key => $value) {
+          $insert[$key]=  $value;
+        }
 
-        unset($data['id']);
-
-        return (new QuerySQL())->
+        unset($insert['id']);
+        
+        
+        $querySQL = (new QuerySQL())->
                         insertInto($this->getTable())
-                        ->value($data);
+                        ->value($insert);
+        $this->exec($querySQL);
     }
 
 ////////////////////////////////////////////////////////////////////////////////

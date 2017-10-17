@@ -31,7 +31,7 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT {
     private $value;
 
     // outils
-    private function isAssoc(array $arr) {
+    private function isAssoc(array $arr): bool {
         if (array() === $arr)
             return false;
         return array_keys($arr) !== range(0, count($arr) - 1);

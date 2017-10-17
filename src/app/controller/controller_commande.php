@@ -11,7 +11,9 @@ class controller_commande extends startCONTROLLER{
      
      public function index($att=null) {
            
-     
+      if(isset($_POST) && !empty($_POST)){
+             $this->model->setData($_POST);
+         }
      
          
          $title = $this->html->getTitle($this->title);
