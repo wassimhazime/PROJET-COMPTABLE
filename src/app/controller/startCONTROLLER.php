@@ -3,7 +3,8 @@
 
 namespace app\controller;
 use core\Controller\controller;
-
+use core\html\TAG;
+use core\INTENT\Intent;
 
 class startCONTROLLER extends controller{
     
@@ -33,49 +34,22 @@ class startCONTROLLER extends controller{
     
     
     
-     protected function getInfo($condition, $link='',$select='*') {
-        
-         $data= $this->model->getData($condition,$link,$select);
-        
-         return $this->html->getInfo($data);
-    } 
-     protected function getTableHTML( $select, $link="reche") {
-       $data= $this->model->show();
-     return $this->html->createTableHTML($data, $link);
-       // return $this->html->createTableHTML($data, $link);
-        
-    } 
-     protected function getTableHTMLrelation( $enfantTable,$enfantSelect,$pereSelect, $link="reche") {
-              
-        // $data =  $this->model->getTableSQLrelation($enfantTable,$enfantSelect,$pereSelect);
-         
-         
-         
-        $data= $this->model->show();
-         return $this->html->createTableHTML($data, $link);
-        
-        
-       //  return $this->html->createTableHTMLrelation($data, $link,$enfantTable);
-        
-    } 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     public function formEnfant($enfant,$index) {
+  
+     protected function show(int $mode = Intent::MODE_SELECT_MASTER, $condition = 1 ) {
+        $intent= $this->model->show($mode,$condition);
+        return (new TAG())->tableHTML($intent);
+} 
      
-         
-         $dataEnfant= $this->model->getTableSQL_Orphelin(null,$this->nom,$enfant);
-         
-         $Enfant['data']= $this->html->multiselect($dataEnfant,$enfant);
-         $Enfant['index']= $index;
-       return $Enfant;
-     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
      protected function getFormHTML($enfant=null,$index=0) {
           

@@ -7,8 +7,8 @@
  */
 
 namespace core\MODEL\Base_Donnee;
-use core\MODEL\Entitys\Entitys;
 
+use core\MODEL\Entitys\Entitys;
 use \PDO;
 use \PDOException;
 use core\MODEL\Base_Donnee\DataBase;
@@ -21,41 +21,46 @@ use core\notify\Notify;
  * @author Wassim Hazime
  */
 class RUN {
+
     public $db;
     public $schema;
     public $entity;
-  
-     public function __construct(Entitys $entity ,EntitysSchema $schema=null) {
+
+    public function __construct(Entitys $entity, EntitysSchema $schema = null) {
         $this->db = DataBase::getDB();
         $this->schema = $schema;
         $this->entity = $entity;
     }
-    
-    
-    public function run($sql, $select = true) {
-        
-        
-        
+
+    public function query($sql):array  {
 
         try {
-            if ($select) {
-                $Statement = $this->db->query($sql);
 
-                $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
+            $Statement = $this->db->query($sql);
 
-             
-                return $Statement->fetchAll();
-            } else {
-                $this->db->exec($sql);
-                
-                return $this->db->lastInsertId();
-            }
-           
-            
-            
+            $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
+
+
+            return $Statement->fetchAll();
         } catch (PDOException $exc) {
-            Notify::send_Notify($exc->getMessage() ."querySQL ERROR ==> </br> $sql");
+            Notify::send_Notify($exc->getMessage() . "querySQL  ERROR ==> </br> $sql");
             die();
         }
     }
+
+    public function exec($sql):string  {
+
+        try {
+            $this->db->beginTransaction();
+            $this->db->exec($sql);
+            $this->db->commit();
+
+            return $this->db->lastInsertId();
+        } catch (PDOException $exc) {
+            $this->db->rollBack();
+            Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
+            die();
+        }
+    }
+
 }

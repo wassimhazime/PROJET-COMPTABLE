@@ -16,7 +16,7 @@ class Form extends RUN {
 
     public static function getForm(EntitysSchema $schem): array {
 
-        $DESCRIBE = ((new self())->run("DESCRIBE  " . $schem->getPARENT()));
+        $DESCRIBE = ((new self())->query("DESCRIBE  " . $schem->getPARENT()));
 
         foreach ($DESCRIBE as $input) {
             if ($input->is_FOREIGN_KEY()) {

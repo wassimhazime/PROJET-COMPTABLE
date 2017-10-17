@@ -15,12 +15,8 @@ class controller_avoir extends startCONTROLLER{
            
     
          $title = $this->html->getTitle($this->title);
-         $info = $this->getInfo($att);
-         $enfantTable=array('bl');
-         $pereSelect=null;
-         $enfantSelect=array('id,N,raison_sociale');
-         
-         $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
+         $info = $this->show();
+         $table=$this->show();
         
          $this->render(compact('title','info','table'));
          

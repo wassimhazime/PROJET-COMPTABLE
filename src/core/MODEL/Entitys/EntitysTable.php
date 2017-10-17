@@ -16,8 +16,11 @@ class EntitysTable extends Entitys {
         $this->DataJOIN[$key] = $enfant;
     }
 
-    public function getDataJOIN($key) {
-        return $this->DataJOIN[$key];
+    public function getDataJOIN($key=null) {
+        if($key==null){
+            return $this->DataJOIN;
+        }else{
+        return $this->DataJOIN[$key];}
     }
 
     public function getValueSyntaxeSql($key) {

@@ -14,13 +14,8 @@ class controller_paiement extends startCONTROLLER{
            
         
          $title = $this->html->getTitle($this->title);
-         $info = $this->getInfo($att);
-         $enfantTable=array('facture');
-         $pereSelect=null;
-         $enfantSelect=['id,N,raison_sociale'];
-         
-         $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
-        
+          $info = $this->show();
+         $table=$this->show();
          $this->render(compact('title','info','table'));
          
      }

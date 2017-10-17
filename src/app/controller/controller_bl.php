@@ -11,13 +11,8 @@ class controller_bl extends startCONTROLLER{
            
          
          $title = $this->html->getTitle($this->title);
-         $info = $this->getInfo($att);
-         $enfantTable=['commande'];
-         $pereSelect=null;//'id_facture,N_facture,raison_sociale_facture';
-         $enfantSelect=['id,objectif,raison_sociale']; 
-         
-         $table=$this->getTableHTMLrelation($enfantTable,$enfantSelect,$pereSelect);
-        
+             $info = $this->show();
+         $table=$this->show();
          $this->render(compact('title','info','table'));
          
      }

@@ -31,12 +31,12 @@
                         <span class="loading" style="display: none"><img src="<?php echo ROOTWEB ?>app/views/templete/image/loading.gif" alt="loading" width="80" height="80"/></span>
 		</fieldset>
 	</form>
-            <table id="table_finde" class="table table-hover table-bordered scroll" >
+          
 
 <?php  echo  $table ;?>     
 
 
-            </table>
+           
             
             <div class="row ">
                 <div class="col-md-10 col-md-offset-2">

@@ -12,15 +12,8 @@ class controller_mode_paiement extends startCONTROLLER{
          
          $title = $this->html->getTitle($this->title);
 
-        if (isset($_POST['ajout_data'])) {
-            $data=$_POST;
-           $id = $this->model->setData($data);
-           $info = $this->getInfo($id);
-        } else {
-            $info = $this->getInfo($att);
-        }
-       
-         $table=$this->getTableHTML(null);
+        $info = $this->show();
+         $table=$this->show();
          $form= $this->getFormHTML('');
          $this->render(compact('title','info','table','form'));
          

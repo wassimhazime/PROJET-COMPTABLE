@@ -25,12 +25,12 @@
 <div class ="container">
     <div class="row">
         <div id="wtable" class="col-md-7 cadre " >
-            <table class="table table-hover table-bordered scroll" >
+            
 
 <?php  echo  $table ;?>     
 
 
-            </table>
+        
             
             <div class="row ">
                 <div class="col-md-10 col-md-offset-2">

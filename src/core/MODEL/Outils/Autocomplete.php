@@ -21,7 +21,7 @@ class Autocomplete extends RUN{
  
     
     public static function getAutocomplete($table) {
-        $describe = (new self)->run("SHOW COLUMNS FROM " .
+        $describe = (new self)->query("SHOW COLUMNS FROM " .
                 $table.
                 " WHERE `null`='no' and "
                 . "`Type` !='varchar(201)' and"
@@ -37,7 +37,7 @@ class Autocomplete extends RUN{
         $colums= implode(' , ', $select); 
         
         
-     return (new self)->run('SELECT ' .$colums. ' FROM '.$table);
+     return (new self)->query('SELECT ' .$colums. ' FROM '.$table);
     }
     
   

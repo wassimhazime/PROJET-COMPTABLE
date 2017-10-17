@@ -15,7 +15,7 @@ class Schema extends RUN {
     }
 
     public static function getschema($parent = null) :EntitysSchema {
-        $PARENT = (new self(''))->run(' SELECT table_name as PARENT FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "comptable" and  table_name not LIKE("r\_%") ');
+        $PARENT = (new self(''))->query(' SELECT table_name as PARENT FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "comptable" and  table_name not LIKE("r\_%") ');
 
        
         foreach ($PARENT as $table) {
@@ -49,7 +49,7 @@ class Schema extends RUN {
 
 private function columns_master($table) {
 
-        $describe = $this->run("SHOW COLUMNS FROM " .
+        $describe = $this->query("SHOW COLUMNS FROM " .
                 $table->getPARENT() .
                 " WHERE `null`='no' and "
                 . "`Type` !='varchar(201)' and"
@@ -67,7 +67,7 @@ private function columns_master($table) {
     }
 private function columns_all($table) {
 
-        $describe = $this->run("SHOW COLUMNS FROM " .
+        $describe = $this->query("SHOW COLUMNS FROM " .
                 $table->getPARENT() .
                 " WHERE "
                 . "`Key`!='MUL' "
@@ -83,7 +83,7 @@ private function columns_all($table) {
     }
 private function columns_master_CHILDREN($table) {
 
-        $describe = $this->run("SHOW COLUMNS FROM " . $table .
+        $describe = $this->query("SHOW COLUMNS FROM " . $table .
                 " WHERE `null`='no' and "
                 . "`Type` !='varchar(201)' and"
                 . " `Type` !='varchar(20)' and"
@@ -100,7 +100,7 @@ private function columns_master_CHILDREN($table) {
     }
 private function FOREIGN_KEY($table) {
 
-        $describe = $this->run("SHOW COLUMNS FROM " .
+        $describe = $this->query("SHOW COLUMNS FROM " .
                 $table->getPARENT() .
                 " WHERE `Key`='MUL'");
         $FOREIGN_KEY = [];
@@ -111,7 +111,7 @@ private function FOREIGN_KEY($table) {
         return $FOREIGN_KEY;
     }
 private function tables_CHILDREN($mainTable) {
-        $tables_relation = (new self(''))->run('SELECT table_name as tables_relation FROM'
+        $tables_relation = (new self(''))->query('SELECT table_name as tables_relation FROM'
                 . ' INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "comptable" '
                 . 'and  table_name  LIKE("r\_' . $mainTable->getPARENT() . '%")  ');
         $tables_CHILDREN = [];

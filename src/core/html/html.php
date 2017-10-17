@@ -7,8 +7,7 @@ namespace core\html;
 
 use core\html\Bootstrap\Bootstrap;
 use core\html\Bootstrap\DialogHTML;
-use core\html\element\tableHTML\TableHTML;
-use core\html\element\tableHTML\TableHTMLrelation;
+
 use core\html\element\FormHTML;
 use core\html\element\multiSelect;
 
@@ -30,8 +29,8 @@ class html {
         $this->bootstrap = new Bootstrap();
         $this->DialogHTML = new DialogHTML();
          $this->multiSelect = new multiSelect();
-        $this->TableHTML = new TableHTML();
-        $this->TableHTMLrelation = new TableHTMLrelation();
+       
+        
         $this->FormHTML = new FormHTML();
         
     }
@@ -50,13 +49,7 @@ class html {
         return '<div class="title"><h1><strong><center>'.ucfirst($title).'</center></strong></h1></div>';
     }
 
-    public function createTableHTML($data, $link) {
-    return $this->TableHTML->createTableHTML($data,$this->suffixe, $link);
-    }
-  
-    public function createTableHTMLrelation($data, $link,$title) {
-    return $this->TableHTMLrelation->createTableHTMLrelation($data,$this->suffixe, $link,$title);
-    }
+   
     public function getFormHTML($metaFORM,$formEnfant=null,$index=0) {
         return $this->FormHTML->createFormHTML($metaFORM,$formEnfant,$index);
     }
@@ -75,7 +68,7 @@ class html {
 
     public function Infocherche($data, $btn = 'test') {
 
-        $content = $this->TableHTML->createTableHTML($data,$this->suffixe);
+      //  $content = $this->TableHTML->createTableHTML($data,$this->suffixe);
 
         $content = $this->bootstrap->createStyleTable($content);
         

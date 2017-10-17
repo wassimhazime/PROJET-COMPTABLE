@@ -6,8 +6,11 @@ use core\MODEL\Base_Donnee\RUN;
 use core\MODEL\Query\QuerySQL;
 use core\MODEL\Entitys\EntitysTable;
 use core\MODEL\Entitys\EntitysSchema;
+use core\INTENT\Intent;
 
 class Statement extends RUN {
+
+    
 
     function getTable() {
         return $this->schema->getPARENT();
@@ -48,24 +51,33 @@ class Statement extends RUN {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(EntitysSchema $schema = null, $condition = 1): array {
-        if ($schema == null) {
-            $schema = $this->schema;
+    public function Select(int $mode = Intent::MODE_SELECT_MASTER, $condition = 1): Intent {
+        $schema = $this->schema;
+        if ($mode == Intent::MODE_SELECT_MASTER) {
+            $Entitys = $this->query((new QuerySQL())
+                            ->select($schema->select_master())
+                            ->from($schema->getPARENT())
+                            ->join($schema->getFOREIGN_KEY())
+                            ->where($condition));
+        } elseif ($mode == Intent::MODE_SELECT_ALL) {
+            $Entitys = $this->query((new QuerySQL())
+                            ->select($schema->select_all())
+                            ->from($schema->getPARENT())
+                            ->join($schema->getFOREIGN_KEY())
+                            ->where($condition));
         }
-        $Entitys = $this->run((new QuerySQL())
-                        ->select($schema->select_master())
-                        ->from($schema->getPARENT())
-                        ->join($schema->getFOREIGN_KEY())
-                        ->where($condition));
-        return $this->dataJoin($Entitys, $schema);
+        $this->setDataJoins($Entitys);
+        
+        return new Intent($schema, $Entitys, $mode);
     }
 
-    private function dataJoin(array $Entitys,EntitysSchema $schema): array {
+    private function setDataJoins(array $Entitys) {
+        $schema = $this->schema;
 
         foreach ($Entitys as $Entity) {
             if (!empty($schema->get_table_CHILDREN())) {
                 foreach ($schema->get_table_CHILDREN() as $tablechild) {
-                    $Entity->setDataJOIN($tablechild, $this->run((
+                    $Entity->setDataJOIN($tablechild, $this->query((
                                             new QuerySQL())
                                             ->select($schema->select_CHILDREN($tablechild))
                                             ->from($schema->getPARENT())
@@ -77,7 +89,6 @@ class Statement extends RUN {
                 $Entity->setDataJOIN("empty", []);
             }
         }
-        return $Entitys;
     }
 
     public function independent($Select, $TABLEenfant) {

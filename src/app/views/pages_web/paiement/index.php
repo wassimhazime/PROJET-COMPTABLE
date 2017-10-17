@@ -10,12 +10,12 @@ echo $info;
 
     <div class="row">
         <div id="wtable"  >
-            <table class="table table-hover table-bordered scroll" >
+          
 
                 <?php echo $table; ?>     
 
 
-            </table>
+       
 
            
         </div>

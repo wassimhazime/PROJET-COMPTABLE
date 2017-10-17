@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1d17eee377304cd3997e65e87a91b166
+class ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01
 {
     public static $files = array (
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
@@ -193,10 +193,10 @@ class ComposerStaticInit1d17eee377304cd3997e65e87a91b166
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit1d17eee377304cd3997e65e87a91b166::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01::$classMap;
 
         }, null, ClassLoader::class);
     }

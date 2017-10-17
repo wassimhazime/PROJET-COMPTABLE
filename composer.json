@@ -8,6 +8,7 @@
         }
     ],
     "require": {
+          "php": "^7.0",
         "nette/forms": "^2.4",
         "filp/whoops": "^2.1",
         "slim/slim": "^3.0"
