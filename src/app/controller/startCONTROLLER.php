@@ -40,9 +40,9 @@ class startCONTROLLER extends controller{
     
     
   
-     protected function show(int $mode = Intent::MODE_SELECT_MASTER, $condition = 1 ) {
+     protected function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1 ) {
         
-         
+        
          $intent= $this->model->show($mode,$condition);
         return (new TAG())->tableHTML($intent);
         

@@ -6,10 +6,36 @@ use core\MODEL\Entitys\EntitysSchema;
 use core\MODEL\Entitys\EntitysTable;
 
 class Intent {
+    const MODE_SELECT_MASTER_MASTER =  ["MASTER","MASTER"];
+    const MODE_SELECT_MASTER_ALL =     ["MASTER","ALL"   ];
+    const MODE_SELECT_ALL_MASTER =     ["ALL"   ,"MASTER"];
+    const MODE_SELECT_ALL_ALL =        ["ALL"   ,"ALL"   ];
+    const MODE_SELECT_MASTER_NULL =    ["MASTER","EMPTY"   ];
+    const MODE_SELECT_ALL_NULL =       ["ALL"   ,"EMPTY"];
+    
+    
+    
+    public static function is_PARENT_MASTER( $_intentORmode):bool{
+        if($_intentORmode instanceof Intent){
+        $mode=$_intentORmode->getMode();
+        }else{$mode=$_intentORmode;}
+        
+        return $mode[0]=="MASTER";
+    }
+    public static function is_PARENT_ALL($_intentORmode):bool{
+         if($_intentORmode instanceof Intent){
+        $mode=$_intentORmode->getMode();
+        }else{$mode=$_intentORmode;}
+        return $mode[0]=="ALL";
+    }
+     public static function is_get_CHILDREN($_intentORmode):bool{
+         if($_intentORmode instanceof Intent){
+        $mode=$_intentORmode->getMode();
+        }else{$mode=$_intentORmode;}
+        return $mode[1]!="EMPTY";
+    }
 
-    const MODE_SELECT_MASTER = 1;
-    const MODE_SELECT_ALL = 2;
-
+    
     private $entitysSchema;
     private $entitysTable;
     private $mode;
@@ -22,17 +48,17 @@ class Intent {
         return $this->entitysTable;
     }
 
-    public function getMode(): int {
+    public function getMode(): array {
         return $this->mode;
     }
 
-    public static function parse(array $data, EntitysSchema $schema, int $mode = self::MODE_SELECT_ALL):self {
+    public static function parse(array $data, EntitysSchema $schema, array $mode = self::MODE_SELECT_MASTER_MASTER):self {
         if (self::isAssoc($data) and isset($data)) {
             return (new self($schema, ((new EntitysTable())->set($data)), $mode));
         }
     }
 
-    public function __construct(EntitysSchema $entitysSchema, array $entitysTables, int $mode) {
+    public function __construct(EntitysSchema $entitysSchema, array $entitysTables, array $mode) {
 
 
 

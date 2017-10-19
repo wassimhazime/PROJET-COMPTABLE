@@ -3,19 +3,31 @@
 namespace core\MODEL\Entitys;
 
 class EntitysSchema extends Entitys {
+    private $modeCHILDREN=null;
 
+    private $PARENT = "";
     private $COLUMNS_master = ["*"];
     private $COLUMNS_all = ["*"];
     private $FOREIGN_KEY = [];
     private $CHILDREN = [];
-    private $PARENT = "";
+    
 
     function set(string $PARENT, array $COLUMNS_master = ["*"], array $COLUMNS_all = ["*"], array $FOREIGN_KEY = [], array $CHILDREN = []) {
+        $this->PARENT = $PARENT;
         $this->COLUMNS_master = $COLUMNS_master;
         $this->COLUMNS_all = $COLUMNS_all;
         $this->FOREIGN_KEY = $FOREIGN_KEY;
         $this->CHILDREN = $CHILDREN;
-        $this->PARENT = $PARENT;
+        
+    }
+    public function Instance(array $table):self {
+        $this->PARENT = $table["PARENT"];
+       $this->COLUMNS_master = $table["COLUMNS_master"];
+        $this->COLUMNS_all = $table["COLUMNS_all"];
+        $this->FOREIGN_KEY = $table["FOREIGN_KEY"];
+        $this->CHILDREN = $table["CHILDREN"];
+        
+        return $this;
     }
 
     function getCOLUMNS_all() {
@@ -34,17 +46,21 @@ class EntitysSchema extends Entitys {
         return $this->FOREIGN_KEY;
     }
 
-    function getCHILDREN() {
-        return $this->CHILDREN;
+    function getCHILDREN($mode=null) {
+        $this->setModeCHILDREN($mode);
+     
+        return $this->CHILDREN[$this->modeCHILDREN];
     }
-   function get_table_CHILDREN() {
+    function get_table_CHILDREN($mode=null) {
+        $this->setModeCHILDREN($mode);
        $TABLE=[];
-       foreach ($this->CHILDREN as $table => $columns) {
+       foreach ($this->CHILDREN[$this->modeCHILDREN] as $table => $columns) {
           $TABLE[]=$table; 
        }
        
         return $TABLE;
     }
+    
     function getPARENT() {
         return $this->PARENT;
     }
@@ -58,6 +74,7 @@ class EntitysSchema extends Entitys {
     }
 
     function setCHILDREN($CHILDREN) {
+       
         $this->CHILDREN = $CHILDREN;
     }
 
@@ -80,7 +97,7 @@ class EntitysSchema extends Entitys {
         return $select;
     }
     
-       function select_all() {
+    function select_all() {
 
         $select = [];
         foreach ($this->COLUMNS_all as $colom) {
@@ -92,16 +109,28 @@ class EntitysSchema extends Entitys {
         return $select;
     }
     
-    
+    private function setModeCHILDREN($mode) {
+        if($mode==null and $this->modeCHILDREN==null){
+            $this->modeCHILDREN="MASTER";
+         } elseif ($mode!=null) {
+          $this->modeCHILDREN=$mode;   
+         }
+        
+        
+    }
     
 
-    function select_CHILDREN($TABLE = null) {
-
+    function select_CHILDREN($TABLE = null,$mode=null) {
+        $this->setModeCHILDREN($mode);
+        
+        
+         
+       
         $select = [];
 
         if ($TABLE == null) {
 
-            foreach ($this->CHILDREN as $table => $colums) {
+            foreach ($this->CHILDREN[$this->modeCHILDREN] as $table => $colums) {
 
                 foreach ($colums as $colum) {
                     $select[] = $table . "." . $colum . " as $table" . "_" . $colum;
@@ -109,7 +138,7 @@ class EntitysSchema extends Entitys {
             }
         } else {
             
-              foreach ($this->CHILDREN[$TABLE] as  $colum) {
+              foreach ($this->CHILDREN[$this->modeCHILDREN][$TABLE] as  $colum) {
 
                 
                     $select[] = $TABLE . "." . $colum . " as $TABLE" . "_" . $colum;
@@ -120,7 +149,7 @@ class EntitysSchema extends Entitys {
         }
 
 
-
+        
 
         return $select;
     }

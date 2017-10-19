@@ -58,35 +58,35 @@ class Statement extends RUN {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(int $mode = Intent::MODE_SELECT_MASTER, $condition = 1): Intent {
+    public function Select(array $mode = Intent::MODE_SELECT_ALL_ALL, $condition = 1): Intent {
         $schema = $this->schema;
-        if ($mode == Intent::MODE_SELECT_MASTER) {
+        if ( Intent::is_PARENT_MASTER($mode) ) {
             $Entitys = $this->query((new QuerySQL())
                             ->select($schema->select_master())
                             ->from($schema->getPARENT())
                             ->join($schema->getFOREIGN_KEY())
                             ->where($condition));
-        } elseif ($mode == Intent::MODE_SELECT_ALL) {
+        } elseif (Intent::is_PARENT_ALL($mode)) {
             $Entitys = $this->query((new QuerySQL())
                             ->select($schema->select_all())
                             ->from($schema->getPARENT())
                             ->join($schema->getFOREIGN_KEY())
                             ->where($condition));
         }
-        $this->setDataJoins($Entitys);
+        $this->setDataJoins($Entitys, $mode);
         
         return new Intent($schema, $Entitys, $mode);
     }
 
-    private function setDataJoins(array $Entitys) {
+    private function setDataJoins(array $Entitys,array $mode) {
         $schema = $this->schema;
 
         foreach ($Entitys as $Entity) {
-            if (!empty($schema->get_table_CHILDREN())) {
+            if (!empty($schema->get_table_CHILDREN())and Intent::is_get_CHILDREN($mode)) {
                 foreach ($schema->get_table_CHILDREN() as $tablechild) {
                     $Entity->setDataJOIN($tablechild, $this->query((
                                             new QuerySQL())
-                                            ->select($schema->select_CHILDREN($tablechild))
+                                            ->select($schema->select_CHILDREN($tablechild,$mode[1]))
                                             ->from($schema->getPARENT())
                                             ->join($tablechild, " INNER ", TRUE)
                                             ->where($schema->getPARENT() . ".id = " . $Entity->id)));

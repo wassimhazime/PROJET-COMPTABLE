@@ -14,6 +14,7 @@ use \PDOException;
 use core\MODEL\Base_Donnee\DataBase;
 use core\MODEL\Entitys\EntitysSchema;
 use core\notify\Notify;
+use core\MODEL\Base_Donnee\Config;
 
 /**
  * Description of RUN
@@ -21,22 +22,25 @@ use core\notify\Notify;
  * @author Wassim Hazime
  */
 class RUN {
+   
 
-    public $db;
-    public $schema;
-    public $entity;
+   
+    protected $schema;
+    protected $schemaSELECT;
+    protected $entity;
 
     public function __construct(Entitys $entity, EntitysSchema $schema = null) {
-        $this->db = DataBase::getDB();
-        $this->schema = $schema;
+        
+         $this->schema = $schema;
         $this->entity = $entity;
     }
 
-    public function query($sql):array  {
+    public function query($sql): array {
+        $db = DataBase::getDB(Config::getConnect());
 
         try {
 
-            $Statement = $this->db->query($sql);
+            $Statement = $db->query($sql);
 
             $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
 
@@ -48,16 +52,17 @@ class RUN {
         }
     }
 
-    public function exec($sql):string  {
+    public function exec($sql): string {
+        $db = DataBase::getDB(Config::getConnect());
 
         try {
-            $this->db->beginTransaction();
-            $this->db->exec($sql);
-            $this->db->commit();
+            $db->beginTransaction();
+            $db->exec($sql);
+            $db->commit();
 
-            return $this->db->lastInsertId();
+            return $db->lastInsertId();
         } catch (PDOException $exc) {
-            $this->db->rollBack();
+            $db->rollBack();
             Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
             die();
         }

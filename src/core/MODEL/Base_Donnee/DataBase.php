@@ -5,22 +5,27 @@ namespace core\MODEL\Base_Donnee;
 use \PDO;
 use \Exception;
 use core\notify\notify;
+use core\MODEL\Base_Donnee\Config;
 
 class DataBase {
 
     private static $dbConnection = null;
 
-    public static function getDB() {
+    public static function getDB(array $config) {
 
         if (self::$dbConnection === null) {
+            $DB = $config['DB'];
+            $dbhost = $config['dbhost'];
+            $dbuser = $config['dbuser'];
+            $dbpass = $config['dbpass'];
+            $dbname = $config['dbname'];
 
-            $config = new Config();
 
             try {
-                $dbConnection = new PDO("$config->DB:host=$config->dbhost;dbname=$config->dbname", $config->dbuser, $config->dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+                $dbConnection = new PDO("$DB:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             } catch (Exception $e) {
-                
-                notify::send_Notify($e->getMessage());
+
+                Notify::send_Notify($e->getMessage());
 
                 die('Erreur data base: ' . $e->getMessage());
             }

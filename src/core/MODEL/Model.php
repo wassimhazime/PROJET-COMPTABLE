@@ -35,7 +35,7 @@ class Model {
     
     
     
-    public function show(int $mode = Intent::MODE_SELECT_MASTER, $condition = 1) :Intent{
+    public function show(array $mode = Intent::MODE_SELECT_MASTER, $condition = 1) :Intent{
 
         
        
