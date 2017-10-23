@@ -2,35 +2,65 @@
 
 namespace core\html\element;
 
-
 class AbstractHTML {
-    
-            
-    function __construct() {
-        
+
+    protected $intent;
+
+    function __construct($intent) {
+        $this->intent = $intent;
     }
 
-    public function a($href,$value) {
-        return "<a href={$href}  > {$value} </a>";  
+    protected function labelHTML(array $input, $att = 'class="control-label" '): string {
+        return '<label ' . $att . 'for="' . $input['Field'] . '">' . str_replace("_", " ", $input['Field']) . '</label>';
+        ;
     }
- 
-    public function chargeListHtml($item, $param = '', $balis = 'option ') {
-        
-       $id='id';
-      
-        $option = "<$balis $param " . " value =rien>select champ</$balis>";
-        foreach ($item as $c) {
-            $op = '';
 
-            foreach ($c as $key => $value) {
-               
-                $op .= $key . '<>' . $value . '  ||  ';
-            }
-            $option .= "<$balis $param " . " value ={$c->$id}> $op </$balis>"
-            ;
+    protected function textareaHTML(array $input, $att = '  class="form-control" '): string {
+        return ' <textarea  ' . $att . '   name="' . $input['Field'] . '"  placeholder="' . str_replace("_", " ", $input['Field']) . '" value="' . $input['Default'] . '"> </textarea>';
+    }
+
+    protected function inputHTML(array $input, $att = ' class="form-control" '): string {
+        return ' <input type="' . $input['Type'] . '" ' . $att . ' name="' . $input['Field'] . '" placeholder="' . str_replace("_", " ", $input['Field']) . '" value="' . $input['Default'] . '">';
+    }
+
+    protected function divHTML(array $TAG, $att = ' class="form-group" ') {
+        $tag = implode("\n", $TAG);
+        return "<div $att> \n $tag \n </div> \n";
+    }
+
+    protected function selectHTML(array $input, $att = ' class="form-control" '): string {
+        $inputHTML = ' <select ' . $att . ' name="' . $input['Field'] . '" >' . "\n";
+
+        foreach ($input['DataFOREIGN_KEY'] as $op) {
+
+            $name = ($input['Field']);
+
+            $inputHTML .= '  <option value="' . $op->id . '">' . $op->$name . '</option>' . "\n";
         }
-    return $option;
-    } 
- 
+        $inputHTML .= '</select>';
+        return $inputHTML;
+    }
+
+    protected function multiSelectHTML(array $input, $att = '  class="multiSelectItemwassim form-control" '): string {
+        $inputHTML = ' <select multiple  ' . $att . '   name="' . $input['Field'] . '" >';
+        $inputHTML .= $this->chargeListHtml($input['DataCHILDRENS']) . ' </select>';
+        return $inputHTML;
+    }
+
+    private function chargeListHtml($DataCHILDRENS, $param = '') {
+        $TAGoption = "";
+        foreach ($DataCHILDRENS as $row) {
+            if (!isset($row->id)) {
+                return "<option></option>";
+            }
+            $dataOption = '';
+            foreach ($row as $column => $value) {
+                $dataOption .= $column . '$$$' . $value . ' £££ ';
+            }
+            $popover = 'data-container="body" data-toggle="popover" data-placement="top" data-content="' . $dataOption . '"';
+            $TAGoption .= "<option $param $popover " . "  value ={$row->id}> $dataOption </option> ";
+        }
+        return $TAGoption;
+    }
 
 }

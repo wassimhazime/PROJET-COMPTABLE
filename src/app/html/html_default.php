@@ -1,13 +1,15 @@
 <?php
 namespace app\html;
-use core\html\html;
 
-class html_default extends html{
+
+class html_default {
     
     function __construct() {
-        parent::__construct(trim(get_class(),__NAMESPACE__.'html'));
+        
          
     }
     
-   
+    public function getTitle($param) {
+        return $param;
+    }
 }

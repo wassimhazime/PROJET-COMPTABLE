@@ -85,7 +85,7 @@
  */
 
 namespace core\html\element;
-
+use core\html\element\AbstractHTML;
 use core\INTENT\Intent;
 
 /**
@@ -93,11 +93,12 @@ use core\INTENT\Intent;
  *
  * @author Wassim Hazime
  */
-class TableHTML {
+class TableHTML extends AbstractHTML{
 
-    protected $intent;
+    
     function __construct($intent) {
-        $this->intent = $intent;
+        parent::__construct($intent);
+
     }
 
         public function builder( $att ) {
@@ -153,7 +154,7 @@ class TableHTML {
         return (implode(" \n", $bodys));
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected function TableCHILD(Intent $intent, int $indexROW): array {
         if (!Intent::is_get_CHILDREN($intent)) {

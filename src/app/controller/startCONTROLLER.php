@@ -53,10 +53,7 @@ class startCONTROLLER extends controller{
          $intent= $this->model->form();
        
          return (new TAG())->FormHTML($intent);
-         
-//        $metaFORM= $this->model->getMetaFORM(); // object meta
-//      
-//         return $this->html->getFormHTML($metaFORM,$enfant,$index) ;
+
          
     }
     

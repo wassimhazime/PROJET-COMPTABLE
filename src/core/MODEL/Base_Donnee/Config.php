@@ -1,13 +1,14 @@
 <?php
 
 namespace core\MODEL\Base_Donnee;
+use core\ConfigPath;
 
 use core\notify\Notify;
 use \Exception;
 
-class Config {
+class Config extends ConfigPath{
 
-    private static $path;
+   
     private static $connect = [];
     private static $SCHEMA_SELECT_AUTO;
     private static $SCHEMA_SELECT_MANUAL;
@@ -39,24 +40,13 @@ class Config {
         return self::$connect;
     }
 
-    public static function getPath() {
-        if (self::$path == null) {
-            self::$path = ROOT . D_S . "src" . D_S . "app" . D_S . "config" . D_S;
-        }
-        return self::$path;
-    }
+    
 
     public static function getNameDataBase(): string {
         return self::getConnect()["dbname"];
     }
 
-    private function __construct(string $path = null) {
-        if ($path == null) {
-            self::getPath();
-        } else {
-            self::$path = $path;
-        }
-    }
+    
 
     public static function getSCHEMA_SELECT_MANUAL(string $path = null): array {
         if ($path == null) {

@@ -9,7 +9,7 @@
 namespace core\html;
 use core\INTENT\Intent;
 use core\html\element\TableHTML;
-use core\html\element\form\FormHTML;
+use core\html\element\FormHTML;
 
 /**
  * Description of TAG
@@ -25,9 +25,9 @@ class TAG {
         
         
     }
-        public function FormHTML(Intent $intent) {
+    public function FormHTML(Intent $intent) {
         $formhtml=new FormHTML($intent);
-        return $formhtml->builder();
+        return $formhtml->builder("  ");
         
         
     }

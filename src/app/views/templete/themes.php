@@ -9,56 +9,31 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="icon" href="../../favicon.ico">
-
         <title>Starter Template for Bootstrap</title>
-
         <link href="<?php echo ROOTWEB ?>src/app/views/templete/front_end/dist/dist.css" rel="stylesheet">
-
-
     </head>
-
     <body>
-
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+        <div class="container">
+            <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="navbar-header">
-                    <?php ?>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>index">Project name </a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>mode_paiement/index">mode_paiement</a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>commande/index">commande</a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>bl/index">bl</a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>raison_sociale/index">raison_sociale</a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>avoir/index">avoir</a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>facture/index">facture</a>
-                    <a class="navbar-brand" href="<?php echo ROOTWEB ?>paiement/index">paiement</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>index">Project name </a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>mode_paiement/index">mode_paiement</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>commande/index">commande</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>bl/index">bl</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>raison_sociale/index">raison_sociale</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>avoir/index">avoir</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>facture/index">facture</a>
+                    <a class="navbar-brand" href="<?= ROOTWEB ?>paiement/index">paiement</a>
                 </div>
-        </nav>
-
-        <div class="container" >
-
-            <div class="starter-template">
-                <h1></h1><br>  <h1></h1><br>  <h1></h1><br>
-                <p class="lead"> </p>
-
-
+            </nav>
+            <div class="container" >
+                <div class="starter-template">
+                    <h1></h1><br>  <h1></h1><br>  <h1></h1><br>
+                    <p class="lead"> </p>
+                </div>
             </div>
-
+            <?= $container; ?>
+            <script src="<?= ROOTWEB ?>src/app/views/templete/front_end/dist/dist.js"></script>  
         </div>
-
-
-        <?php
-        echo $container;
-        ?>
-
-
-
-
-
-        <script src="<?php echo ROOTWEB ?>src/app/views/templete/front_end/dist/dist.js"></script>  
-
-
-
-
-
     </body>
 </html>

@@ -6,26 +6,9 @@
     "MANUAL": [{
         "modeCHILDREN": null,
         "PARENT": "avoir",
-        "COLUMNS_master": ["id", "N", "date", "la_somme"],
-        "COLUMNS_all": ["id", "N", "date", "les_articles", "la_somme", "remarque", "image"],
-        "FOREIGN_KEY": ["raison_sociale"],
-        "CHILDREN": {
-            "MASTER": {
-                "bl": ["id", "N", "date_de_livraison", "la_somme"],
-                "facture": ["id", "N", "date_de_emise", "la_somme"]
-            },
-            "ALL": {
-                "bl": ["id", "N", "date_de_livraison", "la_somme", "remarque", "BL_manque", "image", "adresse_BL"],
-                "facture": ["id", "N", "date_de_emise", "la_somme", "TVA", "facture_real", "facture_existant", "image", "remarque"]
-            },
-            "EMPTY": {
-                "bl": [],
-                "facture": []
-            }
-        },
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
@@ -79,27 +62,30 @@
                 "Key": "",
                 "Default": "image.jpg",
                 "Extra": ""
-            }]
-    }, {
-        "modeCHILDREN": null,
-        "PARENT": "bl",
-        "COLUMNS_master": ["id", "N", "date_de_livraison", "la_somme"],
-        "COLUMNS_all": ["id", "N", "date_de_livraison", "la_somme", "remarque", "BL_manque", "image", "adresse_BL"],
+            }],
+        "COLUMNS_master": ["id", "N", "date", "la_somme"],
+        "COLUMNS_all": ["id", "N", "date", "les_articles", "la_somme", "remarque", "image"],
         "FOREIGN_KEY": ["raison_sociale"],
         "CHILDREN": {
             "MASTER": {
-                "commande": ["id", "objectif", "date"]
+                "bl": ["id", "N", "date_de_livraison", "la_somme"],
+                "facture": ["id", "N", "date_de_emise", "la_somme"]
             },
             "ALL": {
-                "commande": ["id", "objectif", "date", "tarif_estime", "adresse", "remarque", "image"]
+                "bl": ["id", "N", "date_de_livraison", "la_somme", "remarque", "BL_manque", "image", "adresse_BL"],
+                "facture": ["id", "N", "date_de_emise", "la_somme", "TVA", "facture_real", "facture_existant", "image", "remarque"]
             },
             "EMPTY": {
-                "commande": []
+                "bl": [],
+                "facture": []
             }
-        },
+        }
+    }, {
+        "modeCHILDREN": null,
+        "PARENT": "bl",
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
@@ -160,21 +146,27 @@
                 "Key": "",
                 "Default": null,
                 "Extra": ""
-            }]
+            }],
+        "COLUMNS_master": ["id", "N", "date_de_livraison", "la_somme"],
+        "COLUMNS_all": ["id", "N", "date_de_livraison", "la_somme", "remarque", "BL_manque", "image", "adresse_BL"],
+        "FOREIGN_KEY": ["raison_sociale"],
+        "CHILDREN": {
+            "MASTER": {
+                "commande": ["id", "objectif", "date"]
+            },
+            "ALL": {
+                "commande": ["id", "objectif", "date", "tarif_estime", "adresse", "remarque", "image"]
+            },
+            "EMPTY": {
+                "commande": []
+            }
+        }
     }, {
         "modeCHILDREN": null,
         "PARENT": "commande",
-        "COLUMNS_master": ["id", "objectif", "date"],
-        "COLUMNS_all": ["id", "objectif", "date", "tarif_estime", "adresse", "remarque", "image"],
-        "FOREIGN_KEY": ["raison_sociale"],
-        "CHILDREN": {
-            "MASTER": [],
-            "ALL": [],
-            "EMPTY": []
-        },
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
@@ -228,27 +220,21 @@
                 "Key": "",
                 "Default": "image.jpg",
                 "Extra": ""
-            }]
+            }],
+        "COLUMNS_master": ["id", "objectif", "date"],
+        "COLUMNS_all": ["id", "objectif", "date", "tarif_estime", "adresse", "remarque", "image"],
+        "FOREIGN_KEY": ["raison_sociale"],
+        "CHILDREN": {
+            "MASTER": [],
+            "ALL": [],
+            "EMPTY": []
+        }
     }, {
         "modeCHILDREN": null,
         "PARENT": "facture",
-        "COLUMNS_master": ["id", "N", "date_de_emise", "la_somme"],
-        "COLUMNS_all": ["id", "N", "date_de_emise", "la_somme", "TVA", "facture_real", "facture_existant", "image", "remarque"],
-        "FOREIGN_KEY": ["raison_sociale"],
-        "CHILDREN": {
-            "MASTER": {
-                "bl": ["id", "N", "date_de_livraison", "la_somme"]
-            },
-            "ALL": {
-                "bl": ["id", "N", "date_de_livraison", "la_somme", "remarque", "BL_manque", "image", "adresse_BL"]
-            },
-            "EMPTY": {
-                "bl": []
-            }
-        },
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
@@ -316,21 +302,27 @@
                 "Key": "",
                 "Default": null,
                 "Extra": ""
-            }]
+            }],
+        "COLUMNS_master": ["id", "N", "date_de_emise", "la_somme"],
+        "COLUMNS_all": ["id", "N", "date_de_emise", "la_somme", "TVA", "facture_real", "facture_existant", "image", "remarque"],
+        "FOREIGN_KEY": ["raison_sociale"],
+        "CHILDREN": {
+            "MASTER": {
+                "bl": ["id", "N", "date_de_livraison", "la_somme"]
+            },
+            "ALL": {
+                "bl": ["id", "N", "date_de_livraison", "la_somme", "remarque", "BL_manque", "image", "adresse_BL"]
+            },
+            "EMPTY": {
+                "bl": []
+            }
+        }
     }, {
         "modeCHILDREN": null,
         "PARENT": "mode_paiement",
-        "COLUMNS_master": ["id", "mode_paiement"],
-        "COLUMNS_all": ["id", "mode_paiement"],
-        "FOREIGN_KEY": [],
-        "CHILDREN": {
-            "MASTER": [],
-            "ALL": [],
-            "EMPTY": []
-        },
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
@@ -342,30 +334,21 @@
                 "Key": "",
                 "Default": null,
                 "Extra": ""
-            }]
+            }],
+        "COLUMNS_master": ["id", "mode_paiement"],
+        "COLUMNS_all": ["id", "mode_paiement"],
+        "FOREIGN_KEY": [],
+        "CHILDREN": {
+            "MASTER": [],
+            "ALL": [],
+            "EMPTY": []
+        }
     }, {
         "modeCHILDREN": null,
         "PARENT": "paiement",
-        "COLUMNS_master": ["id", "N_mode", "la_somme_factures", "la_somme_paye", "factures_regler", "image", "remarque"],
-        "COLUMNS_all": ["id", "N_mode", "date_Negociation", "date_paiement", "la_somme_factures", "la_somme_TVA", "la_somme_remise", "remarque_remise", "la_somme_avoir", "la_somme_paye", "reste", "factures_regler", "image", "remarque"],
-        "FOREIGN_KEY": ["raison_sociale", "mode_paiement"],
-        "CHILDREN": {
-            "MASTER": {
-                "avoir": ["id", "N", "date", "la_somme"],
-                "facture": ["id", "N", "date_de_emise", "la_somme"]
-            },
-            "ALL": {
-                "avoir": ["id", "N", "date", "les_articles", "la_somme", "remarque", "image"],
-                "facture": ["id", "N", "date_de_emise", "la_somme", "TVA", "facture_real", "facture_existant", "image", "remarque"]
-            },
-            "EMPTY": {
-                "avoir": [],
-                "facture": []
-            }
-        },
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
@@ -475,27 +458,36 @@
                 "Key": "",
                 "Default": null,
                 "Extra": ""
-            }]
+            }],
+        "COLUMNS_master": ["id", "N_mode", "la_somme_factures", "la_somme_paye", "factures_regler", "image", "remarque"],
+        "COLUMNS_all": ["id", "N_mode", "date_Negociation", "date_paiement", "la_somme_factures", "la_somme_TVA", "la_somme_remise", "remarque_remise", "la_somme_avoir", "la_somme_paye", "reste", "factures_regler", "image", "remarque"],
+        "FOREIGN_KEY": ["raison_sociale", "mode_paiement"],
+        "CHILDREN": {
+            "MASTER": {
+                "avoir": ["id", "N", "date", "la_somme"],
+                "facture": ["id", "N", "date_de_emise", "la_somme"]
+            },
+            "ALL": {
+                "avoir": ["id", "N", "date", "les_articles", "la_somme", "remarque", "image"],
+                "facture": ["id", "N", "date_de_emise", "la_somme", "TVA", "facture_real", "facture_existant", "image", "remarque"]
+            },
+            "EMPTY": {
+                "avoir": [],
+                "facture": []
+            }
+        }
     }, {
         "modeCHILDREN": null,
         "PARENT": "raison_sociale",
-        "COLUMNS_master": ["id", "RAISON_SOCIALE", "ICE", "CNSS"],
-        "COLUMNS_all": ["id", "RAISON_SOCIALE", "ICE", "I_F", "T_P", "CNSS", "R_C", "TELE1", "TELE2", "GSM", "FAX", "site_web", "EMAIL", "adresse", "image"],
-        "FOREIGN_KEY": [],
-        "CHILDREN": {
-            "MASTER": [],
-            "ALL": [],
-            "EMPTY": []
-        },
         "COLUMNS_META": [{
                 "Field": "id",
-                "Type": "int(11)",
+                "Type": "int(10)",
                 "Null": "NO",
                 "Key": "PRI",
                 "Default": null,
                 "Extra": "auto_increment"
             }, {
-                "Field": "RAISON_SOCIALE",
+                "Field": "raison_sociale",
                 "Type": "varchar(200)",
                 "Null": "NO",
                 "Key": "UNI",
@@ -592,7 +584,15 @@
                 "Key": "",
                 "Default": "image.jpj",
                 "Extra": ""
-            }]
+            }],
+        "COLUMNS_master": ["id", "raison_sociale", "ICE", "CNSS"],
+        "COLUMNS_all": ["id", "raison_sociale", "ICE", "I_F", "T_P", "CNSS", "R_C", "TELE1", "TELE2", "GSM", "FAX", "site_web", "EMAIL", "adresse", "image"],
+        "FOREIGN_KEY": [],
+        "CHILDREN": {
+            "MASTER": [],
+            "ALL": [],
+            "EMPTY": []
+        }
     }]
 }  
 

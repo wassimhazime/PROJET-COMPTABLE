@@ -6,44 +6,64 @@ class EntitysSchema extends abstractEntitys {
     private $modeCHILDREN=null;
 
     private $PARENT = "";
+    private $COLUMNS_META = [];
     private $COLUMNS_master = ["*"];
     private $COLUMNS_all = ["*"];
     
     private $FOREIGN_KEY = [];
     private $CHILDREN = [];
     
-    private $COLUMNS_META = [];
+    
+    public function Instance(array $table):self {
+        $this->PARENT = $table["PARENT"];
+         $this->COLUMNS_master = $table["COLUMNS_master"];
+         $this->COLUMNS_all = $table["COLUMNS_all"];
+         $this->COLUMNS_META = $table["COLUMNS_META"];
+         $this->FOREIGN_KEY = $table["FOREIGN_KEY"];
+         $this->CHILDREN = $table["CHILDREN"];
+        
+        return $this;
+    }
+    
+    
+    /*
+     * modeCHILDREN
+     */
+    private function setModeCHILDREN($mode) {
+        if($mode==null and $this->modeCHILDREN==null){
+            $this->modeCHILDREN="MASTER";
+         } elseif ($mode!=null) {
+          $this->modeCHILDREN=$mode;   
+         }
+        
+        
+    }
+    
+    
+        /*
+     * PARENT
+     */
+    function getPARENT() {
+        return $this->PARENT;
+    }
+    function setPARENT($PARENT) {
+        $this->PARENT = $PARENT;
+    }
+    
+    /**
+     * 
+     * COLUMNS
+     */
     function getCOLUMNS_META() {
         return $this->COLUMNS_META;
     }
-
     function setCOLUMNS_META($COLUMNS_META) {
         $this->COLUMNS_META = $COLUMNS_META;
-    }
-
-//        function set(string $PARENT, array $COLUMNS_master = ["*"], array $COLUMNS_all = ["*"], array $FOREIGN_KEY = [], array $CHILDREN = []) {
-//        $this->PARENT = $PARENT;
-//        $this->COLUMNS_master = $COLUMNS_master;
-//        $this->COLUMNS_all = $COLUMNS_all;
-//        $this->FOREIGN_KEY = $FOREIGN_KEY;
-//        $this->CHILDREN = $CHILDREN;
-//        
-//    }
-    public function Instance(array $table):self {
-        $this->PARENT = $table["PARENT"];
-       $this->COLUMNS_master = $table["COLUMNS_master"];
-        $this->COLUMNS_all = $table["COLUMNS_all"];
-        $this->COLUMNS_META = $table["COLUMNS_META"];
-        $this->FOREIGN_KEY = $table["FOREIGN_KEY"];
-        $this->CHILDREN = $table["CHILDREN"];
-        
-        return $this;
     }
 
     function getCOLUMNS_all() {
         return $this->COLUMNS_all;
     }
-
     function setCOLUMNS_all($COLUMNS_all) {
         $this->COLUMNS_all = $COLUMNS_all;
     }
@@ -51,10 +71,24 @@ class EntitysSchema extends abstractEntitys {
     function getCOLUMNS_master() {
         return $this->COLUMNS_master;
     }
+    function setCOLUMNS_master($COLUMNS) {
+        $this->COLUMNS_master = $COLUMNS;
+    }
 
+      /**
+     * 
+     * FOREIGN_KEY
+     */
     function getFOREIGN_KEY() {
         return $this->FOREIGN_KEY;
     }
+    function setFOREIGN_KEY($FOREIGN_KEY) {
+        $this->FOREIGN_KEY = $FOREIGN_KEY;
+    }
+    
+/*
+ * CHILDREN
+ */
 
     function getCHILDREN($mode=null) {
         $this->setModeCHILDREN($mode);
@@ -70,32 +104,19 @@ class EntitysSchema extends abstractEntitys {
        
         return $TABLE;
     }
-    
-    function getPARENT() {
-        return $this->PARENT;
-    }
-
-    function setCOLUMNS_master($COLUMNS) {
-        $this->COLUMNS_master = $COLUMNS;
-    }
-
-    function setFOREIGN_KEY($FOREIGN_KEY) {
-        $this->FOREIGN_KEY = $FOREIGN_KEY;
-    }
-
     function setCHILDREN($CHILDREN) {
        
         $this->CHILDREN = $CHILDREN;
     }
 
-    function setPARENT($PARENT) {
-        $this->PARENT = $PARENT;
-    }
 
+///TOULS
+    /*
+     * SELECT SQL
+     */
     
     
-    
-    function select_master() {
+    public function select_master() {
 
         $select = [];
         foreach ($this->COLUMNS_master as $colom) {
@@ -106,8 +127,7 @@ class EntitysSchema extends abstractEntitys {
         }
         return $select;
     }
-    
-    function select_all() {
+    public function select_all() {
 
         $select = [];
         foreach ($this->COLUMNS_all as $colom) {
@@ -127,26 +147,9 @@ class EntitysSchema extends abstractEntitys {
         
         return $select;
     }
-    
-    
-    private function setModeCHILDREN($mode) {
-        if($mode==null and $this->modeCHILDREN==null){
-            $this->modeCHILDREN="MASTER";
-         } elseif ($mode!=null) {
-          $this->modeCHILDREN=$mode;   
-         }
-        
-        
-    }
-    
-
-    function select_CHILDREN($TABLE = null,$mode=null) {
+    public function select_CHILDREN($TABLE = null,$mode=null) {
         $this->setModeCHILDREN($mode);
-        
-        
-         
-       
-        $select = [];
+            $select = [];
 
         if ($TABLE == null) {
 
