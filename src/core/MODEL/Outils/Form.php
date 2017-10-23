@@ -8,28 +8,34 @@
 
 namespace core\MODEL\Outils;
 
-use core\MODEL\base_donnee\RUN;
-use core\MODEL\entitys\EntityForm;
-use core\MODEL\entitys\EntitysSchema;
+use core\MODEL\Base_Donnee\RUN;
+use core\MODEL\Entitys\EntityMetaColumn;
+use core\MODEL\Entitys\EntitysSchema;
 
 class Form extends RUN {
+    
+    
 
     public static function getForm(EntitysSchema $schem): array {
 
         $DESCRIBE = ((new self())->query("DESCRIBE  " . $schem->getPARENT()));
+        
 
         foreach ($DESCRIBE as $input) {
-            if ($input->is_FOREIGN_KEY()) {
-                $field = $input->getField();
+            if ($input->is_FOREIGN_KEY()) { // ok 
+                $field = $input->getField();//ok
                 $input->setData(Autocomplete::getAutocomplete($field));
+               // var_dump(Autocomplete::getAutocomplete($field));
             }
         }
        
+        
+        
         return $DESCRIBE;
     }
 
     function __construct() {
-        parent::__construct(new EntityForm());
+        parent::__construct(new EntityMetaColumn());
     }
 
 }

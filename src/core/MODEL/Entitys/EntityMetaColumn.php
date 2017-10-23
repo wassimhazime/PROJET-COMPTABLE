@@ -13,7 +13,7 @@ namespace core\MODEL\Entitys;
  *
  * @author Wassim Hazime
  */
-class EntityForm extends Entitys{
+class EntityMetaColumn extends abstractEntitys{
     
       public $Data;
       public $Field;

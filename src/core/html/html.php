@@ -8,7 +8,7 @@ namespace core\html;
 use core\html\Bootstrap\Bootstrap;
 use core\html\Bootstrap\DialogHTML;
 
-use core\html\element\FormHTML;
+use core\html\element\form\FormHTML;
 use core\html\element\multiSelect;
 
 class html {
@@ -31,7 +31,7 @@ class html {
          $this->multiSelect = new multiSelect();
        
         
-        $this->FormHTML = new FormHTML();
+     //   $this->FormHTML = new FormHTML();
         
     }
 

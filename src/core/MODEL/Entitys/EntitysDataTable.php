@@ -2,13 +2,15 @@
 
 namespace core\MODEL\Entitys;
 
-class EntitysTable extends Entitys {
+class EntitysDataTable extends abstractEntitys {
 
     private $DataJOIN = array();
+  
 
 //add item enfant
+    
 
-    public function setDataJOIN($key, $enfant) {
+        public function setDataJOIN($key, $enfant) {
         $this->DataJOIN[$key] = $enfant;
     }
 

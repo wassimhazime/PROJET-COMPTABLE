@@ -1,8 +1,7 @@
 <?php
 
 namespace app\controller;
-use app\controller\startCONTROLLER;
-use core\INTENT\Intent;
+
 
 class controller_mode_paiement extends startCONTROLLER{
     

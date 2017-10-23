@@ -7,7 +7,7 @@
  */
 
 namespace core\MODEL\Outils;
-use core\MODEL\Entitys\EntitysTable;
+use core\MODEL\Entitys\EntitysDataTable;
 use core\MODEL\Base_Donnee\RUN;
 
 
@@ -15,12 +15,12 @@ class Autocomplete extends RUN{
      
     
      function __construct() {
-        parent::__construct(new EntitysTable());
+        parent::__construct(new EntitysDataTable());
     }
     
  
     
-    public static function getAutocomplete($table) {
+    public static function getAutocomplete($table): array {
         $describe = (new self)->query("SHOW COLUMNS FROM " .
                 $table.
                 " WHERE `null`='no' and "
@@ -36,8 +36,9 @@ class Autocomplete extends RUN{
         
         $colums= implode(' , ', $select); 
         
+        $return=(new self)->query('SELECT ' .$colums. ' FROM '.$table);
         
-     return (new self)->query('SELECT ' .$colums. ' FROM '.$table);
+     return $return;
     }
     
   

@@ -4,9 +4,10 @@ namespace core\MODEL\Statement;
 
 use core\MODEL\Base_Donnee\RUN;
 use core\MODEL\Query\QuerySQL;
-use core\MODEL\Entitys\EntitysTable;
+use core\MODEL\Entitys\EntitysDataTable;
 use core\MODEL\Entitys\EntitysSchema;
 use core\INTENT\Intent;
+use core\MODEL\Outils\Schema;
 
 class Statement extends RUN {
 
@@ -17,7 +18,7 @@ class Statement extends RUN {
     }
 
     public function __construct(EntitysSchema $schema) {
-        parent::__construct(new EntitysTable(), $schema);
+        parent::__construct(new EntitysDataTable(), $schema);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ class Statement extends RUN {
     }
 
     public function insert(Intent $intent) {
-        $data=($intent->getEntitysTable()[0]);
+        $data=($intent->getEntitysDataTable(0));
        $insert=[];
         foreach ($data as $key => $value) {
           $insert[$key]=  $value;
@@ -98,13 +99,59 @@ class Statement extends RUN {
         }
     }
 
-    public function independent($Select, $TABLEenfant) {
-
-        return (new QuerySQL())->select($Select)
-                        ->from($TABLEenfant)
-                        ->join("raison_sociale")
-                        ->independent($TABLEpere);
-    }
+//    public function independent($Select, $TABLEenfant) {
+//
+//        return (new QuerySQL())->select($Select)
+//                        ->from($TABLEenfant)
+//                        ->join("raison_sociale")
+//                        ->independent($TABLEpere);
+//    }
 
 ////////////////////////////////////////////////////////////////////////////////
+    public function form(array $mode = Intent::MODE_FORM): Intent {
+        $schema = $this->schema;
+        $nameTable_FOREIGNs= $schema->getFOREIGN_KEY();
+        
+        $Entitys_FOREIGNs=[];
+       foreach ($nameTable_FOREIGNs as $nameTable_FOREIGN) {
+           
+           $schem_Table_FOREIGN=Schema::getschema($nameTable_FOREIGN);
+           
+           $Entitys_FOREIGNs[$nameTable_FOREIGN] = 
+                   
+                   
+                   $this->query((new QuerySQL()) 
+                            ->select($schem_Table_FOREIGN->select_master())
+                            ->from($schem_Table_FOREIGN->getPARENT())
+                            ->join($schem_Table_FOREIGN->getFOREIGN_KEY())
+                           
+                           
+                        );
+           }
+           
+           
+           ////////////////////////////////////////////////////////////
+           $nameTable_CHILDRENs= $schema->get_table_CHILDREN();
+           $Entitys_CHILDRENs=[];
+           
+           foreach ($nameTable_CHILDRENs as $table_CHILDREN) {
+               
+               
+           $schem_Table_CHILDREN=Schema::getschema($table_CHILDREN);               
+          
+               $Entitys_CHILDRENs[$table_CHILDREN]= 
+                       $this->query(((new QuerySQL())
+                        ->select($schem_Table_CHILDREN->select_master())
+                        ->from($schem_Table_CHILDREN->getPARENT())
+                        ->join($schem_Table_CHILDREN->getFOREIGN_KEY())
+                        ->independent($schema->getPARENT())));
+           }
+           
+           $data=["FOREIGN_KEYs"=>$Entitys_FOREIGNs,
+                   "CHILDRENs"=>$Entitys_CHILDRENs];
+           
+       return new Intent($schema, $data, $mode);
+    }
+    
+    
 }

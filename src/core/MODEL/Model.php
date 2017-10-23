@@ -24,7 +24,7 @@ class Model {
     public function setData($data){
         if(isset($data) && !empty($data)){
             unset($data["ajout_data"]);
-       $intent= Intent::parse($data,$this->schema);
+       $intent= Intent::parse($data,$this->schema,Intent::MODE_INSERT_PARENT_NULL);
         
         $this->statement->insert($intent);
         
@@ -35,12 +35,21 @@ class Model {
     
     
     
-    public function show(array $mode = Intent::MODE_SELECT_MASTER, $condition = 1) :Intent{
+    public function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1) :Intent{
 
         
        
         $intent = $this->statement->Select($mode, $condition);
        
+   
+        return $intent;
+    }
+      public function form(array $mode = Intent::MODE_FORM, $condition = 1) :Intent{
+
+        
+       
+        $intent = $this->statement->form($mode);
+      
       
         return $intent;
     }

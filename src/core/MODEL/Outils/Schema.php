@@ -27,17 +27,14 @@ class Schema extends RUN {
                 return $TABLE;
             }
         }
-
-        
-        
         foreach (Config::getSCHEMA_SELECT_MANUAL() as $table) {
+              
             $TABLE = (new EntitysSchema())->Instance($table);
             if ($TABLE->getPARENT() == $parent) {
                 return $TABLE;
             }
         }
-        $DB_AUTO = self::getALLschema(Config::getSCHEMA_SELECT_AUTO(), Config::getNameDataBase());
-        foreach ($DB_AUTO as $TABLE) {
+        foreach (self::getALLschema( Config::getNameDataBase(),Config::getSCHEMA_SELECT_AUTO()) as $TABLE) {
             if ($TABLE->getPARENT() == $parent) {
 
                 return $TABLE;
@@ -45,12 +42,16 @@ class Schema extends RUN {
         }
     }
 
-    public static function getALLschema(array $config = [], string $DB_name): array {
+    public static function getALLschema( string $DB_name=null,array $config = []): array {
         if (self::$PARENT == null) {
+            
+            if($DB_name==null){$DB_name=Config::getNameDataBase();}
+            
             $PARENT = (new self())->query(' SELECT table_name as PARENT FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = "' . $DB_name . '" and  table_name not LIKE("r\_%") ');
             foreach ($PARENT as $table) {
                 $table->setCOLUMNS_master((new self())->columns_master($table, $config));
                 $table->setCOLUMNS_all((new self())->columns_all($table, $config));
+                $table->setCOLUMNS_META((new self())->columns_META($table, $config));
                 $table->setFOREIGN_KEY((new self())->FOREIGN_KEY($table, $config));
                 $table->setCHILDREN((new self())->tables_CHILDREN($table, $config, $DB_name));
             }
@@ -113,6 +114,24 @@ class Schema extends RUN {
         }
         return $select;
     }
+    
+    private function columns_META($table, array $config = []) {
+        
+        if (isset($config['COLUMNS_META']) and ! empty($config['COLUMNS_META'])) {
+            $describe = $this->query("  DESCRIBE   " .
+                    $table->getPARENT() 
+            );
+        } else {
+            $describe = $this->query("DESCRIBE " .
+                    $table->getPARENT() 
+            );
+        }
+
+
+       
+        return $describe;
+    }
+    
 
     private function columns_master_CHILDREN($table, array $config = []) {
 
@@ -202,13 +221,20 @@ class Schema extends RUN {
         }
         return $tables_CHILDREN;
     }
+    
+    
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * generateCache
+     */
     
+    
+    //////////////////////////////////////
     private static function generateCache(string $path){
     $tempschmaTabls=[];
     $schmaTabls=[];
-    $DB_AUTO = self::getALLschema(Config::getSCHEMA_SELECT_AUTO(), Config::getNameDataBase());
+    $DB_AUTO = self::getALLschema( Config::getNameDataBase(),Config::getSCHEMA_SELECT_AUTO());
         foreach ($DB_AUTO as $TABLE) {
             $tempschmaTabls[$TABLE->getPARENT()]=$TABLE;
       }
@@ -224,7 +250,7 @@ class Schema extends RUN {
         
     
 }
-private static function parse_object_TO_array($object): array {
+    private static function parse_object_TO_array($object): array {
     if(is_array($object)){ return $object;}
     $reflectionClass = new \ReflectionClass(get_class($object));
     $array = array();
@@ -235,7 +261,7 @@ private static function parse_object_TO_array($object): array {
     }
     return $array;
 }
-private static function json_fileOUT(array $shema,string $path) {
+    private static function json_fileOUT(array $shema,string $path) {
        
         $fp = fopen($path."1generateCACHE_SELECT.json", 'w');
         fwrite($fp, json_encode( $shema));

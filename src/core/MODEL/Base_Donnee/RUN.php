@@ -8,7 +8,7 @@
 
 namespace core\MODEL\Base_Donnee;
 
-use core\MODEL\Entitys\Entitys;
+use core\MODEL\Entitys\abstractEntitys;
 use \PDO;
 use \PDOException;
 use core\MODEL\Base_Donnee\DataBase;
@@ -29,7 +29,7 @@ class RUN {
     protected $schemaSELECT;
     protected $entity;
 
-    public function __construct(Entitys $entity, EntitysSchema $schema = null) {
+    public function __construct(abstractEntitys $entity, EntitysSchema $schema = null) {
         
          $this->schema = $schema;
         $this->entity = $entity;

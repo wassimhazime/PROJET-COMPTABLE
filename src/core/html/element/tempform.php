@@ -1,16 +1,19 @@
 <?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 namespace core\html\element;
 
-use core\html\element\AbstractHTML;
-
-
-class  FormHTML  extends AbstractHTML{
-    
-            
-    function __construct( ) {
-        parent::__construct();
-}
-
+/**
+ * Description of tempform
+ *
+ * @author Wassim Hazime
+ */
+class tempform {
     public function createFormHTML($metaFORM,$formEnfant=null,$index=0) {
         $suffixe='';
         
@@ -127,35 +130,4 @@ class  FormHTML  extends AbstractHTML{
         
         return implode(" ", $form);
     }
-
-    private function createElementParMeta($meta,$suffixe) {
-     
-     $label =str_replace($suffixe, '', $meta['name']);
-     
-        $form = '<div ' . $meta['hidden'] . ' form-group ' . $meta['warning'] . ' ' . $meta['form_group'] . '>'
-                . ' <label   for="' . $meta['name'] . '">'
-                . $meta['description'] . ' ' . $label . '  ' . $meta['etoile']
-                . '</label>'
-                . '  <' . $meta['balise'] . ''
-                . ' class="  ' . $meta['classInput'] . ' "'
-                . ' id="' . $meta['name'] . ' "'
-                . '  name="' . $meta['name'] . '" '
-                . ' placeholder="' .$label . '" '
-                . 'type="' . $meta['Type'] . '" '
-                . $meta['value']
-                . ' > '
-                . $meta['inputf']
-                . '</div> ';
-        
-        
-
-
-
-
-        return $form;
-    }
-
-    
-
 }
-

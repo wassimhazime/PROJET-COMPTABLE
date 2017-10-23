@@ -1,4 +1,9 @@
-[{
+
+
+
+{
+
+    "MANUAL": [{
         "modeCHILDREN": null,
         "PARENT": "avoir",
         "COLUMNS_master": ["id", "N", "date", "la_somme"],
@@ -589,3 +594,6 @@
                 "Extra": ""
             }]
     }]
+}  
+
+

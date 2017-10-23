@@ -9,18 +9,26 @@
 namespace core\html;
 use core\INTENT\Intent;
 use core\html\element\TableHTML;
+use core\html\element\form\FormHTML;
 
 /**
  * Description of TAG
  *
- * @author Wassim Hazime
+ *Les décorateurs
  */
-class TAG {
+class TAG {   
+
+    
     public function tableHTML(Intent $intent) {
-        $tablehtml=new TableHTML();
-        return $tablehtml->parse($intent);
+        $tablehtml=new TableHTML($intent);
+        return $tablehtml->builder("class='table table-hover table-bordered' style='width:100%'");
         
         
     }
-    
+        public function FormHTML(Intent $intent) {
+        $formhtml=new FormHTML($intent);
+        return $formhtml->builder();
+        
+        
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace app\controller;
-use app\controller\startCONTROLLER;
+
 
 class controller_paiement extends startCONTROLLER{
     
@@ -31,9 +31,9 @@ class controller_paiement extends startCONTROLLER{
         
          $title = $this->html->getTitle($this->title).'relation';
          
-         $formEnfant[]= $this->formEnfant('facture', 3);
+     
         // $formEnfant[]=$this->formEnfant('avoir', 4);
-         $form= $this->getFormHTML($formEnfant,0);
+         $form= $this->getFormHTML('');
          
           if (isset($_POST['ajout_data'])) {
             $data=$_POST;

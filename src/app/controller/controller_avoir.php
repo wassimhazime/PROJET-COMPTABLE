@@ -1,7 +1,7 @@
 <?php
 
 namespace app\controller;
-use app\controller\startCONTROLLER;
+
 
 class controller_avoir extends startCONTROLLER{
     
@@ -33,12 +33,11 @@ class controller_avoir extends startCONTROLLER{
         
          
          
-        // $formEnfant[]= $this->formEnfant('facture', 3);
-         $formEnfant[]=$this->formEnfant('bl', 4);
+        $form= $this->getFormHTML('');
          
          
          
-         $form= $this->getFormHTML($formEnfant,0);
+       
          
          
          

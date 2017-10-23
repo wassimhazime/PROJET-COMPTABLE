@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/comptable/src/core/html/TAG.php</file>
-            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Entitys/EntitysSchema.php</file>
-            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Outils/Schema.php</file>
-            <file>file:/C:/wamp64/www/comptable/src/app/config/SCHEMA_SELECT_AUTO.json</file>
-            <file>file:/C:/wamp64/www/comptable/src/app/config/SCHEMA_SELECT_MANUAL.json</file>
-            <file>file:/C:/wamp64/www/comptable/src/core/INTENT/Intent.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/app/config/uu2SCHEMA_SELECT_MANUAL.json</file>
+            <file>file:/C:/wamp64/www/comptable/src/app/config/1generateCACHE_SELECT.json</file>
+            <file>file:/C:/wamp64/www/comptable/src/app/config/3SCHEMA_SELECT_AUTO.json</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/html/element/form/FormHTML.php</file>
             <file>file:/C:/wamp64/www/comptable/src/core/html/element/TableHTML.php</file>
-            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Statement/Statement.php</file>
         </group>
     </open-files>
 </project-private>

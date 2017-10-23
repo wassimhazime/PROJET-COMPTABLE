@@ -1,6 +1,7 @@
 {"BOOT":"TEST",
     
     "TEST":{
+        "$CACHE": true,
 
     "$DB": "mysql",
     "$dbhost": "localhost",
@@ -10,7 +11,8 @@
 }
     ,
     "PROD":{
-
+     "$CACHE": true,
+        
     "$DB": "mysql",
     "$dbhost": "localhost",
     "$dbuser": "comptable", 

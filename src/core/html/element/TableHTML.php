@@ -95,8 +95,13 @@ use core\INTENT\Intent;
  */
 class TableHTML {
 
-    public function parse(Intent $intent, $att = "class='table table-hover table-bordered' style='width:100%'") {
+    protected $intent;
+    function __construct($intent) {
+        $this->intent = $intent;
+    }
 
+        public function builder( $att ) {
+         $intent=$this->intent;
         $thead = $this->thead($intent);
 
         $tbody = $this->tbody($intent);
@@ -129,7 +134,7 @@ class TableHTML {
     }
 
     protected function tbody(Intent $intent): string {
-        $table = $intent->getEntitysTable();
+        $table = $intent->getEntitysDataTable();
         $bodys = [];
         foreach ($table as $index => $ROWS) {
             $row = [];
@@ -200,7 +205,7 @@ class TableHTML {
         $childs = $intent->getEntitysSchema()->get_table_CHILDREN();
         $datajoin = [];
         foreach ($childs as $nameTable) {
-            $datajoin[$nameTable] = $intent->getEntitysTable()[$indexROW]->getDataJOIN($nameTable);
+            $datajoin[$nameTable] = $intent->getEntitysDataTable()[$indexROW]->getDataJOIN($nameTable);
         }
 
         foreach ($datajoin as $nameTable => $table) {

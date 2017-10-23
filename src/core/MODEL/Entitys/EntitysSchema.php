@@ -2,28 +2,38 @@
 
 namespace core\MODEL\Entitys;
 
-class EntitysSchema extends Entitys {
+class EntitysSchema extends abstractEntitys {
     private $modeCHILDREN=null;
 
     private $PARENT = "";
     private $COLUMNS_master = ["*"];
     private $COLUMNS_all = ["*"];
+    
     private $FOREIGN_KEY = [];
     private $CHILDREN = [];
     
-
-    function set(string $PARENT, array $COLUMNS_master = ["*"], array $COLUMNS_all = ["*"], array $FOREIGN_KEY = [], array $CHILDREN = []) {
-        $this->PARENT = $PARENT;
-        $this->COLUMNS_master = $COLUMNS_master;
-        $this->COLUMNS_all = $COLUMNS_all;
-        $this->FOREIGN_KEY = $FOREIGN_KEY;
-        $this->CHILDREN = $CHILDREN;
-        
+    private $COLUMNS_META = [];
+    function getCOLUMNS_META() {
+        return $this->COLUMNS_META;
     }
+
+    function setCOLUMNS_META($COLUMNS_META) {
+        $this->COLUMNS_META = $COLUMNS_META;
+    }
+
+//        function set(string $PARENT, array $COLUMNS_master = ["*"], array $COLUMNS_all = ["*"], array $FOREIGN_KEY = [], array $CHILDREN = []) {
+//        $this->PARENT = $PARENT;
+//        $this->COLUMNS_master = $COLUMNS_master;
+//        $this->COLUMNS_all = $COLUMNS_all;
+//        $this->FOREIGN_KEY = $FOREIGN_KEY;
+//        $this->CHILDREN = $CHILDREN;
+//        
+//    }
     public function Instance(array $table):self {
         $this->PARENT = $table["PARENT"];
        $this->COLUMNS_master = $table["COLUMNS_master"];
         $this->COLUMNS_all = $table["COLUMNS_all"];
+        $this->COLUMNS_META = $table["COLUMNS_META"];
         $this->FOREIGN_KEY = $table["FOREIGN_KEY"];
         $this->CHILDREN = $table["CHILDREN"];
         
@@ -108,6 +118,16 @@ class EntitysSchema extends Entitys {
         }
         return $select;
     }
+    public function select_FOREIGN_KEY(array $FOREIGN_KEY = null) {
+       $select = [];
+     if($FOREIGN_KEY == null){$FOREIGN_KEY=$this->FOREIGN_KEY;}
+       foreach ($FOREIGN_KEY as $FOREIGN) {
+            $select[] = $FOREIGN . "." . $FOREIGN;
+       }
+        
+        return $select;
+    }
+    
     
     private function setModeCHILDREN($mode) {
         if($mode==null and $this->modeCHILDREN==null){

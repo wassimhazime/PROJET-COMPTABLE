@@ -40,30 +40,23 @@ class startCONTROLLER extends controller{
     
     
   
-     protected function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1 ) {
+     protected function show(array $mode = Intent::MODE_SELECT_ALL_MASTER, $condition = 1 ) {
         
         
          $intent= $this->model->show($mode,$condition);
+  
         return (new TAG())->tableHTML($intent);
         
     } 
      
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-     protected function getFormHTML($enfant=null,$index=0) {
-          
-        $metaFORM= $this->model->getMetaFORM(); // object meta
-      
-         return $this->html->getFormHTML($metaFORM,$enfant,$index) ;
+ protected function getFormHTML() {
+         $intent= $this->model->form();
+       
+         return (new TAG())->FormHTML($intent);
+         
+//        $metaFORM= $this->model->getMetaFORM(); // object meta
+//      
+//         return $this->html->getFormHTML($metaFORM,$enfant,$index) ;
          
     }
     
