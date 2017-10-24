@@ -22,6 +22,7 @@ class Model {
     }
 
     public function setData($data){
+       
         if(isset($data) && !empty($data)){
             unset($data["ajout_data"]);
        $intent= Intent::parse($data,$this->schema,Intent::MODE_INSERT_PARENT_NULL);

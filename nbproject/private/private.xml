@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/comptable/src/core/html/element/form/FormHTML.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/html/element/AbstractHTML.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/app/controller/controller_bl.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Base_Donnee/RUN.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Model.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/html/element/FormHTML.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Statement/Statement.php</file>
+            <file>file:/C:/wamp64/www/comptable/src/core/MODEL/Query/QuerySQL.php</file>
         </group>
     </open-files>
 </project-private>

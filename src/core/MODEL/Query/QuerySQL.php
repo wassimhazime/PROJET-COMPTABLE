@@ -396,11 +396,15 @@ class QuerySQL implements I_QuerySQL_LDD, I_QuerySQL_LMD, I_QuerySQL_LCT {
     }
 
     public function value(array $data) {
-
-
-        $this->value = " (`" . implode("`, `", array_keys($data)) . "`)" .
+        if ($this->isAssoc($data)) {
+           $this->value = " (`" . implode("`, `", array_keys($data)) . "`)" .
                 " VALUES ('" . implode("', '", $data) . "') ";
-        return $this;
+        return $this;  
+        }
+        return "error value insert querysql";
+
+
+       
     }
 
     //update

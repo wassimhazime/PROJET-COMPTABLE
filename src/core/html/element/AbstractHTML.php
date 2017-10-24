@@ -41,8 +41,9 @@ class AbstractHTML {
         return $inputHTML;
     }
 
-    protected function multiSelectHTML(array $input, $att = '  class="multiSelectItemwassim form-control" '): string {
-        $inputHTML = ' <select multiple  ' . $att . '   name="' . $input['Field'] . '" >';
+    protected function multiSelectHTML(array $input, $att = '   '): string {
+       // class="multiSelectItemwassim form-control"
+        $inputHTML = ' <select multiple  ' . $att . '   name="' . $input['Field'] . '[]" >';
         $inputHTML .= $this->chargeListHtml($input['DataCHILDRENS']) . ' </select>';
         return $inputHTML;
     }
@@ -58,7 +59,8 @@ class AbstractHTML {
                 $dataOption .= $column . '$$$' . $value . ' £££ ';
             }
             $popover = 'data-container="body" data-toggle="popover" data-placement="top" data-content="' . $dataOption . '"';
-            $TAGoption .= "<option $param $popover " . "  value ={$row->id}> $dataOption </option> ";
+            //$TAGoption .= "<option $param $popover " . "  value ={$row->id}> $dataOption </option> ";
+            $TAGoption .= "<option $param $popover " . "  value ={$row->id}> {$row->id} </option> ";
         }
         return $TAGoption;
     }

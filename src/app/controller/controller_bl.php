@@ -21,13 +21,13 @@ class controller_bl extends startCONTROLLER{
        public function add($att=null) {
            
          
-         $title = $this->html->getTitle($this->title).'relation';
+         $title = $this->html->getTitle($this->title);
          
          $form= $this->getFormHTML('');
          
          if (isset($_POST['ajout_data'])) {
             $data=$_POST;
-           $id = $this->model->setData($data,['commande']);
+           $id = $this->model->setData($data);
           
         } 
        $this->render(compact('title','form'));

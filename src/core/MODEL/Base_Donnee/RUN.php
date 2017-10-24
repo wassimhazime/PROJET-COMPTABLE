@@ -56,13 +56,13 @@ class RUN {
         $db = DataBase::getDB(Config::getConnect());
 
         try {
-            $db->beginTransaction();
+            //$db->beginTransaction();
             $db->exec($sql);
-            $db->commit();
+           // $db->commit();
 
             return $db->lastInsertId();
         } catch (PDOException $exc) {
-            $db->rollBack();
+           // $db->rollBack();
             Notify::send_Notify($exc->getMessage() . "exec SQL ERROR ==> </br> $sql");
             die();
         }
