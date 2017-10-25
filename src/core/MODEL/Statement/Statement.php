@@ -43,50 +43,45 @@ class Statement extends RUN {
     }
 
     public function insert(Intent $intent) {
-       
-        $data=($intent->getEntitysDataTable());
-        var_dump($data);
-         $CHILDREN=($intent->getEntitysSchema()->getCHILDREN()); 
-         $temp=[];
-         foreach ($CHILDREN as $key => $value) {
-          $temp[$key]   =$data[0]->$key;
-          unset($data[0]->$key);   
-         }
-         
-        
-       unset($data[0]->id);
-       $insert=[];
-        foreach ($data[0] as $key => $value) {
-          $insert[$key]=  $value;
-        }
-       
-        
-       $querySQL = (new QuerySQL())->
+     $data=($intent->getEntitysDataTable()[0]); // data send FORM
+     unset($data->id);   // remove id  
+     $name_CHILDRENs=(array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array 
+     $dataCHILDRENs=[]; 
+     
+     foreach ($name_CHILDRENs as $name_CHILDREN) {
+         if(isset($data->$name_CHILDREN)){
+             $dataCHILDRENs=[$name_CHILDREN=>$data->$name_CHILDREN]; // charge $dataCHILDREN
+             unset($data->$name_CHILDREN); // remove CHILDREN in $data
+       }   
+     }
+     $data= self::entitys_TO_array($data);
+     
+     $querySQL = (new QuerySQL())-> // exec query sql insert to parent table
                         insertInto($this->getTable())
-                        ->value($insert);
-             $id=  $this->exec($querySQL);
-      
-             
-             foreach ($temp as $command=>$val) {
-                 foreach ($val as  $value) {
-                 $querySQL = (new QuerySQL())->
-                        insertInto("r_".$this->getTable()."_".$command)
-                        ->value(["id_".$this->getTable()=>$id,"id_".$command=>$value]);
+                        ->value($data);
+     
+             $id_parent=  $this->exec($querySQL); // return id rowe set data parent table
+     
+     /**
+      * code insert data to relation table
+      */
+         
+             if(!empty($dataCHILDRENs)){
+                 foreach ($dataCHILDRENs as $name_table_CHILDREN => $id_CHILDRENs) {
+                     foreach ($id_CHILDRENs as  $id_CHILD) {
+                        $querySQL = (new QuerySQL())->
+                        insertInto("r_".$this->getTable()."_".$name_table_CHILDREN)
+                         ->value([
+                                 "id_".$this->getTable()=>$id_parent,
+                                "id_".$name_table_CHILDREN=>$id_CHILD
+                                ]);
                 
-              $this->exec($querySQL);
-             }
-             
-              
+                  $this->exec($querySQL); 
+                     }
+                 }
                  
-             }  
-           
-      
-        
-        
-        
-        
-        
-    }
+             }
+  }
 
 ////////////////////////////////////////////////////////////////////////////////
     public function Select(array $mode = Intent::MODE_SELECT_ALL_ALL, $condition = 1): Intent {
@@ -128,14 +123,6 @@ class Statement extends RUN {
             }
         }
     }
-
-//    public function independent($Select, $TABLEenfant) {
-//
-//        return (new QuerySQL())->select($Select)
-//                        ->from($TABLEenfant)
-//                        ->join("raison_sociale")
-//                        ->independent($TABLEpere);
-//    }
 
 ////////////////////////////////////////////////////////////////////////////////
     public function form(array $mode = Intent::MODE_FORM): Intent {

@@ -250,22 +250,7 @@ class Schema extends RUN {
         
     
 }
-    private static function parse_object_TO_array($object): array {
-    if(is_array($object)){ return $object;}
-    $reflectionClass = new \ReflectionClass(get_class($object));
-    $array = array();
-    foreach ($reflectionClass->getProperties() as $property) {
-        $property->setAccessible(true);
-        $array[$property->getName()] = $property->getValue($object);
-        $property->setAccessible(false);
-    }
-    return $array;
-}
-    private static function json_fileOUT(array $shema,string $path) {
-       
-        $fp = fopen($path."1generateCACHE_SELECT.json", 'w');
-        fwrite($fp, json_encode( $shema));
-        fclose($fp);
-    }
+   
+
 
 }

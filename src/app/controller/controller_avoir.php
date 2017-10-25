@@ -44,13 +44,11 @@ class controller_avoir extends startCONTROLLER{
          
    
       
-         if (isset($_POST['ajout_data'])) {
+        if (isset($_POST['ajout_data'])) {
             $data=$_POST;
-            $enfant=['facture','bl'];
-            $id = $this->model->setData($data,$enfant);
+           $id = $this->model->setData($data);
           
-        }
-         
+        } 
          
          
          
