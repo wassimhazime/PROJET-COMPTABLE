@@ -17,8 +17,8 @@
     "autoload": {
         "psr-4": {
            
-            "core\\": "src/core/",
-            "app\\": "src/app/"
+            "core\\": "back_end/core/",
+            "app\\": "back_end/app/"
         }
         
     }
