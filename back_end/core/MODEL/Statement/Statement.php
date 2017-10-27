@@ -91,7 +91,8 @@ class Statement extends RUN {
                 }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(array $mode = Intent::MODE_SELECT_ALL_ALL, $condition = 1): Intent {
+    public function Select(array $mode , $condition ): Intent {
+        
         $schema = $this->schema;
         if (Intent::is_PARENT_MASTER($mode)) {
             $Entitys = $this->query((new QuerySQL())
@@ -132,7 +133,7 @@ class Statement extends RUN {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function form(array $mode = Intent::MODE_FORM): Intent {
+    public function form(array $mode): Intent {
         $schema = $this->schema;
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
 

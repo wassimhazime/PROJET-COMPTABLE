@@ -15,11 +15,10 @@ class Model {
         $this->statement = new Statement(Schema::getschema($table));
     }
 
-    public function setData($data): Intent {
-
+    public function setData($data, $mode = Intent::MODE_INSERT): Intent {
         if (isset($data) && !empty($data)) {
             unset($data["ajout_data"]);
-            $intent = $this->statement->insert($data, Intent::MODE_INSERT);
+            $intent = $this->statement->insert($data, $mode);
             return $intent;
         } else {
             throw new \TypeError(" ERROR setData(data) model  ==> data null");
@@ -27,14 +26,13 @@ class Model {
     }
 
     public function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1): Intent {
+       
         $intent = $this->statement->Select($mode, $condition);
         return $intent;
     }
 
     public function form(array $mode = Intent::MODE_FORM): Intent {
-
         $intent = $this->statement->form($mode);
-
         return $intent;
     }
 
