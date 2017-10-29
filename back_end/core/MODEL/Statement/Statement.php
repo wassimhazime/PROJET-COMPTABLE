@@ -40,59 +40,58 @@ class Statement extends RUN {
                         ->from($this->getTable());
     }
 
-    public function insert(array $dataForm,$mode): Intent {
-         if($mode==Intent::MODE_INSERT){
-         $intent=Intent::parse($dataForm, $this->schema, $mode);  
-         
-        $data = ($intent->getEntitysDataTable()[0]); // data send FORM
-        unset($data->id);   // remove id  
-        $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array 
-        $dataCHILDRENs = [];
+    public function insert(array $dataForm, $mode): Intent {
+        if ($mode == Intent::MODE_INSERT) {
+            $intent = Intent::parse($dataForm, $this->schema, $mode);
 
-        foreach ($name_CHILDRENs as $name_CHILDREN) {
-            if (isset($data->$name_CHILDREN)) {
-                
-                $dataCHILDRENs[$name_CHILDREN] = $data->$name_CHILDREN; // charge $dataCHILDREN
-                unset($data->$name_CHILDREN); // remove CHILDREN in $data
-            }
-        }
-        $data = self::entitys_TO_array($data);
+            $data = ($intent->getEntitysDataTable()[0]); // data send FORM
+            unset($data->id);   // remove id  
+            $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array 
+            $dataCHILDRENs = [];
 
-        
-        $querySQL = (new QuerySQL())->// exec query sql insert to parent table
-                insertInto($intent->getEntitysSchema()->getPARENT())
-                ->value($data);
+            foreach ($name_CHILDRENs as $name_CHILDREN) {
+                if (isset($data->$name_CHILDREN)) {
 
-        $id_parent = $this->exec($querySQL); // return id rowe set data parent table
-       
-
-        /**
-         * code insert data to relation table
-         */
-        if (!empty($dataCHILDRENs)) {
-            foreach ($dataCHILDRENs as $name_table_CHILDREN => $id_CHILDRENs) {
-                foreach ($id_CHILDRENs as $id_CHILD) {
-                    $querySQL = (new QuerySQL())->
-                            insertInto("r_" . $intent->getEntitysSchema()->getPARENT() . "_" . $name_table_CHILDREN)
-                            ->value([
-                        "id_" . $intent->getEntitysSchema()->getPARENT() => $id_parent,
-                        "id_" . $name_table_CHILDREN => $id_CHILD
-                    ]);
-
-                    $this->exec($querySQL);
+                    $dataCHILDRENs[$name_CHILDREN] = $data->$name_CHILDREN; // charge $dataCHILDREN
+                    unset($data->$name_CHILDREN); // remove CHILDREN in $data
                 }
             }
-        }
-    }
- else {
-         throw new \TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
-    }
-    return $intent;
+            $data = self::entitys_TO_array($data);
+
+
+            $querySQL = (new QuerySQL())->// exec query sql insert to parent table
+                    insertInto($intent->getEntitysSchema()->getPARENT())
+                    ->value($data);
+
+            $id_parent = $this->exec($querySQL); // return id rowe set data parent table
+
+
+            /**
+             * code insert data to relation table
+             */
+            if (!empty($dataCHILDRENs)) {
+                foreach ($dataCHILDRENs as $name_table_CHILDREN => $id_CHILDRENs) {
+                    foreach ($id_CHILDRENs as $id_CHILD) {
+                        $querySQL = (new QuerySQL())->
+                                insertInto("r_" . $intent->getEntitysSchema()->getPARENT() . "_" . $name_table_CHILDREN)
+                                ->value([
+                            "id_" . $intent->getEntitysSchema()->getPARENT() => $id_parent,
+                            "id_" . $name_table_CHILDREN => $id_CHILD
+                        ]);
+
+                        $this->exec($querySQL);
+                    }
                 }
+            }
+        } else {
+            throw new \TypeError(" ERROR mode Intent ==> mode!= MODE_INSERT ");
+        }
+        return $this->Select(Intent::MODE_SELECT_ALL_ALL, "{$intent->getEntitysSchema()->getPARENT()}.id=$id_parent");
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(array $mode , $condition ): Intent {
-        
+    public function Select(array $mode, $condition): Intent {
+
         $schema = $this->schema;
         if (Intent::is_PARENT_MASTER($mode)) {
             $Entitys = $this->query((new QuerySQL())

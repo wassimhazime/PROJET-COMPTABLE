@@ -18,5 +18,14 @@
     "$dbuser": "comptable", 
     "$dbpass": "achrafwassim", 
     "$dbname": "comptable"
+},
+    "godaddy":{
+     "$CACHE": true,
+        
+    "$DB": "mysql",
+    "$dbhost": "localhost",
+    "$dbuser": "comptable", 
+    "$dbpass": "achrafwassim", 
+    "$dbname": "comptable"
 }
 }

@@ -120,6 +120,7 @@ class TableHTML extends AbstractHTML{
         } elseif (Intent::is_PARENT_ALL($intent)) {
             $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
         }
+        $columns = array_merge($columns, ["controle"=>"controle"]); /////////////
          if (Intent::is_get_CHILDREN($intent)) {
            $columns = array_merge($columns , $table_CHILDREN); 
         }
@@ -142,12 +143,12 @@ class TableHTML extends AbstractHTML{
             foreach ($ROWS as $head => $body) {
                 $row[] = $this->td($body);
             }
-
+$row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" value="modifier">');////
             foreach ($intent->getEntitysSchema()->get_table_CHILDREN() as $name_table_child) {
                 if ($this->TableCHILD($intent, $index) != [])
                     $row[] = $this->td($this->TableCHILD($intent, $index)[$name_table_child]);
             }
-
+       
             $bodys[] = $this->tr(implode(" \n", $row));
         }
 

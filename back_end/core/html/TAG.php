@@ -18,7 +18,7 @@ use core\html\element\FormHTML;
  */
 class TAG {   
 
-    
+    //"nette/forms": "^2.4",
     public function tableHTML(Intent $intent) {
         $tablehtml=new TableHTML($intent);
         return $tablehtml->builder("class='table table-hover table-bordered' style='width:100%'");

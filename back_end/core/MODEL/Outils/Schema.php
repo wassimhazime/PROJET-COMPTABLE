@@ -21,12 +21,15 @@ class Schema extends RUN {
         if(Config::getgenerateCACHE_SELECT()==['generateCACHE_SELECT']){
             self::generateCache(Config::getPath());}
         
+            
+            //find json config => model file 1generateCACHE_SELECT
         foreach (Config::getgenerateCACHE_SELECT() as $table) {
             $TABLE = (new EntitysSchema())->Instance($table);
             if ($TABLE->getPARENT() == $parent) {
                 return $TABLE;
             }
         }
+            //find json config => model file 2SCHEMA_SELECT_MANUAL
         foreach (Config::getSCHEMA_SELECT_MANUAL() as $table) {
               
             $TABLE = (new EntitysSchema())->Instance($table);
@@ -34,12 +37,17 @@ class Schema extends RUN {
                 return $TABLE;
             }
         }
+            //find json config => model file 3SCHEMA_SELECT_AUTO 
+            //and system SCHEMA_SELECT_AUTO
         foreach (self::getALLschema( Config::getNameDataBase(),Config::getSCHEMA_SELECT_AUTO()) as $TABLE) {
             if ($TABLE->getPARENT() == $parent) {
 
                 return $TABLE;
             }
         }
+        
+        
+        return (new EntitysSchema()); // == return EntitysSchema vide
     }
 
     public static function getALLschema( string $DB_name=null,array $config = []): array {

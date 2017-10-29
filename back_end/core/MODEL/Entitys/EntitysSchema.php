@@ -5,7 +5,7 @@ namespace core\MODEL\Entitys;
 class EntitysSchema extends abstractEntitys {
     private $modeCHILDREN=null;
 
-    private $PARENT = "";
+    private $PARENT = null;
     private $COLUMNS_META = [];
     private $COLUMNS_master = ["*"];
     private $COLUMNS_all = ["*"];
