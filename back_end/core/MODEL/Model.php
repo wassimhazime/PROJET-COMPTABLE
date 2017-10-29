@@ -14,7 +14,7 @@ class Model {
         $schema=Schema::getschema($table);
       
         if($schema->getPARENT()==null){
-            throw new \TypeError(" ERROR not table  ==> table not in DATABASE");
+            throw new \TypeError(" class Model  __construct ERROR not Model  ==> $table in  DATABASE");
         }
         $this->statement = new Statement($schema);
     }

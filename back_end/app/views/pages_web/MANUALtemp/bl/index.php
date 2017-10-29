@@ -10,22 +10,10 @@ echo $info;
 
     <div class="row">
         <div id="wtable"  >
-            
-
-                <?php echo $table; ?>     
-
-
-          
-
-           
-        </div>
+ <?php echo $table; ?>     
+ </div>
        
-
-
-    </div>
-
-
-
+</div>
 
 </div>
 

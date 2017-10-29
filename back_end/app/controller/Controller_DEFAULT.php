@@ -8,20 +8,24 @@ use core\INTENT\Intent;
 
 class Controller_DEFAULT extends Controller {
 
-    protected $model;
+    protected $model ;
+    protected $route;
+    protected $name;
 
     function __construct($route) {
-        parent::__construct($route);
+        $this->route = $route;
+        $this->name = $route['controleur'];
+    
         
         if ($route['controleur'] != 'index') {
-            $this->charge_liaison($route['controleur']);
+            $this->setModel($route['controleur']);
         }
     }
 
     
     
     protected function setModel($model) {
-        $_modelFile = D_S . 'app' . D_S . 'model' . D_S . 'MANUAL' . D_S . 'model_' . $model;
+        $_modelFile = D_S . 'app' . D_S . 'model' . D_S . 'MANUAL' . D_S . 'Model_' . $model;
         if (is_file(ROOT . 'back_end' . $_modelFile . '.php')) {
             
         } else {
@@ -29,14 +33,20 @@ class Controller_DEFAULT extends Controller {
         }
         // si server window 
         $_model = str_replace("/", "\\", $_modelFile);
-        $this->model = new $_model($model);
-    }
+        try {
+           $this->model = new $_model($model); 
+        } catch (\TypeError $exc) {
+            
+            self::NotFound($exc->getMessage());
+            exit();
+        }
 
-    protected function charge_liaison(string $name_controleur) {
         
-
-        $this->setModel($name_controleur);
+        
     }
+
+    
+    
 
     protected function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1) {
 
@@ -46,8 +56,8 @@ class Controller_DEFAULT extends Controller {
         return (new TAG())->tableHTML($intent);
     }
 
-    protected function getFormHTML() {
-        $intent = $this->model->form(Intent::MODE_FORM);
+    protected function getFormHTML(array $mode = Intent::MODE_FORM) {
+        $intent = $this->model->form($mode);
 
         return (new TAG())->FormHTML($intent);
     }
@@ -58,8 +68,38 @@ class Controller_DEFAULT extends Controller {
          header("Location: ".ROOTWEB.$this->name); 
     }
     
-    /// show view
-       public function render(array $variable=[]) {
+    
+    /// default action
+
+      public function index($att = null) {
+          if ($this->route['controleur'] != 'index') {
+           $title = $this->name;
+        $info = $this->show();
+        $table = $this->show();
+        $this->render(compact('title', 'info', 'table')); 
+        } else {
+        $title = "index";
+        $info = "";
+        $table = "";
+        $this->render(compact('title', 'info', 'table'));   
+        }
+
+        
+    }
+
+      public function add($att = null) {
+        if (isset($_POST['ajout_data'])) {
+            $data = $_POST;
+            $id = $this->setData($data);
+        }
+        $title = $this->name;
+        $form = $this->getFormHTML();
+        
+        $this->render(compact('title', 'form'));
+    }
+    
+/// show view
+       protected function render(array $variable=[]) {
 
         ob_start();
 
@@ -72,7 +112,7 @@ class Controller_DEFAULT extends Controller {
                 'templete' . D_S .
                 'themes.php';
     }
-       private function charge_page( $variable) {
+       protected function charge_page( $variable) {
            if (is_array($variable)) {
             extract($variable);
         }
@@ -102,34 +142,4 @@ class Controller_DEFAULT extends Controller {
             require $chemin;
         }
     }
-    /// default method
-
-     public function index($att = null) {
-          if ($this->route['controleur'] != 'index') {
-           $title = $this->name;
-        $info = $this->show();
-        $table = $this->show();
-        $this->render(compact('title', 'info', 'table')); 
-        } else {
-        $title = "index";
-        $info = "";
-        $table = "";
-        $this->render(compact('title', 'info', 'table'));   
-        }
-
-        
-    }
-
-    public function add($att = null) {
-        if (isset($_POST['ajout_data'])) {
-            $data = $_POST;
-            $id = $this->setData($data);
-        }
-        $title = $this->name;
-        $form = $this->getFormHTML('');
-        
-        $this->render(compact('title', 'form'));
-    }
-    
-
 }

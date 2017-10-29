@@ -7,9 +7,6 @@ echo "<h1><center>" . $title . "</center></h1>";
 
 ?>
 
-
-
-
 <div class ="container">
     <div class="row">
       
