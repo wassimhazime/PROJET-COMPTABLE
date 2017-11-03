@@ -30,6 +30,7 @@ require ROOT . 'vendor' . D_S . 'autoload.php';
 $start= microtime(true);
 session_start();
 Dispatcher::load();
+//var_dump($_SERVER);
 $fin= round(microtime(true)-$start,5);
 
 echo"<h5>". $fin.' secondes </h5>';

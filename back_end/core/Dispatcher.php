@@ -1,55 +1,46 @@
 <?php
+
 namespace core;
-use core\routeur\Requete;
-use core\routeur\Routeur;
+
+use core\Router\Router;
 use core\CONTROLLER\Controller;
-use core\routeur\Session;
 
 class Dispatcher {
- 
 
-   public static function load(){
-       Session::set('url', (new  Requete())->getURL());
-       $request =new  Requete();
-      $route=Routeur::parst($request) ;
-     Controller::executer($route);
-       
-//      
-//       
-// $app = new \Slim\App([
-//       'settings' => ['displayErrorDetails' => true, ],
-//]);
+    public static function load() {
 
-//$app->get('/', 
-//        function ($request, $response, $args) {
-//    
-//       $_GET['controleur']="index";
-//      $request =new  Requete();
-//      $parst=Routeur::parst($request) ;
-//     controller::executer($parst);
-//     
-//   return $response->write("Hello, " );
-//     
-//});
-//
-//
-//
-//$app->get('/{controleur}/{action}',
-//        function ($request, $response, $args) {
-//    
-//       $_GET['controleur']=$args['controleur'];
-//       $_GET['action']=$args['action'];
-//      $request =new  Requete();
-//      $parst=Routeur::parst($request) ;
-//     controller::executer($parst);
-//     
-//   return $response->write("Hello, " );
-//     
-//});
-//$app->run();
-       
-       
-      
-   }
-    
+        $app = new Router();
+
+
+        $app->get("/comptable/{Controleur}/{Action}", function ($C, $A) {
+            $route = [];
+            $route['controleur'] = $C;
+            $route['action'] = $A;
+            $route['param'] = "";
+            Controller::executer($route);
+        });
+
+        $app->get("/comptable/{Controleur}", function ($C) {
+            $route = [];
+            $route['controleur'] = $C;
+            $route['action'] = "index";
+            $route['param'] = "";
+            Controller::executer($route);
+        });
+
+        $app->get("/comptable/", function () {
+            $route = [];
+            $route['controleur'] = "index";
+            $route['action'] = "index";
+            $route['param'] = "";
+            Controller::executer($route);
+        });
+
+        
+        
+        
+
+        $app->run();
+    }
+
 }
