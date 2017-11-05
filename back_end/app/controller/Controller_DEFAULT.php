@@ -9,13 +9,14 @@ class Controller_DEFAULT extends Controller {
     /// default action
 
     public function index($att = null) {
-        if ($this->route['controleur'] != 'index') {
-            $title = $this->name;
+        $title = $this->name;
+        if ($this->name != 'index') {
+            
             $info = $this->show();
             $table = $this->show();
             $this->render(compact('title', 'info', 'table'));
         } else {
-            $title = "index";
+            
             $info = "";
             $table = "";
             $this->render(compact('title', 'info', 'table'));
@@ -53,7 +54,7 @@ class Controller_DEFAULT extends Controller {
             extract($variable);
         }
 
-        $page = $this->route['controleur'] . D_S . $this->route['action'];
+        $page = $this->name . D_S . $this->action;
 
         $chemin = ROOT .
                 'back_end' . D_S .
@@ -66,7 +67,7 @@ class Controller_DEFAULT extends Controller {
         if (is_file($chemin)) {
             require $chemin;
         } else {
-            $page = $this->route['action'];
+            $page = $this->action;
             $chemin = ROOT .
                     'back_end' . D_S .
                     'app' . D_S .

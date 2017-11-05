@@ -4,30 +4,59 @@ namespace core\CONTROLLER;
 
 use core\html\TAG;
 use core\INTENT\Intent;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\ServerRequest;
 
 class Controller {
 
     protected $model;
-    protected $route;
+    protected $Request;
+    protected $Response;
     protected $name;
+    protected $action;
 
-    function __construct($route) {
-        $this->route = $route;
-        $this->name = $route['controleur'];
+    function __construct(ServerRequestInterface $Request, ResponseInterface $Response) {
+        $this->Request = $Request;
+        $this->Response = $Response;
+
+        $this->name = $Request->getAttribute('MVC')["controller"];
+        $this->action = $Request->getAttribute('MVC')["action"];
+        $this->param = $Request->getAttribute('MVC')["param"];
 
 
-        if ($route['controleur'] != 'index') {
-            $this->setModel($route['controleur']);
+        if ($this->name != 'index') {
+            $this->setModel($this->name);
         }
     }
 
-    public static function executer($route) {
-        $nomcontroller = $route['controleur'];
-        $action = $route['action'];
-        $param = $route['param'];
+    public static function executer(ServerRequestInterface $Request, ResponseInterface $Response) {
 
-        $controllerFile = D_S . 'app' . D_S . 'controller' . D_S . 'MANUAL' . D_S . 'Controller_' . $nomcontroller;
- 
+        $params = $Request->getAttribute('params_match');
+        $mvc = [];
+
+        if (!empty($params[0])and isset($params[0])) {
+            $mvc["controller"] = $params[0];
+        } else {
+            $mvc["controller"] = "index";
+        }
+        if (!empty($params[0])and isset($params[1])) {
+            $mvc["action"] = $params[1];
+        } else {
+            $mvc["action"] = "index";
+        }
+        if (!empty($params[2])and isset($params[2])) {
+            $mvc["param"] = $params[2];
+        } else {
+            $mvc["param"] = "";
+        }
+
+
+
+
+        $controllerFile = D_S . 'app' . D_S . 'controller' . D_S . 'MANUAL' . D_S . 'Controller_' . $mvc["controller"];
+
         if (is_file(ROOT . 'back_end' . $controllerFile . '.php')) {
             
         } else {
@@ -35,15 +64,17 @@ class Controller {
         }
 
 
-       
+
         // si server window 
         $controller = str_replace("/", "\\", $controllerFile);
-        $obController = new $controller($route);
-        if (is_callable(array($obController, $action))) {
-
-            call_user_func(array($obController, $action), $param);
+        
+        $Request = $Request->withAttribute("MVC", $mvc);
+       
+        $obController = new $controller($Request, $Response);
+        if (is_callable(array($obController, $mvc["action"]))) {
+             call_user_func(array($obController, $mvc["action"]), $mvc["param"]);
         } else {
-            self::NotFound("action  <b> $action </b>  not found");
+            self::NotFound($Request, $Response);
         }
     }
 
@@ -60,7 +91,7 @@ class Controller {
             $this->model = new $_model($model);
         } catch (\TypeError $exc) {
 
-            self::NotFound($exc->getMessage());
+            self::NotFound();
             exit();
         }
     }
@@ -81,12 +112,14 @@ class Controller {
 
     protected function setData($data, $mode = Intent::MODE_INSERT) {
         $intent = $this->model->setData($data, $mode);
-        // var_dump($intent);
-        header("Location: " . ROOTWEB . $this->name);
     }
 
-    public static function NotFound($msg = 'not found') {
-        echo $msg;
+    public static function NotFound(ServerRequestInterface $Request=null, ResponseInterface $Response=null)  {
+        
+        ////////////
+        
+        echo "action or controller or model  NotFound";
+        
         header("HTTP/1.0 404 Not Found");
 
         require ROOT .

@@ -54,8 +54,14 @@ class Route {
           return true;
     }
 
-    public function call() {
-        call_user_func_array($this->callable, $this->variable_match);
+    public function call($Request,$Response) {
+      
+        $param[]=$Request->withAttribute("params_match",$this->variable_match);
+        $param[]=$Response;
+        
+        
+        
+        return  call_user_func_array($this->callable, $param);
     }
 
 }
