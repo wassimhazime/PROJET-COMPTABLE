@@ -28,8 +28,9 @@ require ROOT . 'vendor' . D_S . 'autoload.php';
 
 // start application
 $start= microtime(true);
-session_start();
+
 Dispatcher::load();
+
 $fin= round(microtime(true)-$start,5);
 
 echo"<h5>". $fin.' secondes </h5>';

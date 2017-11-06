@@ -59,8 +59,9 @@ class Router {
     }
     public function redirection(string $name, array $param=[]) {
         $url= $this->get_URL($name, $param);
-       send((new Response(301))->withHeader("Location", $url));
+        header('Location: '.$url);
         
+       
     }
 
 }

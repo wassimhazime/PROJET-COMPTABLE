@@ -1,5 +1,5 @@
 <?php
-namespace app\model\MANUAL;
+namespace app\Model\MANUAL;
 use core\MODEL\Model;
 class Model_mode_paiement extends Model{
     

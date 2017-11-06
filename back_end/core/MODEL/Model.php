@@ -8,15 +8,19 @@ use core\MODEL\Outils\Schema;
 
 class Model {
 
-    private $statement;
+    private $statement=null;
+    private $is_null=false;
 
     public function __construct($table) {
         $schema=Schema::getschema($table);
-      
+        
         if($schema->getPARENT()==null){
-            throw new \TypeError(" class Model  __construct ERROR not Model  ==> $table in  DATABASE");
+            $this->is_null=TRUE;
+        }else{
+            $this->statement = new Statement($schema); 
         }
-        $this->statement = new Statement($schema);
+        
+       
     }
 
     public function setData($data, $mode ): Intent {
@@ -40,5 +44,9 @@ class Model {
         $intent = $this->statement->form($mode);
         return $intent;
     }
+    function is_null() {
+        return $this->is_null;
+    }
+
 
 }

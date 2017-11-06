@@ -1,5 +1,5 @@
 <?php
-namespace app\model;
+namespace app\Model;
 use core\MODEL\Model;
 class Model_DEFAULT extends Model{
     
