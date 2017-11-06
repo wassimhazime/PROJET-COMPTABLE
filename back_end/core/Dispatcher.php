@@ -2,51 +2,54 @@
 
 namespace core;
 
-use function Http\Response\send;
+use Psr\Http\Message\ServerRequestInterface as Req;
+use Psr\Http\Message\ResponseInterface as Res;
 use core\Router\Router;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
 use core\CONTROLLER\Controller;
+use GuzzleHttp\Psr7\ServerRequest;
 
 class Dispatcher {
 
     public static function load() {
 
         $app = new Router();
+        $app->setSiApatch('/comptable/');
 
-       
+
+
+
 ///get
-        $app->get("/comptable/{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response)  {
+        ///////////////////////////////////////////////////////////////////////////////////////       
+        $app->get("/{Controleur}/{Action}", function (Req $Request, Res $Response) {
+            echo 'nombre';
+        }, "routeNombre"
+        )->with("Controleur", "[1-9]*")->with("Action", "[1-9]*");
+///////////////////////////////////////////////////////////////////////////////////////
+        $app->get("{Controleur}/{Action}", function (Req $Request, Res $Response) {
             return Controller::executer($Request, $Response);
+        }, "routeMVC"
+        )->with("Controleur", "[a-z\-_]*")->with("Action", "[a-z\-_]*");
+///////////////////////////////////////////////////////////////////////////////////////
+        $app->get("/{Controleur}", function (Req $Request, Res $Response) use($app) {
+            $c = $Request->getAttribute('params_match')[0];
+            $app->redirection("routeMVC", ["Controleur" => $c, "Action" => "index"]);
         });
-
-        $app->get("/comptable/{Controleur}", function (ServerRequestInterface $Request, ResponseInterface $Response)  {
-
-            return Controller::executer($Request, $Response);
+///////////////////////////////////////////////////////////////////////////////////////
+        $app->get("/", function (Req $Request, Res $Response) use($app) {
+            $app->redirection("routeMVC", ["Controleur" => "index", "Action" => "index"]);
         });
-
-        $app->get("/comptable/", function (ServerRequestInterface $Request, ResponseInterface $Response)  {
-
-            return Controller::executer($Request, $Response);
-        });
+        ///////////////////////////////////////////////////////////////////////////////////////       
 ///post
-        $app->post("/comptable/{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response)
-                 {
-
-            Controller::executer($Request, $Response);
-
-            send($Response->withStatus(301)
-                            ->withHeader("Location", "/comptable/"));
-
-            return $Response;
+        $app->post("/{Controleur}/{Action}", function (Req $Request, Res $Response)use($app) {
+            $app->redirection("routeMVC", ["Controleur" => "index", "Action" => "index"]);
         });
 
 
-        //  $app->run(new ServerRequest("GET", "/comptable/")); //stop page
+        /////       
+        //  $app->run(new ServerRequest("GET", "/")); //stop page
 
         $Response = $app->run(ServerRequest::fromGlobals());
+        //  send($Response);
     }
 
 }

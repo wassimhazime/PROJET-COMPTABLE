@@ -1,67 +1,110 @@
 <?php
 
-
-
 namespace core\Router;
 
-
 class Route {
+    
+    private $siApatch='';
 
-    private $path;
-    private $callable;
-    private $variable_match = [];
-    private $param_with = [];
+    private $path; // path generate ex=>/test/ll/{bb}/
+    private $callable; // function($Request, $Response) call 
+    private $nameRoute;
+    
+    
+    /*// path generate ex=>/test/ll/{param}/
+     * {param}=>$syntax_param_method_router='#{([a-zA-Z0-9]+)}#'
+     * 
+     * 
+     * is call with("Action", "[a-z\-_]*")
+     * $app->get("/{Controleur}/{Action}",
+     *  function (ServerRequestInterface $Request, ResponseInterface $Response)  {
+            return Controller::executer($Request, $Response);
+        })->with("Controleur", "[a-z\-_]*")->with("Action", "[a-z\-_]*");
+     * 
+     * "[a-z\-_]*"==>$regex_pattern = [];
+     * 
+     * $params_match = [] => $Request->getAttribute('params_match'); Controleur and Action
+     *  
+     */
+    
+    private $syntax_param_method_router='#{([a-zA-Z0-9]+)}#';
+    private $regex_pattern = [];
+    private $params_match = [];
 
-    function __construct(string $path, callable $callable) {
+    private function getRegex_pattern($ref): string {
+        
+        if (isset($this->regex_pattern[$ref])) {
+           return $this->regex_pattern[$ref];
+        }
+         return '([^/]+)';
+    }
+
+    private function setRegex_pattern($ref, $regex_pattern) {
+        $this->regex_pattern[$ref] = $regex_pattern;
+    }
+
+    function __construct(string $path, callable $callable,$name,$siApatch='') {
+        
 
         $this->path = trim($path, "/");
-        ;
         $this->callable = $callable;
+        $this->nameRoute=$name;
+        $this->siApatch=$siApatch;
     }
 
     public function with($param, $regex): self {
-        $regex= str_replace("(", "(?", $regex);//pour ne creier (
-        $this->param_with[$param] = "($regex)";
+        $regex = str_replace("(", "(?", $regex); //pour ne creier (
+        $regex_pattern = "($regex)";
+        $this->setRegex_pattern($param, $regex_pattern);
         return $this;
     }
 
     private function replace_callback($paramPath) {
-        if (isset($this->param_with[$paramPath[1]])) {
-            return $this->param_with[$paramPath[1]];
-        };
-
-        return '([^/]+)';
+        //$paramPath[0]=> match global {text}
+        //$paramPath[1]=> group match    text
+        return $this->getRegex_pattern($paramPath[1]);
     }
 
-    public function match($url): bool {
-        $url = trim($url, "/");
+    public function match($Request): bool {
 
-        
-        //si il ya parame
-        // exemple/:hh TO   exemple/([^/]+)
-        $path = preg_replace_callback('#{([a-zA-Z0-9]+)}#',
-                [$this, 'replace_callback'],
-                $this->path);
-
-        $regex = "#^$path$#i";
-
+         
+         $path = preg_replace_callback(
+                 $this->syntax_param_method_router,
+                 [$this, 'replace_callback'],
+                  $this->path);
+         
+        $regex = "#^$path$#i"; ///=> '#^comptable/([a-z\-_]*)/([a-z\-_]*)$#i
        
+        $url=$Request->getUri()->getPath();
+        
+        $url=  str_replace($this->siApatch, "", $url);// server apatch
+        
+        $url = trim($url, "/");
         if (!preg_match($regex, $url, $match)) {
             return false;
         }
-        array_shift($match);
-        $this->variable_match = $match;
-          return true;
+        
+        array_shift($match); ///$match[0]=> 'comptable/commande/add'
+        $this->params_match = $match;
+        return true;
     }
 
-    public function call($Request,$Response) {
-      
-        $param[]=$Request->withAttribute("params_match",$this->variable_match);
-        $param[]=$Response;
-        
-        
-        
-        return  call_user_func_array($this->callable, $param);
+    public function call($Request, $Response) {
+        $Request = $Request->withAttribute("params_match", $this->params_match);
+        return call_user_func_array($this->callable, [$Request, $Response]);
     }
+    public function url(array $param) {
+        $path=$this->path;
+        
+        foreach ($param as $key => $value) {
+         $path= str_replace('{'.$key.'}', $value, $path)  ; 
+        }
+        return $this->siApatch.$path;
+    }
+    function getNameRoute() {
+        return $this->nameRoute;
+    }
+
+
 
 }
