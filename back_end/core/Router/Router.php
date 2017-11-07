@@ -2,7 +2,7 @@
 
 namespace core\Router;
 use function Http\Response\send;
-
+use Psr\Http\Message\ResponseInterface ;
 use GuzzleHttp\Psr7\Response;
 
 
@@ -34,14 +34,16 @@ class Router {
         return $route;
     }
 
-    public function run($Request) {
+    public function run($Request):ResponseInterface {
         $Response = new Response();
         
         foreach ($this->routes[$Request->getMethod()] as $route) {
             
             
             if ($route->match($Request)) {
-                $route->call($Request, $Response);
+             return   $route->call($Request, $Response);
+                 break; 
+                
             }
          }
         
@@ -59,7 +61,7 @@ class Router {
     }
     public function redirection(string $name, array $param=[]) {
         $url= $this->get_URL($name, $param);
-        header('Location: '.$url);
+        return ((new Response(301))->withHeader('Location', $url));
         
        
     }

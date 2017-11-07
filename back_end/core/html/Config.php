@@ -14,10 +14,10 @@ use core\ConfigPath;
  *
  * @author Wassim Hazime
  */
-class Config extends ConfigPath{
+class Config {
   
-    public static function getPath() {
-        return parent::getPath(). "html" . D_S;
+      public static function getPath() {
+        return   ConfigPath::getPath("html");
     }
 
     public static function getConevert_TypeClomunSQL_to_TypeInputHTML(string $path = null): array {

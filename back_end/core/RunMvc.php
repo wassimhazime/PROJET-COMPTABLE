@@ -13,6 +13,7 @@ use core\MODEL\Model;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+
 /**
  * Description of Run
  *
@@ -27,15 +28,21 @@ class RunMvc {
         
     }
 
-    public function run(Request $Request, Response $Response) {
+    public function run(Request $Request, Response $Response):Response {
 
         $Request = $this->parsse_Params_match_to_Params_MVC($Request);
         $obController = $this->get_Object_Controller($Request, $Response);
         $obModel = $this->get_Object_Model();
         $view = $obController->run($obModel);
-        $this->render($view);
+       $container =  $this->render($view);
+          $Response->getBody()->write($container);
+          return $Response;
+       
     }
 
+   
+    
+    
     private function parsse_Params_match_to_Params_MVC(Request $Request): Request {
         $params = $Request->getAttribute('params_match');
         $this->name = $params[0];
@@ -75,75 +82,43 @@ class RunMvc {
     }
 
     private function get_Class(string $mvc): string {
-
-        $classMVC = D_S . 'app' . D_S . $mvc . D_S . 'MANUAL' . D_S . $mvc . '_' . $this->name;
-
-        if (is_file(ROOT . 'back_end' . $classMVC . '.php')) {
-            
-        } else {
-            $classMVC = D_S . 'app' . D_S . $mvc . D_S . $mvc . '_DEFAULT';
+        
+      $classMVC =  'app\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
+      if (!class_exists ($classMVC)) {
+       $classMVC = D_S . 'app\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
         }
-
-        return str_replace("/", "\\", $classMVC);
+         return$classMVC;
     }
 
-    ////view
-    /// show view
-    protected function render(array $variable = []) {
+    private function render(array $variable = []) {
+            
         if ($variable != []) {
             ob_start();
-            $this->charge_page($variable);
+             $this->charge_page($variable);
             $container = ob_get_clean();
-            require ROOT .
-                    'back_end' . D_S .
-                    'app' . D_S .
-                    'views' . D_S .
-                    'templete' . D_S .
-                    'themes.php';
+            
+            ob_start();
+            require ConfigPath::getPath("templeteROOT") . 'themes.php';
+            return ob_get_clean();
         } else {
-            ////////////
-
-            echo "action or controller or model  NotFound";
-
-            header("HTTP/1.0 404 Not Found");
-
-            require ROOT .
-                    'back_end' . D_S .
-                    'app' . D_S .
-                    'views' . D_S .
-                    'templete' . D_S .
-                    '404.php';
-            exit();
+            ob_start();
+           require ConfigPath::getPath("templeteROOT") . '404.php';
+           return ob_get_clean();
         }
     }
 
-    protected function charge_page($variable) {
-        if (is_array($variable)) {
-            extract($variable);
-        }
-
+    private function charge_page(array $variable) {
+        extract($variable);
+        
         $page = $this->name . D_S . $this->action;
 
-        $chemin = ROOT .
-                'back_end' . D_S .
-                'app' . D_S .
-                'views' . D_S .
-                'pages_web' . D_S .
-                'MANUAL' . D_S .
-                $page . '.php';
+        $chemin = ConfigPath::getPath("views_MANUAL") . $page . '.php';
 
         if (is_file($chemin)) {
             require $chemin;
         } else {
             $page = $this->action;
-            $chemin = ROOT .
-                    'back_end' . D_S .
-                    'app' . D_S .
-                    'views' . D_S .
-                    'pages_web' . D_S .
-                    'DEFAULT' . D_S .
-                    $page . '.php';
-
+            $chemin = ConfigPath::getPath("views_DEFAULT") . $page . '.php';
             require $chemin;
         }
     }

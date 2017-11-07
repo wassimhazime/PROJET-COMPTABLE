@@ -6,14 +6,14 @@ use core\ConfigPath;
 use core\notify\Notify;
 use \Exception;
 
-class Config extends ConfigPath{
+class Config {
 
    
     private static $connect = [];
     private static $SCHEMA_SELECT_AUTO;
     private static $SCHEMA_SELECT_MANUAL;
     public static function getPath() {
-        return parent::getPath(). "model" . D_S;
+        return   ConfigPath::getPath("model");
     }
 
     public static function getConnect(string $path = null, string $name = null): array {
