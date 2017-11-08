@@ -1,12 +1,12 @@
-{"BOOT":"godaddy",
+{"BOOT":"TEST",
     
     "TEST":{
         "$CACHE": true,
 
     "$DB": "mysql",
     "$dbhost": "localhost",
-    "$dbuser": "comptable", 
-    "$dbpass": "achrafwassim", 
+    "$dbuser": "root", 
+    "$dbpass": "root", 
     "$dbname": "comptable"
 }
     ,

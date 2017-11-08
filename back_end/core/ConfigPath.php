@@ -3,14 +3,15 @@
 namespace core;
 
 class ConfigPath {
-    const Path = ROOT  . "back_end" . D_S ;
-    const PathApp = self::Path. "app" . D_S;
+
+    const Path = ROOT . "back_end" . D_S;
+    const PathApp = self::Path . "app" . D_S;
     const PathAppConfig = self::PathApp . "config" . D_S;
     const PathAppViews = self::PathApp . "views" . D_S;
 
     public static function getPath($name) {
         switch ($name) {
-             case "back_end":
+            case "back_end":
                 return self::Path;
                 break;
             case "app":
@@ -35,8 +36,8 @@ class ConfigPath {
             case "views_DEFAULT":
                 return self::PathAppViews . 'views_page' . D_S . 'DEFAULT' . D_S;
                 break;
-               default:
-                return ROOT ;
+            default:
+                return ROOT;
                 break;
         }
     }

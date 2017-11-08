@@ -85,7 +85,7 @@ class RunMvc {
         
       $classMVC =  'app\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
       if (!class_exists ($classMVC)) {
-       $classMVC = D_S . 'app\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
+       $classMVC = 'app\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
         }
          return$classMVC;
     }
