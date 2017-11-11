@@ -1,8 +1,12 @@
 <?php
 
 namespace core;
+/*
+ * config path application global
+ */
 
 class ConfigPath {
+    
 
     const Path = ROOT . "back_end" . D_S;
     const PathApp = self::Path . "app" . D_S;
@@ -30,7 +34,7 @@ class ConfigPath {
             case "templeteROOT":
                 return self::PathAppViews . 'templete' . D_S;
                 break;
-            case "views_MANUAL":
+            case "views_MANUAL": 
                 return self::PathAppViews . 'templete_page' . D_S . 'MANUAL' . D_S;
                 break;
             case "views_DEFAULT":
