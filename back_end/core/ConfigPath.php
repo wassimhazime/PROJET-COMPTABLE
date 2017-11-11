@@ -31,10 +31,10 @@ class ConfigPath {
                 return self::PathAppViews . 'templete' . D_S;
                 break;
             case "views_MANUAL":
-                return self::PathAppViews . 'views_page' . D_S . 'MANUAL' . D_S;
+                return self::PathAppViews . 'templete_page' . D_S . 'MANUAL' . D_S;
                 break;
             case "views_DEFAULT":
-                return self::PathAppViews . 'views_page' . D_S . 'DEFAULT' . D_S;
+                return self::PathAppViews . 'templete_page' . D_S . 'DEFAULT' . D_S;
                 break;
             default:
                 return ROOT;
