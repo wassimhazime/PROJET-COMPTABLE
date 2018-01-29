@@ -1,11 +1,11 @@
 <?php
 
-namespace core\MODEL\Base_Donnee;
+namespace core\MVC\MODEL\Base_Donnee;
 
 use \PDO;
 use \Exception;
 use core\notify\Notify;
-use core\MODEL\Base_Donnee\Config;
+use core\MVC\MODEL\Base_Donnee\Config;
 
 class DataBase {
 

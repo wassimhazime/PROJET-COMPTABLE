@@ -1,6 +1,6 @@
 <?php
 
-namespace core\MODEL\Entitys;
+namespace core\MVC\MODEL\Entitys;
 
 class EntitysDataTable extends abstractEntitys {
 

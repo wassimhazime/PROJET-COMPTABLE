@@ -1,6 +1,6 @@
 <?php
 
-namespace core\MODEL\Base_Donnee;
+namespace core\MVC\MODEL\Base_Donnee;
 use core\ConfigPath;
 
 use core\notify\Notify;

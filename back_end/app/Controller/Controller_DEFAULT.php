@@ -2,7 +2,7 @@
 
 namespace app\Controller;
 
-use core\CONTROLLER\Controller;
+use core\MVC\CONTROLLER\Controller;
 
 class Controller_DEFAULT extends Controller {
 

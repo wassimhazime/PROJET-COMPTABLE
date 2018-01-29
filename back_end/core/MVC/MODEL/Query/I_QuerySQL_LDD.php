@@ -9,7 +9,7 @@ Contraintes
 Tables et contraintes
  */
 
-namespace core\MODEL\Query;
+namespace core\MVC\MODEL\Query;
 
 /**
  *

@@ -1,10 +1,10 @@
 <?php
 
-namespace core\MODEL\Outils;
+namespace core\MVC\MODEL\Outils;
 
-use core\MODEL\Entitys\EntitysSchema;
-use core\MODEL\Base_Donnee\RUN;
-use core\MODEL\Base_Donnee\Config;
+use core\MVC\MODEL\Entitys\EntitysSchema;
+use core\MVC\MODEL\Base_Donnee\RUN;
+use core\MVC\MODEL\Base_Donnee\Config;
 
 class Schema extends RUN {
 

@@ -7,7 +7,7 @@ DELETE : suppression de données d'une table ;
 UPDATE : mise à jour de données d'une table.
  */
 
-namespace core\MODEL\Query;
+namespace core\MVC\MODEL\Query;
 
 /**
  *

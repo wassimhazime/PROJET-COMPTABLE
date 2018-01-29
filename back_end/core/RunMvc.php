@@ -8,8 +8,8 @@
 
 namespace core;
 
-use core\CONTROLLER\Controller;
-use core\MODEL\Model;
+use core\MVC\CONTROLLER\Controller;
+use core\MVC\MODEL\Model;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace core\MODEL\Statement;
+namespace core\MVC\MODEL\Statement;
 
-use core\MODEL\Base_Donnee\RUN;
-use core\MODEL\Query\QuerySQL;
-use core\MODEL\Entitys\EntitysDataTable;
-use core\MODEL\Entitys\EntitysSchema;
+use core\MVC\MODEL\Base_Donnee\RUN;
+use core\MVC\MODEL\Query\QuerySQL;
+use core\MVC\MODEL\Entitys\EntitysDataTable;
+use core\MVC\MODEL\Entitys\EntitysSchema;
 use core\INTENT\Intent;
-use core\MODEL\Outils\Schema;
+use core\MVC\MODEL\Outils\Schema;
 
 class Statement extends RUN {
 

@@ -2,8 +2,8 @@
 
 namespace core\INTENT;
 
-use core\MODEL\Entitys\EntitysSchema;
-use core\MODEL\Entitys\EntitysDataTable;
+use core\MVC\MODEL\Entitys\EntitysSchema;
+use core\MVC\MODEL\Entitys\EntitysDataTable;
 
 class Intent {
 

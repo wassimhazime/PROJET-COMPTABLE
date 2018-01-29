@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace core\MODEL\Entitys;
+namespace core\MVC\MODEL\Entitys;
 
 /**
  * Description of Entitys

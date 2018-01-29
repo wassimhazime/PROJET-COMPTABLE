@@ -1,9 +1,9 @@
 <?php
 
-namespace core\CONTROLLER;
+namespace core\MVC\CONTROLLER;
 
 use core\html\TAG;
-use core\MODEL\Model;
+use core\MVC\MODEL\Model;
 use core\INTENT\Intent;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;

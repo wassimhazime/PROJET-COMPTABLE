@@ -1,10 +1,10 @@
 <?php
 
-namespace core\MODEL;
+namespace core\MVC\MODEL;
 
 use core\INTENT\Intent;
-use core\MODEL\Statement\Statement;
-use core\MODEL\Outils\Schema;
+use core\MVC\MODEL\Statement\Statement;
+use core\MVC\MODEL\Outils\Schema;
 
 class Model {
 
