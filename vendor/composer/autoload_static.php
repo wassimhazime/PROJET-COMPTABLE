@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01
 {
     public static $files = array (
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '6f2c5977e422114bbaec553e7c77ee8b' => __DIR__ . '/..' . '/http-interop/response-sender/src/functions.php',
     );
 
@@ -38,6 +38,17 @@ class ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr7Middlewares\\' => 16,
+        ),
+        'M' => 
+        array (
+            'Middlewares\\Utils\\' => 18,
+            'Middlewares\\' => 12,
+        ),
+        'I' => 
+        array (
+            'Interop\\Http\\Server\\' => 20,
+            'Interop\\Http\\Factory\\' => 21,
         ),
         'G' => 
         array (
@@ -84,6 +95,27 @@ class ComposerStaticInit321d4a7e6a2c3b4d03a212a677af8e01
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr7Middlewares\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/oscarotero/psr7-middlewares/src',
+        ),
+        'Middlewares\\Utils\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/middlewares/utils/src',
+        ),
+        'Middlewares\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/middlewares/whoops/src',
+        ),
+        'Interop\\Http\\Server\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/http-interop/http-server-handler/src',
+            1 => __DIR__ . '/..' . '/http-interop/http-server-middleware/src',
+        ),
+        'Interop\\Http\\Factory\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/http-interop/http-factory/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
