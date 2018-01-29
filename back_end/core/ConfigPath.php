@@ -1,11 +1,13 @@
 <?php
 
 namespace core;
+
 /*
  * config path application global
  */
 
-class ConfigPath {
+class ConfigPath
+{
     
 
     const Path = ROOT . "back_end" . D_S;
@@ -13,7 +15,8 @@ class ConfigPath {
     const PathAppConfig = self::PathApp . "config" . D_S;
     const PathAppViews = self::PathApp ."module_achat".D_S. "views" . D_S;
 
-    public static function getPath($name) {
+    public static function getPath($name)
+    {
         switch ($name) {
             case "back_end":
                 return self::Path;
@@ -34,7 +37,7 @@ class ConfigPath {
             case "templeteROOT":
                 return self::PathAppViews . 'templete' . D_S;
                 break;
-            case "views_MANUAL": 
+            case "views_MANUAL":
                 return self::PathAppViews . 'templete_page' . D_S . 'MANUAL' . D_S;
                 break;
             case "views_DEFAULT":
@@ -45,5 +48,4 @@ class ConfigPath {
                 break;
         }
     }
-
 }

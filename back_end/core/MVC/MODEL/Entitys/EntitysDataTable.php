@@ -2,7 +2,8 @@
 
 namespace core\MVC\MODEL\Entitys;
 
-class EntitysDataTable extends abstractEntitys {
+class EntitysDataTable extends abstractEntitys
+{
 
     private $DataJOIN = array();
   
@@ -10,11 +11,13 @@ class EntitysDataTable extends abstractEntitys {
 //add item enfant
     
 
-        public function setDataJOIN($key, $enfant) {
+    public function setDataJOIN($key, $enfant)
+    {
         $this->DataJOIN[$key] = $enfant;
     }
 
-    public function getDataJOIN($key = null) {
+    public function getDataJOIN($key = null)
+    {
         if ($key == null) {
             return $this->DataJOIN;
         } else {
@@ -22,7 +25,8 @@ class EntitysDataTable extends abstractEntitys {
         }
     }
 
-    public function set(array $data): array {
+    public function set(array $data): array
+    {
         if ($this->isAssoc($data)) {
             foreach ($data as $key => $value) {
                 $this->$key = $value;
@@ -30,7 +34,4 @@ class EntitysDataTable extends abstractEntitys {
         }
         return [$this];
     }
-
-   
-
 }

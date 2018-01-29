@@ -13,10 +13,13 @@ namespace core\MVC\MODEL\Entitys;
  *
  * @author Wassim Hazime
  */
-abstract class  abstractEntitys {
-     public  function isAssoc(array $arr): bool {
-        if (array() === $arr){
-        return false;}
+abstract class abstractEntitys
+{
+    public function isAssoc(array $arr): bool
+    {
+        if (array() === $arr) {
+            return false;
+        }
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 }

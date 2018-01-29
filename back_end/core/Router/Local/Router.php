@@ -5,26 +5,31 @@ namespace core\Router\Local;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 
-class Router {
+class Router
+{
 
     private $siApatch = '';
 
-    function setSiApatch($siApatch) {
+    function setSiApatch($siApatch)
+    {
         $this->siApatch = $siApatch;
     }
 
     private $routes = [];
     private $namedroutes = [];
 
-    public function get(string $path, callable $callable, string $name = ""): Route {
+    public function get(string $path, callable $callable, string $name = ""): Route
+    {
         return $this->method("GET", $path, $callable, $name);
     }
 
-    public function post(string $path, callable $callable, string $name = ""): Route {
+    public function post(string $path, callable $callable, string $name = ""): Route
+    {
         return $this->method("POST", $path, $callable, $name);
     }
 
-    private function method(string $method, string $path, callable $callable, string $name) {
+    private function method(string $method, string $path, callable $callable, string $name)
+    {
         $route = new Route($path, $callable, $name, $this->siApatch);
 
         $this->routes[$method][] = $route;
@@ -32,7 +37,8 @@ class Router {
         return $route;
     }
 
-    public function run($Request): ResponseInterface {
+    public function run($Request): ResponseInterface
+    {
         $Response = new Response();
 
         foreach ($this->routes[$Request->getMethod()] as $route) {
@@ -46,7 +52,8 @@ class Router {
     }
 
     ///tools
-    public function get_URL(string $name, array $param = []) {
+    public function get_URL(string $name, array $param = [])
+    {
         if (!isset($this->namedroutes[$name])) {
             throw new \Exception(" not is name route");
         }
@@ -54,9 +61,9 @@ class Router {
         return $route->url($param);
     }
 
-    public function redirection(string $name, array $param = []) {
+    public function redirection(string $name, array $param = [])
+    {
         $url = $this->get_URL($name, $param);
         return ((new Response(301))->withHeader('Location', $url));
     }
-
 }

@@ -6,9 +6,11 @@ use \SplObserver;
 use \SplSubject;
 use core\notify\Config;
 
-class Notify implements SplSubject {
+class Notify implements SplSubject
+{
 
-    function __construct(array $config=null) {
+    function __construct(array $config = null)
+    {
         if ($config === null) {
             $config = Config::getOutilsnotify();
         }
@@ -17,7 +19,8 @@ class Notify implements SplSubject {
         }
     }
 
-    static function send_Notify($msg, $config = null) {
+    static function send_Notify($msg, $config = null)
+    {
         if ($config === null) {
             $config = Config::getOutilsnotify();
         }
@@ -29,30 +32,34 @@ class Notify implements SplSubject {
     public $outilsnotify = [];
     private $Formation;
 
-    public function attach(SplObserver $outilsnotify) {
+    public function attach(SplObserver $outilsnotify)
+    {
         $this->outilsnotify[] = $outilsnotify;
         return $this;
     }
 
-    public function detach(SplObserver $outilsnotify) {
+    public function detach(SplObserver $outilsnotify)
+    {
         if (is_int($key = array_search($outilsnotify, $this->outilsnotify, true))) {
             unset($this->outilsnotify[$key]);
         }
     }
 
-    public function notify() {
+    public function notify()
+    {
         foreach ($this->outilsnotify as $observer) {
             $observer->update($this);
         }
     }
 
-    function getFormation() {
+    function getFormation()
+    {
         return $this->Formation;
     }
 
-    function setFormation($Formation) {
+    function setFormation($Formation)
+    {
         $this->Formation = $Formation;
         $this->notify();
     }
-
 }

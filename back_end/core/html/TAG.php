@@ -7,6 +7,7 @@
  */
 
 namespace core\html;
+
 use core\INTENT\Intent;
 use core\html\element\TableHTML;
 use core\html\element\FormHTML;
@@ -16,19 +17,18 @@ use core\html\element\FormHTML;
  *
  *Les décorateurs
  */
-class TAG {   
+class TAG
+{
 
     //"nette/forms": "^2.4",
-    public function tableHTML(Intent $intent) {
+    public function tableHTML(Intent $intent)
+    {
         $tablehtml=new TableHTML($intent);
         return $tablehtml->builder("class='table table-hover table-bordered' style='width:100%'");
-        
-        
     }
-    public function FormHTML(Intent $intent) {
+    public function FormHTML(Intent $intent)
+    {
         $formhtml=new FormHTML($intent);
         return $formhtml->builder("  ");
-        
-        
     }
 }

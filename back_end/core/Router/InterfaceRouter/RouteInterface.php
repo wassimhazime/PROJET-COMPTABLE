@@ -11,7 +11,9 @@
  * @author wassime
  */
 namespace core\Router\InterfaceRouter;
-interface RouteInterface {
+
+interface RouteInterface
+{
 
 
 }

@@ -6,11 +6,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use GuzzleHttp\Psr7\Response;
 
-class Route {
+class Route
+{
 
     private $siApatch = '';
     private $path; // path generate ex=>/test/ll/{bb}/
-    private $callable; // function($Request, $Response) call 
+    private $callable; // function($Request, $Response) call
     private $nameRoute;
 
 
@@ -33,7 +34,8 @@ class Route {
     private $regex_pattern = [];
     private $params_match = [];
 
-    private function getRegex_pattern($ref): string {
+    private function getRegex_pattern($ref): string
+    {
 
         if (isset($this->regex_pattern[$ref])) {
             return $this->regex_pattern[$ref];
@@ -41,11 +43,13 @@ class Route {
         return '([^/]+)';
     }
 
-    private function setRegex_pattern($ref, $regex_pattern) {
+    private function setRegex_pattern($ref, $regex_pattern)
+    {
         $this->regex_pattern[$ref] = $regex_pattern;
     }
 
-    function __construct(string $path, callable $callable, $name, $siApatch = '') {
+    function __construct(string $path, callable $callable, $name, $siApatch = '')
+    {
 
 
         $this->path = trim($path, "/");
@@ -54,24 +58,30 @@ class Route {
         $this->siApatch = $siApatch;
     }
 
-    public function with($param, $regex): self {
+    public function with($param, $regex): self
+    {
         $regex = str_replace("(", "(?", $regex); //pour ne creier (
         $regex_pattern = "($regex)";
         $this->setRegex_pattern($param, $regex_pattern);
         return $this;
     }
 
-    private function replace_callback($paramPath) {
+    private function replace_callback($paramPath)
+    {
         //$paramPath[0]=> match global {text}
         //$paramPath[1]=> group match    text
         return $this->getRegex_pattern($paramPath[1]);
     }
 
-    public function match($Request): bool {
+    public function match($Request): bool
+    {
 
 
         $path = preg_replace_callback(
-                $this->syntax_param_method_router, [$this, 'replace_callback'], $this->path);
+            $this->syntax_param_method_router,
+            [$this, 'replace_callback'],
+            $this->path
+        );
 
         $regex = "#^$path$#i"; ///=> '#^comptable/([a-z\-_]*)/([a-z\-_]*)$#i
 
@@ -89,7 +99,8 @@ class Route {
         return true;
     }
 
-    public function call(ServerRequestInterface $Request, ResponseInterface $Response): ResponseInterface {
+    public function call(ServerRequestInterface $Request, ResponseInterface $Response): ResponseInterface
+    {
         $Request = $Request->withAttribute("params_match", $this->params_match);
         $Resp = call_user_func_array($this->callable, [$Request, $Response]);
         if ($Resp instanceof ResponseInterface) {
@@ -100,7 +111,8 @@ class Route {
         }
     }
 
-    public function url(array $param) {
+    public function url(array $param)
+    {
         $path = $this->path;
 
         foreach ($param as $key => $value) {
@@ -109,8 +121,8 @@ class Route {
         return $this->siApatch . $path;
     }
 
-    function getNameRoute() {
+    function getNameRoute()
+    {
         return $this->nameRoute;
     }
-
 }

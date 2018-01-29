@@ -8,23 +8,26 @@
 
 namespace core\html\Bootstrap;
 
-class Bootstrap {
+class Bootstrap
+{
 
     public $ico_toggle;
     public $Dialog_modal_meta_div;
     public $Dialog_modal_header;
     public $Dialog_modal_footer;
 
-    function __construct() {
+    function __construct()
+    {
         $this->ico_toggle='<span class="glyphicon glyphicon-equalizer" aria-hidden="true"></span>';
     }
 
-    public function createModal($content,
-            
-            $id='myModal',
-            $json='',
-            $title='<h4 class="modal-title" id="myModalLabel">titre test</h4>',
-            $modal_footer=' <button type="button" class="btn btn-primary">Save changes</button>') {
+    public function createModal(
+        $content,
+        $id = 'myModal',
+        $json = '',
+        $title = '<h4 class="modal-title" id="myModalLabel">titre test</h4>',
+        $modal_footer = ' <button type="button" class="btn btn-primary">Save changes</button>'
+    ) {
 
 
         $header = '<div class="modal fade " id="'.$id.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -59,15 +62,16 @@ class Bootstrap {
     }
     
     
-    public function createStyleTable($content) {
-      $header='<table class="table table-hover table-bordered">';
+    public function createStyleTable($content)
+    {
+        $header='<table class="table table-hover table-bordered">';
       
               $footer=' </table>';
               return $header . $content . $footer;
-        
     }
 
-    public function createJumbotron($content,$idBTN='myModal') {
+    public function createJumbotron($content, $idBTN = 'myModal')
+    {
         $header = '<a  class="btn btn-warning whidden close ">'.$this->ico_toggle.'</a>
             <div class=" center-block jumbotron " id="wjumbotron" >
 
@@ -76,7 +80,7 @@ class Bootstrap {
                    ';
 
 
-                   $footer = 
+                   $footer =
                            '
 
            <button  type="button" class="btn btn-primary btn-lg  " data-toggle="modal" data-target="#'.$idBTN.'">
@@ -89,5 +93,4 @@ class Bootstrap {
 
         return $header . $content . $footer;
     }
-
 }

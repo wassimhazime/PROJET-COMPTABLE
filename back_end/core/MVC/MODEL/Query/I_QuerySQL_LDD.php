@@ -15,29 +15,30 @@ namespace core\MVC\MODEL\Query;
  *
  * @author Wassim Hazime
  */
-interface I_QuerySQL_LDD {
+interface I_QuerySQL_LDD
+{
     public function select() ;
 
     public function from(string $table, string $alias = '') ;
-    public function    column();
+    public function column();
     
 //where
     public function where() ;
-    public function whereNot(string $column,string $value);
-    public function whereNotBETWEEN(string $column, $valeur1,$valeur2);
+    public function whereNot(string $column, string $value);
+    public function whereNotBETWEEN(string $column, $valeur1, $valeur2);
     public function whereIn(string $column, array $range);
-    public function whereBETWEEN(string $column, $valeur1,$valeur2);
+    public function whereBETWEEN(string $column, $valeur1, $valeur2);
     public function whereLike(string $column, $LIKE);
     public function whereNULL(string $column);
  
     
 //join
-    public function join( $tablejoin, string $type = "INNER",bool $relation = false,string $conditions='') ;
-    public function joinAlias(string $table,string $alias,string $conditions, $type = "INNER");
+    public function join($tablejoin, string $type = "INNER", bool $relation = false, string $conditions = '') ;
+    public function joinAlias(string $table, string $alias, string $conditions, $type = "INNER");
     public function independent(string $master);
 
-   // group 
-public function group($column, $direction = null);
+   // group
+    public function group($column, $direction = null);
     
    //having
 //public function having($column, $value);
@@ -58,10 +59,4 @@ public function group($column, $direction = null);
 //public function order($column, $direction = null);
 //public function prependColumn($column, $alias = null);
 //public function type($type);
-
-
-  
-    
-
-
 }

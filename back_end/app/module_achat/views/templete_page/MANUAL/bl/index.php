@@ -10,7 +10,7 @@ echo $info;
 
     <div class="row">
         <div id="wtable"  >
- <?php echo $table; ?>     
+    <?php echo $table; ?>     
  </div>
        
 </div>

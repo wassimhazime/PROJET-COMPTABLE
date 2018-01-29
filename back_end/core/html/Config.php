@@ -7,6 +7,7 @@
  */
 
 namespace core\html;
+
 use core\ConfigPath;
 
 /**
@@ -14,37 +15,37 @@ use core\ConfigPath;
  *
  * @author Wassim Hazime
  */
-class Config {
+class Config
+{
   
-      public static function getPath() {
+    public static function getPath()
+    {
         return   ConfigPath::getPath("html");
     }
 
-    public static function getConevert_TypeClomunSQL_to_TypeInputHTML(string $path = null): array {
+    public static function getConevert_TypeClomunSQL_to_TypeInputHTML(string $path = null): array
+    {
         if ($path == null) {
             $path = self::getPath();
         }
         try {
             $Conevert_Type = file_get_contents($path . "Conevert_TypeClomunSQL_to_TypeInputHTML.json");
-         return json_decode($Conevert_Type, true);
+            return json_decode($Conevert_Type, true);
         } catch (Exception $e) {
-
-            
             Notify::send_Notify(' ERORR CONFIG html JSON  Conevert_TypeClomunSQL_to_TypeInputHTML <br>' . $e->getMessage());
-        return $TypeClomunSQL_to_TypeInputHTML = [
-        'varchar(20)' => 'tel',
-        'varchar(150)' => 'email',
-        'varchar(200)' => 'text',
-        'varchar(201)' => 'text',
-        'varchar(250)' => 'file',
-        'text' => 'textarea',
-        'date' => 'date',
-        'tinyint(1)' => 'checkBox',
-        'int(12)' => 'number',
-        'int(11)' => 'select',
-        'int(10)' => 'hidden'
-    ];
+            return $TypeClomunSQL_to_TypeInputHTML = [
+            'varchar(20)' => 'tel',
+            'varchar(150)' => 'email',
+            'varchar(200)' => 'text',
+            'varchar(201)' => 'text',
+            'varchar(250)' => 'file',
+            'text' => 'textarea',
+            'date' => 'date',
+            'tinyint(1)' => 'checkBox',
+            'int(12)' => 'number',
+            'int(11)' => 'select',
+            'int(10)' => 'hidden'
+            ];
         }
     }
-
 }

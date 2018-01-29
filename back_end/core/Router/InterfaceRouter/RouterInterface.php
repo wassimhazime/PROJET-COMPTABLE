@@ -12,6 +12,7 @@ namespace core\Router\InterfaceRouter;
  *
  * @author wassime
  */
-interface RouterInterface {
+interface RouterInterface
+{
     //put your code here
 }

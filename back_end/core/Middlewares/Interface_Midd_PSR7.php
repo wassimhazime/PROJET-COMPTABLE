@@ -10,6 +10,8 @@ namespace core\Middlewares;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-interface Interface_Midd_PSR7 {
-  public function __invoke(ServerRequestInterface $request,ResponseInterface $response, callable $next):ResponseInterface ; 
+
+interface Interface_Midd_PSR7
+{
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next):ResponseInterface ;
 }

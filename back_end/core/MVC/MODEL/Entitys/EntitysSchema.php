@@ -2,7 +2,8 @@
 
 namespace core\MVC\MODEL\Entitys;
 
-class EntitysSchema extends abstractEntitys {
+class EntitysSchema extends abstractEntitys
+{
     private $modeCHILDREN=null;
 
     private $PARENT = null;
@@ -14,7 +15,8 @@ class EntitysSchema extends abstractEntitys {
     private $CHILDREN = [];
     
     
-    public function Instance(array $table):self {
+    public function Instance(array $table):self
+    {
         $this->PARENT = $table["PARENT"];
          $this->COLUMNS_master = $table["COLUMNS_master"];
          $this->COLUMNS_all = $table["COLUMNS_all"];
@@ -29,60 +31,69 @@ class EntitysSchema extends abstractEntitys {
     /*
      * modeCHILDREN
      */
-    private function setModeCHILDREN($mode) {
-        if($mode==null and $this->modeCHILDREN==null){
+    private function setModeCHILDREN($mode)
+    {
+        if ($mode==null and $this->modeCHILDREN==null) {
             $this->modeCHILDREN="MASTER";
-         } elseif ($mode!=null) {
-          $this->modeCHILDREN=$mode;   
-         }
-        
-        
+        } elseif ($mode!=null) {
+            $this->modeCHILDREN=$mode;
+        }
     }
     
     
         /*
      * PARENT
      */
-    function getPARENT() {
+    function getPARENT()
+    {
         return $this->PARENT;
     }
-    function setPARENT($PARENT) {
+    function setPARENT($PARENT)
+    {
         $this->PARENT = $PARENT;
     }
     
     /**
-     * 
+     *
      * COLUMNS
      */
-    function getCOLUMNS_META() {
+    function getCOLUMNS_META()
+    {
         return $this->COLUMNS_META;
     }
-    function setCOLUMNS_META($COLUMNS_META) {
+    function setCOLUMNS_META($COLUMNS_META)
+    {
         $this->COLUMNS_META = $COLUMNS_META;
     }
 
-    function getCOLUMNS_all() {
+    function getCOLUMNS_all()
+    {
         return $this->COLUMNS_all;
     }
-    function setCOLUMNS_all($COLUMNS_all) {
+    function setCOLUMNS_all($COLUMNS_all)
+    {
         $this->COLUMNS_all = $COLUMNS_all;
     }
 
-    function getCOLUMNS_master() {
+    function getCOLUMNS_master()
+    {
         return $this->COLUMNS_master;
     }
-    function setCOLUMNS_master($COLUMNS) {
+    function setCOLUMNS_master($COLUMNS)
+    {
         $this->COLUMNS_master = $COLUMNS;
     }
 
       /**
-     * 
+     *
      * FOREIGN_KEY
      */
-    function getFOREIGN_KEY() {
+    function getFOREIGN_KEY()
+    {
         return $this->FOREIGN_KEY;
     }
-    function setFOREIGN_KEY($FOREIGN_KEY) {
+    function setFOREIGN_KEY($FOREIGN_KEY)
+    {
         $this->FOREIGN_KEY = $FOREIGN_KEY;
     }
     
@@ -90,21 +101,24 @@ class EntitysSchema extends abstractEntitys {
  * CHILDREN
  */
 
-    function getCHILDREN($mode=null) {
+    function getCHILDREN($mode = null)
+    {
         $this->setModeCHILDREN($mode);
      
         return $this->CHILDREN[$this->modeCHILDREN];
     }
-    function get_table_CHILDREN($mode=null) {
+    function get_table_CHILDREN($mode = null)
+    {
         $this->setModeCHILDREN($mode);
-       $TABLE=[];
-       foreach ($this->CHILDREN[$this->modeCHILDREN] as $table => $columns) {
-          $TABLE[]=$table; 
-       }
+        $TABLE=[];
+        foreach ($this->CHILDREN[$this->modeCHILDREN] as $table => $columns) {
+            $TABLE[]=$table;
+        }
        
         return $TABLE;
     }
-    function setCHILDREN($CHILDREN) {
+    function setCHILDREN($CHILDREN)
+    {
        
         $this->CHILDREN = $CHILDREN;
     }
@@ -116,7 +130,8 @@ class EntitysSchema extends abstractEntitys {
      */
     
     
-    public function select_master() {
+    public function select_master()
+    {
 
         $select = [];
         foreach ($this->COLUMNS_master as $colom) {
@@ -127,7 +142,8 @@ class EntitysSchema extends abstractEntitys {
         }
         return $select;
     }
-    public function select_all() {
+    public function select_all()
+    {
 
         $select = [];
         foreach ($this->COLUMNS_all as $colom) {
@@ -138,37 +154,33 @@ class EntitysSchema extends abstractEntitys {
         }
         return $select;
     }
-    public function select_FOREIGN_KEY(array $FOREIGN_KEY = null) {
-       $select = [];
-     if($FOREIGN_KEY == null){$FOREIGN_KEY=$this->FOREIGN_KEY;}
-       foreach ($FOREIGN_KEY as $FOREIGN) {
+    public function select_FOREIGN_KEY(array $FOREIGN_KEY = null)
+    {
+        $select = [];
+        if ($FOREIGN_KEY == null) {
+            $FOREIGN_KEY=$this->FOREIGN_KEY;
+        }
+        foreach ($FOREIGN_KEY as $FOREIGN) {
             $select[] = $FOREIGN . "." . $FOREIGN;
-       }
+        }
         
         return $select;
     }
-    public function select_CHILDREN($TABLE = null,$mode=null) {
+    public function select_CHILDREN($TABLE = null, $mode = null)
+    {
         $this->setModeCHILDREN($mode);
             $select = [];
 
         if ($TABLE == null) {
-
             foreach ($this->CHILDREN[$this->modeCHILDREN] as $table => $colums) {
-
                 foreach ($colums as $colum) {
                     $select[] = $table . "." . $colum . " as $table" . "_" . $colum;
                 }
             }
         } else {
-            
-              foreach ($this->CHILDREN[$this->modeCHILDREN][$TABLE] as  $colum) {
-
-                
-                    $select[] = $TABLE . "." . $colum . " as $TABLE" . "_" . $colum;
-                
+            foreach ($this->CHILDREN[$this->modeCHILDREN][$TABLE] as $colum) {
+                  $select[] = $TABLE . "." . $colum . " as $TABLE" . "_" . $colum;
             }
-            
-            
         }
 
 
@@ -176,5 +188,4 @@ class EntitysSchema extends abstractEntitys {
 
         return $select;
     }
-
 }

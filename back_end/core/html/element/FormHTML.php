@@ -6,11 +6,13 @@ use core\html\element\AbstractHTML;
 use core\INTENT\Intent;
 use core\html\Config;
 
-class FormHTML extends AbstractHTML {
+class FormHTML extends AbstractHTML
+{
 
     protected $input = [];
 
-    function __construct(Intent $intent) {
+    function __construct(Intent $intent)
+    {
 
         parent::__construct($intent);
 
@@ -38,7 +40,8 @@ class FormHTML extends AbstractHTML {
         }
     }
 
-    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string {
+    private function conevert_TypeClomunSQL_to_TypeInputHTML(string $Type): string
+    {
         $configjson = (Config::getConevert_TypeClomunSQL_to_TypeInputHTML());
         if (isset($configjson[$Type])) {
             return $configjson[$Type];
@@ -47,18 +50,23 @@ class FormHTML extends AbstractHTML {
         }
     }
 
-    public function builder($att) {
+    public function builder($att)
+    {
         $INPUT = [];
         foreach ($this->input as $input) {
             $labelHTML = $this->labelHTML($input);
             switch ($input['Type']) {
-                case "textarea": $inputHTML = $this->textareaHTML($input);
+                case "textarea":
+                    $inputHTML = $this->textareaHTML($input);
                     break;
-                case "select": $inputHTML = $this->selectHTML($input);
+                case "select":
+                    $inputHTML = $this->selectHTML($input);
                     break;
-                case "multiSelect": $inputHTML = $this->multiSelectHTML($input);
+                case "multiSelect":
+                    $inputHTML = $this->multiSelectHTML($input);
                     break;
-                default: $inputHTML = $this->inputHTML($input);
+                default:
+                    $inputHTML = $this->inputHTML($input);
                     break;
             }
             $INPUT[] = $this->divHTML([$labelHTML, $inputHTML]);
@@ -68,5 +76,4 @@ class FormHTML extends AbstractHTML {
 
         return $builder;
     }
-
 }

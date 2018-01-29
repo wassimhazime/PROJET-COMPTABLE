@@ -9,13 +9,16 @@ use core\MVC\MODEL\Entitys\EntitysSchema;
 use core\INTENT\Intent;
 use core\MVC\MODEL\Outils\Schema;
 
-class Statement extends RUN {
+class Statement extends RUN
+{
 
-    function getTable() {
+    function getTable()
+    {
         return $this->schema->getPARENT();
     }
 
-    public function __construct(EntitysSchema $schema) {
+    public function __construct(EntitysSchema $schema)
+    {
         parent::__construct(new EntitysDataTable(), $schema);
     }
 
@@ -23,7 +26,8 @@ class Statement extends RUN {
 
 
 
-    public function update($data, $condition) {
+    public function update($data, $condition)
+    {
 
         return (new QuerySQL())
                         ->update($this->getTable())
@@ -31,7 +35,8 @@ class Statement extends RUN {
                         ->where($condition);
     }
 
-    public function delete($condition) {
+    public function delete($condition)
+    {
 
 
 
@@ -40,18 +45,18 @@ class Statement extends RUN {
                         ->from($this->getTable());
     }
 
-    public function insert(array $dataForm, $mode): Intent {
+    public function insert(array $dataForm, $mode): Intent
+    {
         if ($mode == Intent::MODE_INSERT) {
             $intent = Intent::parse($dataForm, $this->schema, $mode);
 
             $data = ($intent->getEntitysDataTable()[0]); // data send FORM
-            unset($data->id);   // remove id  
-            $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array 
+            unset($data->id);   // remove id
+            $name_CHILDRENs = (array_keys($intent->getEntitysSchema()->getCHILDREN())); // name childern array
             $dataCHILDRENs = [];
 
             foreach ($name_CHILDRENs as $name_CHILDREN) {
                 if (isset($data->$name_CHILDREN)) {
-
                     $dataCHILDRENs[$name_CHILDREN] = $data->$name_CHILDREN; // charge $dataCHILDREN
                     unset($data->$name_CHILDREN); // remove CHILDREN in $data
                 }
@@ -77,7 +82,7 @@ class Statement extends RUN {
                                 ->value([
                             "id_" . $intent->getEntitysSchema()->getPARENT() => $id_parent,
                             "id_" . $name_table_CHILDREN => $id_CHILD
-                        ]);
+                                ]);
 
                         $this->exec($querySQL);
                     }
@@ -90,7 +95,8 @@ class Statement extends RUN {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function Select(array $mode, $condition): Intent {
+    public function Select(array $mode, $condition): Intent
+    {
 
         $schema = $this->schema;
         if (Intent::is_PARENT_MASTER($mode)) {
@@ -111,7 +117,8 @@ class Statement extends RUN {
         return new Intent($schema, $Entitys, $mode);
     }
 
-    private function setDataJoins(array $Entitys, array $mode) {
+    private function setDataJoins(array $Entitys, array $mode)
+    {
         $schema = $this->schema;
 
         foreach ($Entitys as $Entity) {
@@ -121,31 +128,29 @@ class Statement extends RUN {
                                             new QuerySQL())
                                             ->select($schema->select_CHILDREN($tablechild, $mode[1]))
                                             ->from($schema->getPARENT())
-                                            ->join($tablechild, " INNER ", TRUE)
+                                            ->join($tablechild, " INNER ", true)
                                             ->where($schema->getPARENT() . ".id = " . $Entity->id)));
                 }
             } else {
-
                 $Entity->setDataJOIN("empty", []);
             }
         }
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    public function form(array $mode): Intent {
+    public function form(array $mode): Intent
+    {
         $schema = $this->schema;
         $nameTable_FOREIGNs = $schema->getFOREIGN_KEY();
 
         $Entitys_FOREIGNs = [];
         foreach ($nameTable_FOREIGNs as $nameTable_FOREIGN) {
-
             $schem_Table_FOREIGN = Schema::getschema($nameTable_FOREIGN);
 
             $Entitys_FOREIGNs[$nameTable_FOREIGN] = $this->query((new QuerySQL())
                             ->select($schem_Table_FOREIGN->select_master())
                             ->from($schem_Table_FOREIGN->getPARENT())
-                            ->join($schem_Table_FOREIGN->getFOREIGN_KEY())
-            );
+                            ->join($schem_Table_FOREIGN->getFOREIGN_KEY()));
         }
 
 
@@ -154,8 +159,6 @@ class Statement extends RUN {
         $Entitys_CHILDRENs = [];
 
         foreach ($nameTable_CHILDRENs as $table_CHILDREN) {
-
-
             $schem_Table_CHILDREN = Schema::getschema($table_CHILDREN);
 
             $Entitys_CHILDRENs[$table_CHILDREN] = $this->query(((new QuerySQL())
@@ -170,5 +173,4 @@ class Statement extends RUN {
 
         return new Intent($schema, $data, $mode);
     }
-
 }

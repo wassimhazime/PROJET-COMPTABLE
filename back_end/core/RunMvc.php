@@ -13,37 +13,38 @@ use core\MVC\MODEL\Model;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-
 /**
  * Description of Run
  *
  * @author Wassim Hazime
  */
-class RunMvc {
+class RunMvc
+{
 
     private $name = "";
     private $action = "";
 
-    function __construct() {
-        
+    function __construct()
+    {
     }
 
-    public function run(Request $Request, Response $Response):Response {
+    public function run(Request $Request, Response $Response):Response
+    {
 
         $Request = $this->parsse_Params_match_to_Params_MVC($Request);
         $obController = $this->get_Object_Controller($Request, $Response);
         $obModel = $this->get_Object_Model();
         $view = $obController->run($obModel);
-       $container =  $this->render($view);
+        $container =  $this->render($view);
           $Response->getBody()->write($container);
           return $Response;
-       
     }
 
    
     
     
-    private function parsse_Params_match_to_Params_MVC(Request $Request): Request {
+    private function parsse_Params_match_to_Params_MVC(Request $Request): Request
+    {
         $params = $Request->getAttribute('params_match');
         $this->name = $params[0];
         $this->action = $params[1];
@@ -68,29 +69,33 @@ class RunMvc {
         return $Request->withAttribute("MVC", $mvc);
     }
 
-    private function get_Object_Controller(Request $Request, Response $Response): Controller {
+    private function get_Object_Controller(Request $Request, Response $Response): Controller
+    {
 
         $controller = $this->get_Class("Controller");
         return new $controller($Request, $Response);
     }
 
-    private function get_Object_Model(): Model {
+    private function get_Object_Model(): Model
+    {
 
         $model = $this->get_Class("Model");
 
         return new $model($this->name);
     }
 
-    private function get_Class(string $mvc): string {
+    private function get_Class(string $mvc): string
+    {
         
-      $classMVC =  'app\\module_achat\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
-      if (!class_exists ($classMVC)) {
-       $classMVC = 'app\\module_achat\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
+        $classMVC =  'app\\module_achat\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
+        if (!class_exists($classMVC)) {
+            $classMVC = 'app\\module_achat\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
         }
          return$classMVC;
     }
 
-    private function render(array $variable = []) {
+    private function render(array $variable = [])
+    {
             
         if ($variable != []) {
             ob_start();
@@ -102,12 +107,13 @@ class RunMvc {
             return ob_get_clean();
         } else {
             ob_start();
-           require ConfigPath::getPath("templeteROOT") . '404.php';
-           return ob_get_clean();
+            require ConfigPath::getPath("templeteROOT") . '404.php';
+            return ob_get_clean();
         }
     }
 
-    private function charge_page(array $variable) {
+    private function charge_page(array $variable)
+    {
         extract($variable);
         
         $page = $this->name . D_S . $this->action;
@@ -122,5 +128,4 @@ class RunMvc {
             require $chemin;
         }
     }
-
 }

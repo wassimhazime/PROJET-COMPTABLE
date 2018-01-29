@@ -21,23 +21,25 @@ use core\MVC\MODEL\Base_Donnee\Config;
  *
  * @author Wassim Hazime
  */
-class RUN {
+class RUN
+{
 
     protected $schema;
     protected $schemaSELECT;
     protected $entity;
 
-    public function __construct(abstractEntitys $entity, EntitysSchema $schema = null) {
+    public function __construct(abstractEntitys $entity, EntitysSchema $schema = null)
+    {
 
         $this->schema = $schema;
         $this->entity = $entity;
     }
 
-    public function query($sql): array {
+    public function query($sql): array
+    {
         $db = DataBase::getDB(Config::getConnect());
 
         try {
-
             $Statement = $db->query($sql);
 
             $Statement->setFetchMode(PDO::FETCH_CLASS, get_class($this->entity));
@@ -50,7 +52,8 @@ class RUN {
         }
     }
 
-    public function exec($sql): string {
+    public function exec($sql): string
+    {
         $db = DataBase::getDB(Config::getConnect());
 
         try {
@@ -68,7 +71,8 @@ class RUN {
 
     // TOOLS
 
-    public static function parse_object_TO_array($object): array {
+    public static function parse_object_TO_array($object): array
+    {
         if (is_array($object)) {
             return $object;
         }
@@ -82,7 +86,8 @@ class RUN {
         return $array;
     }
 
-    public static function entitys_TO_array($object): array {
+    public static function entitys_TO_array($object): array
+    {
         if (is_array($object)) {
             return $object;
         }
@@ -93,11 +98,11 @@ class RUN {
         return $array;
     }
 
-    public static function json_fileOUT(array $shema, string $name_file) {
+    public static function json_fileOUT(array $shema, string $name_file)
+    {
 
         $fp = fopen($name_file, 'w');
         fwrite($fp, json_encode($shema));
         fclose($fp);
     }
-
 }

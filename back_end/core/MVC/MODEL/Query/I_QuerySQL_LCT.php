@@ -13,14 +13,12 @@ namespace core\MVC\MODEL\Query;
  *
  * @author Wassim Hazime
  */
-interface I_QuerySQL_LCT {
+interface I_QuerySQL_LCT
+{
 
 
     
      //traitement
     public function query() ;
     public function __toString();
-    
-
-
 }

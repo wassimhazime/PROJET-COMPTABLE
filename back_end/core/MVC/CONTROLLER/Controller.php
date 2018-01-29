@@ -8,7 +8,8 @@ use core\INTENT\Intent;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Controller {
+class Controller
+{
 
     protected $model;
     protected $Request;
@@ -17,7 +18,8 @@ class Controller {
     protected $action;
     protected $param;
 
-    function __construct(ServerRequestInterface $Request, ResponseInterface $Response) {
+    function __construct(ServerRequestInterface $Request, ResponseInterface $Response)
+    {
         $this->Request = $Request;
         $this->Response = $Response;
 
@@ -26,11 +28,13 @@ class Controller {
         $this->param = $Request->getAttribute('MVC')["param"];
     }
 
-    protected function setModel(Model $model) {
+    protected function setModel(Model $model)
+    {
         $this->model = $model;
     }
 
-    protected function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1) {
+    protected function show(array $mode = Intent::MODE_SELECT_MASTER_MASTER, $condition = 1)
+    {
        
 
         $intent = $this->model->show($mode, $condition);
@@ -38,20 +42,23 @@ class Controller {
         return (new TAG())->tableHTML($intent);
     }
 
-    protected function getFormHTML(array $mode = Intent::MODE_FORM) {
+    protected function getFormHTML(array $mode = Intent::MODE_FORM)
+    {
        
         $intent = $this->model->form($mode);
 
         return (new TAG())->FormHTML($intent);
     }
 
-    protected function setData($data, $mode = Intent::MODE_INSERT) {
+    protected function setData($data, $mode = Intent::MODE_INSERT)
+    {
         
 
         $intent = $this->model->setData($data, $mode);
     }
 
-    public function run(Model $model) {
+    public function run(Model $model)
+    {
         
 
         $this->setModel($model);
@@ -63,8 +70,8 @@ class Controller {
         }
     }
 
-    protected function NotFound() {
+    protected function NotFound()
+    {
         return [];
     }
-
 }

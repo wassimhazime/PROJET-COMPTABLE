@@ -5,7 +5,8 @@ namespace core\notify\outilsnotify;
 use \SplObserver;
 use \SplSubject;
 
-class mail implements SplObserver {
+class mail implements SplObserver
+{
 
     protected $mail='wassim.hazime@gmail.com';
 
@@ -15,11 +16,10 @@ class mail implements SplObserver {
 //        }
 //    }
 
-    public function update(SplSubject $obj) {
+    public function update(SplSubject $obj)
+    {
 //        var_dump($this->mail,
 //                'Erreur détectée !', 
 //                'Une erreur a été détectée sur le site. Voici les informations de celle-ci : ' . "\n". $obj->getFormation()) ;
     }
-    
-
 }

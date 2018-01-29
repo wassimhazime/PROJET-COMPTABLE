@@ -85,6 +85,7 @@
  */
 
 namespace core\html\element;
+
 use core\html\element\AbstractHTML;
 use core\INTENT\Intent;
 
@@ -93,23 +94,26 @@ use core\INTENT\Intent;
  *
  * @author Wassim Hazime
  */
-class TableHTML extends AbstractHTML{
+class TableHTML extends AbstractHTML
+{
 
     
-    function __construct($intent) {
+    function __construct($intent)
+    {
         parent::__construct($intent);
-
     }
 
-        public function builder( $att ) {
-         $intent=$this->intent;
+    public function builder($att)
+    {
+        $intent=$this->intent;
         $thead = $this->thead($intent);
 
         $tbody = $this->tbody($intent);
         return "\n<table $att> $thead $tbody </table>";
     }
 
-    protected function thead(Intent $intent): string {
+    protected function thead(Intent $intent): string
+    {
         $COLUMNS_master = $intent->getEntitysSchema()->getCOLUMNS_master();
         $COLUMNS_all = $intent->getEntitysSchema()->getCOLUMNS_all();
         $FOREIGN_KEY = $intent->getEntitysSchema()->getFOREIGN_KEY();
@@ -121,8 +125,8 @@ class TableHTML extends AbstractHTML{
             $columns = array_merge($COLUMNS_all, $FOREIGN_KEY);
         }
         $columns = array_merge($columns, ["controle"=>"controle"]); /////////////
-         if (Intent::is_get_CHILDREN($intent)) {
-           $columns = array_merge($columns , $table_CHILDREN); 
+        if (Intent::is_get_CHILDREN($intent)) {
+            $columns = array_merge($columns, $table_CHILDREN);
         }
         
         
@@ -135,7 +139,8 @@ class TableHTML extends AbstractHTML{
         return "<thead align='center'>" . $this->tr(implode(" \n", $thead)) . " </thead > ";
     }
 
-    protected function tbody(Intent $intent): string {
+    protected function tbody(Intent $intent): string
+    {
         $table = $intent->getEntitysDataTable();
         $bodys = [];
         foreach ($table as $index => $ROWS) {
@@ -143,10 +148,11 @@ class TableHTML extends AbstractHTML{
             foreach ($ROWS as $head => $body) {
                 $row[] = $this->td($body);
             }
-$row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" value="modifier">');////
+            $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" value="modifier">');////
             foreach ($intent->getEntitysSchema()->get_table_CHILDREN() as $name_table_child) {
-                if ($this->TableCHILD($intent, $index) != [])
+                if ($this->TableCHILD($intent, $index) != []) {
                     $row[] = $this->td($this->TableCHILD($intent, $index)[$name_table_child]);
+                }
             }
        
             $bodys[] = $this->tr(implode(" \n", $row));
@@ -157,7 +163,8 @@ $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" va
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    protected function TableCHILD(Intent $intent, int $indexROW): array {
+    protected function TableCHILD(Intent $intent, int $indexROW): array
+    {
         if (!Intent::is_get_CHILDREN($intent)) {
             return [];
         }
@@ -185,12 +192,11 @@ $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" va
         return $tableCHILD;
     }
 
-    protected function theadCHILD(Intent $intent): array {
+    protected function theadCHILD(Intent $intent): array
+    {
         $Schema = $intent->getEntitysSchema();
         $theadChild = [];
         foreach ($Schema->get_table_CHILDREN() as $table) {
-
-
             $thead = [];
             foreach ($Schema->getCHILDREN()[$table] as $column) {
                 $thead[] = $this->th(str_replace("_", " ", $column));
@@ -203,7 +209,8 @@ $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" va
         return $theadChild;
     }
 
-    protected function tbodyCHILD(Intent $intent, int $indexROW): array {
+    protected function tbodyCHILD(Intent $intent, int $indexROW): array
+    {
         $childs = $intent->getEntitysSchema()->get_table_CHILDREN();
         $datajoin = [];
         foreach ($childs as $nameTable) {
@@ -213,7 +220,6 @@ $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" va
         foreach ($datajoin as $nameTable => $table) {
             $bodys = [];
             foreach ($table as $ROWS) {
-
                 $row = [];
                 foreach ($ROWS as $head => $body) {
                     $row[] = $this->td($body);
@@ -228,18 +234,20 @@ $row[]=$this->td('<input type="submit" value="effacer  "><input type="submit" va
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected function tr($content, $att = "style='text-align: center'"): string {
+    protected function tr($content, $att = "style='text-align: center'"): string
+    {
         return "\n<tr $att>\n{$content}\n</tr>\n";
     }
 
-    protected function th($content, $att = "style='text-align: center'"): string {
+    protected function th($content, $att = "style='text-align: center'"): string
+    {
         return "<th  $att>{$content}</th>";
     }
 
-    protected function td($content, $att = "style='text-align: center'"): string {
+    protected function td($content, $att = "style='text-align: center'"): string
+    {
         return "<td $att> {$content}</td>";
     }
-
 }

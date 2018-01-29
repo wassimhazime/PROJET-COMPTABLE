@@ -13,7 +13,8 @@ namespace core\MVC\MODEL\Query;
  *
  * @author Wassim Hazime
  */
-interface I_QuerySQL_LMD {
+interface I_QuerySQL_LMD
+{
     
 
     public function from(string $table, string $alias = '') ;
@@ -36,9 +37,4 @@ interface I_QuerySQL_LMD {
     public function update(string $table) ;
 
     public function set(array $data) ;
-
-   
-    
-
-
 }

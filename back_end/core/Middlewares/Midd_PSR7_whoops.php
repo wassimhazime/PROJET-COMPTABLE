@@ -14,17 +14,18 @@ use Psr\Http\Message\ResponseInterface;
 use \Whoops\Run;
 use \Whoops\Handler\PrettyPageHandler;
 
-class Midd_PSR7_whoops implements Interface_Midd_PSR7 {
+class Midd_PSR7_whoops implements Interface_Midd_PSR7
+{
 
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface {
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
+    {
 
 /// Handler error
-(new Run)
+        (new Run)
         ->pushHandler(new PrettyPageHandler)
         ->register();
 
 
         return $next($request, $response);
     }
-
 }

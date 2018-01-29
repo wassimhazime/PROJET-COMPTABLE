@@ -5,7 +5,6 @@
 <?php
 echo "<h1><center>" . $title . "</center></h1>";
 if (isset($_POST['ajout_data'])) {
-   
 }
 ?>
 

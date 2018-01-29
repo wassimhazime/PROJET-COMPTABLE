@@ -1,22 +1,26 @@
 <?php
 
 namespace core\MVC\MODEL\Base_Donnee;
+
 use core\ConfigPath;
 
 use core\notify\Notify;
 use \Exception;
 
-class Config {
+class Config
+{
 
    
     private static $connect = [];
     private static $SCHEMA_SELECT_AUTO;
     private static $SCHEMA_SELECT_MANUAL;
-    public static function getPath() {
+    public static function getPath()
+    {
         return   ConfigPath::getPath("model");
     }
 
-    public static function getConnect(string $path = null, string $name = null): array {
+    public static function getConnect(string $path = null, string $name = null): array
+    {
         try {
             if ($path == null) {
                 $path = self::getPath();
@@ -35,7 +39,6 @@ class Config {
             self::$connect["dbpass"] = $config[$BOOT]['$dbpass'];
             self::$connect["dbname"] = $config[$BOOT]['$dbname'];
         } catch (Exception $e) {
-
             Notify::send_Notify(" ERORR CONFIG JSON  class methode getConnect() config <br> file name ==> $name .json <br><h1> " . $e->getMessage() . "</h1>");
             die();
         }
@@ -45,13 +48,15 @@ class Config {
 
     
 
-    public static function getNameDataBase(): string {
+    public static function getNameDataBase(): string
+    {
         return self::getConnect()["dbname"];
     }
 
     
 
-    public static function getSCHEMA_SELECT_MANUAL(string $path = null): array {
+    public static function getSCHEMA_SELECT_MANUAL(string $path = null): array
+    {
         if ($path == null) {
             $path = self::getPath();
         }
@@ -63,13 +68,13 @@ class Config {
 
             return self::$SCHEMA_SELECT_MANUAL["MANUAL"];
         } catch (Exception $e) {
-
             Notify::send_Notify(' ERORR CONFIG model JSON  class config  getSCHEMA_SELECT_MANUAL() <br>' . $e->getMessage());
             return [];
         }
     }
 
-    public static function getSCHEMA_SELECT_AUTO(string $path = null): array {
+    public static function getSCHEMA_SELECT_AUTO(string $path = null): array
+    {
         if ($path == null) {
             $path = self::getPath();
         }
@@ -78,13 +83,13 @@ class Config {
             self::$SCHEMA_SELECT_AUTO = json_decode($schemaAUTO, true);
             return self::$SCHEMA_SELECT_AUTO["AUTO"];
         } catch (Exception $e) {
-
             Notify::send_Notify(' ERORR CONFIG model JSON  class config getSCHEMA_SELECT_AUTO <br>' . $e->getMessage());
             return [];
         }
     }
 
-    public static function getgenerateCACHE_SELECT(string $path = null): array {
+    public static function getgenerateCACHE_SELECT(string $path = null): array
+    {
 
 
         if ($path == null) {
@@ -110,10 +115,8 @@ class Config {
                 return [];
             }
         } catch (Exception $e) {
-
             Notify::send_Notify(' generate FILE CACHE_SELECT <br>');
             return ['generateCACHE_SELECT'];
         }
     }
-
 }
