@@ -11,7 +11,7 @@ class ConfigPath {
     const Path = ROOT . "back_end" . D_S;
     const PathApp = self::Path . "app" . D_S;
     const PathAppConfig = self::PathApp . "config" . D_S;
-    const PathAppViews = self::PathApp . "views" . D_S;
+    const PathAppViews = self::PathApp ."module_achat".D_S. "views" . D_S;
 
     public static function getPath($name) {
         switch ($name) {

@@ -1,6 +1,7 @@
 <?php
 
-namespace app\Controller;
+namespace app\module_achat\Controller;
+           
 
 use core\MVC\CONTROLLER\Controller;
 

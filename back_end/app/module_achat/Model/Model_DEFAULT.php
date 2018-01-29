@@ -1,5 +1,5 @@
 <?php
-namespace app\Model;
+namespace app\module_achat\Model;
 use core\MVC\MODEL\Model;
 class Model_DEFAULT extends Model{
     

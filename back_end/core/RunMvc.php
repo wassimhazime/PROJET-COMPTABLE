@@ -83,9 +83,9 @@ class RunMvc {
 
     private function get_Class(string $mvc): string {
         
-      $classMVC =  'app\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
+      $classMVC =  'app\\module_achat\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
       if (!class_exists ($classMVC)) {
-       $classMVC = 'app\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
+       $classMVC = 'app\\module_achat\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
         }
          return$classMVC;
     }
