@@ -10,7 +10,7 @@ namespace core\Middlewares;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use core\Router\Router;
+use core\Router\Local\Router;
 use core\RunMvc;
 
 class Midd_PSR7_Router implements Interface_Midd_PSR7 {

@@ -1,7 +1,17 @@
-<phpunit colors="true">
-  <testsuites>
-    <testsuite name="money">
-      <directory>back_end/tests</directory>
-    </testsuite>
-  </testsuites>
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<phpunit bootstrap="vendor/autoload.php"
+colors="true">
+    <testsuites>
+        <testsuite name="money">
+            <directory>./Tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+    <whitelist proceessUncoveredFromWhitelist="true">
+        <directory suffic=".php">DesignPatterns</directory>
+    </whitelist>
+    </filter>
 </phpunit>
