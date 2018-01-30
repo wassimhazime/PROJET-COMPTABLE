@@ -43,9 +43,18 @@ class RunMvc
    
     
     
-    private function parsse_Params_match_to_Params_MVC(Request $Request): Request
+    private function parsse_Params_match_to_Params_MVC(Request $Request)
     {
-        $params = $Request->getAttribute('params_match');
+        
+        
+        var_dump($Request->getAttributes());
+        
+        $params_match = $Request->getAttribute('params_match');
+        $params=[];
+        foreach ($params_match as $key => $value) {
+            $params[]  =$value;
+        }
+        var_dump($params);
         $this->name = $params[0];
         $this->action = $params[1];
         $mvc = [];

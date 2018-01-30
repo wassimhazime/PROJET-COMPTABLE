@@ -73,7 +73,7 @@ class Route
         return $this->getRegex_pattern($paramPath[1]);
     }
 
-    public function match($Request): bool
+    public function match(\Psr\Http\Message\ServerRequestInterface $Request): bool
     {
 
 

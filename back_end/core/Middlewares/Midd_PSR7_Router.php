@@ -19,45 +19,52 @@ class Midd_PSR7_Router implements Interface_Midd_PSR7
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
     {
 
-        $app = new Router();
+        $route = new Router();
         $MVC = new RunMvc();
-        $app->setSiApatch('/comptable/');
+        
+        //$route->setSiApatch('/comptable/');
+         $route->get("{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($MVC) {
+            return $MVC->run($Request, $Response);
+         }, "routeMVCLocal");
 
-
+          $route->get("/{Controleur:[a-z0-9\_\-]+}/{Action:[a-z0-9\-]+}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($MVC) {
+            
+              return $MVC->run($Request, $Response);
+          }, "routeMVCFastroute");
 
 ///get
-        ///////////////////////////////////////////////////////////////////////////////////////
-        $app->get("/{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) {
-            echo 'nombre';
-        }, "routeNombre")->with("Controleur", "[1-9]*")->with("Action", "[1-9]*");
+//        ///////////////////////////////////////////////////////////////////////////////////////
+//        $route->get("/{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) {
+//            echo 'nombre';
+//        }, "routeNombre")->with("Controleur", "[1-9]*")->with("Action", "[1-9]*");
+/////////////////////////////////////////////////////////////////////////////////////////
+//        $route->get("{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($MVC) {
+//            return $MVC->run($Request, $Response);
+//        }, "routeMVC")->with("Controleur", "[a-z\-_]*")->with("Action", "[a-z\-_]*");
 ///////////////////////////////////////////////////////////////////////////////////////
-        $app->get("{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($MVC) {
-            return $MVC->run($Request, $Response);
-        }, "routeMVC")->with("Controleur", "[a-z\-_]*")->with("Action", "[a-z\-_]*");
-///////////////////////////////////////////////////////////////////////////////////////
-        $app->get("/{Controleur}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($app) {
+        $route->get("/{Controleur}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($route) {
             $c = $Request->getAttribute('params_match')[0];
-            return $app->redirection("routeMVC", ["Controleur" => $c, "Action" => "index"]);
-        });
+            return $route->redirection("routeMVC", ["Controleur" => $c, "Action" => "index"]);
+        }, "red2");
 ///////////////////////////////////////////////////////////////////////////////////////
-        $app->get("/", function (ServerRequestInterface $Request, Res $Response) use ($app) {
+        $route->get("/", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($route) {
 
-            return $app->redirection("routeMVC", ["Controleur" => "index", "Action" => "index"]);
-        });
+            return $route->redirection("routeMVC", ["Controleur" => "index", "Action" => "index"]);
+        }, "red1");
         ///////////////////////////////////////////////////////////////////////////////////////
 ///post
-        $app->post("/{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($app, $MVC) {
-            $MVC->run($Request, $Response);
-            $c = $Request->getAttribute('params_match')[0];
-            return $app->redirection("routeMVC", ["Controleur" => $c, "Action" => "index"]);
-        });
+//        $route->post("/{Controleur}/{Action}", function (ServerRequestInterface $Request, ResponseInterface $Response) use ($route, $MVC) {
+//            $MVC->run($Request, $Response);
+//            $c = $Request->getAttribute('params_match')[0];
+//            return $route->redirection("routeMVC", ["Controleur" => $c, "Action" => "index"]);
+//        });
 
 
 
 
 
+        $response=$route->match($request, $response);
 
-
-        return $next($request, $app->run($request));
+        return $next($request, $response);
     }
 }

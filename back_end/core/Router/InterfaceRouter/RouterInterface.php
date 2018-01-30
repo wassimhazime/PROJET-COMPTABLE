@@ -8,11 +8,22 @@
 
 namespace core\Router\InterfaceRouter;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  *
  * @author wassime
  */
 interface RouterInterface
 {
-    //put your code here
+
+    public function get(string $url, callable $callable, string $name);
+
+    // $uri =  $this->router->generateUri("blogueuri", ["str" => "awa-modif-44", "id" => "99"]);
+    public function generateUri(string $name, array $substitutions = []);
+
+    public function redirection(string $name, array $substitutions = []);
+
+    public function match(ServerRequestInterface $Request, ResponseInterface $Response): ResponseInterface;
 }

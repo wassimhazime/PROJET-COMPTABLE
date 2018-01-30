@@ -15,5 +15,30 @@ namespace core\Router\InterfaceRouter;
 interface RouteInterface
 {
 
+    
+    
+  
+   
+    function __construct($callable, $name, $params);
+    
+    function getCallable();
+    
 
+    function getName();
+    
+
+    function getParams();
+    
+
+    
+    
+    function getParam(string $index);
+    
+    function setCallable($callable);
+    
+
+    function setName($name);
+    
+
+    function setParams($params);
 }
