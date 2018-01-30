@@ -4,7 +4,6 @@ namespace core\Router\Local;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use GuzzleHttp\Psr7\Response;
 
 class Route
 {
@@ -102,6 +101,8 @@ class Route
     public function call(ServerRequestInterface $Request, ResponseInterface $Response): ResponseInterface
     {
         $Request = $Request->withAttribute("params_match", $this->params_match);
+        
+        
         $Resp = call_user_func_array($this->callable, [$Request, $Response]);
         if ($Resp instanceof ResponseInterface) {
             return $Resp;

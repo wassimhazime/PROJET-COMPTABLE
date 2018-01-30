@@ -21,7 +21,7 @@ class Midd_PSR7_MVC implements Interface_Midd_PSR7
 
       
         $MVC = new RunMvc();
-      
-         return $MVC->run($request, $response);
+         $response=$MVC->run($request, $response);
+         return $next($request, $response);
     }
 }

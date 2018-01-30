@@ -74,6 +74,7 @@ class Router implements RouterInterface
     public function redirection(string $name, array $substitutions = [])
     {
         $url = $this->generateUri($name, $substitutions);
+        
         return ((new Response(301))->withHeader('Location', $url));
     }
 }
