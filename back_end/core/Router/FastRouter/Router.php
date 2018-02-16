@@ -11,6 +11,17 @@ use Zend\Expressive\Router\Route as FastRoute;
 
 class Router implements RouterInterface
 {
+    
+    
+    
+        static $routers=null;
+    public static function getRouter():self{
+        if(is_null(self::$routers))
+        {
+        self::$routers= new self();
+        }
+        return self::$routers;
+    }
 
     private $router;
 

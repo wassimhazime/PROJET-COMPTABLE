@@ -15,14 +15,11 @@ require ROOT . 'vendor' . D_S . 'autoload.php';
 $start = microtime(true);
 
 Dispatsher::Dispatsher()
-
-->pipe(core\Middlewares\Midd_PSR7_whoops::class)
-        
-
-->pipe(new core\Middlewares\Midd_PSR7_Router)
- ->pipe(new core\Middlewares\Midd_PSR7_MVC)       
-
-->run();
+        ->pipe(core\Middlewares\Midd_PSR7_whoops::class)
+        ->pipe(new core\Middlewares\Midd_PSR7_addRoute)
+        ->pipe(new core\Middlewares\Midd_PSR7_Router)
+        ->pipe(new core\Middlewares\Midd_PSR7_MVC)
+        ->run();
 
 
 

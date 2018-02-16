@@ -25,7 +25,7 @@ class Midd_PSR7_whoops implements Interface_Midd_PSR7
         ->pushHandler(new PrettyPageHandler)
         ->register();
 
-
+echo 'Midd_PSR7_whoops';
         return $next($request, $response);
     }
 }

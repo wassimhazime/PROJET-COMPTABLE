@@ -10,6 +10,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Router implements RouterInterface
 {
+    
+    
+    static $router=null;
+    public static function getRouter():self{
+        if(is_null(self::$router))
+        {
+        self::$router= new self();
+        }
+        return self::$router;
+    }
+
+    
+
 
     private $siApatch = '';
 

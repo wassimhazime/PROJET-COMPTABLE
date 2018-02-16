@@ -34,7 +34,9 @@ class RunMvc
         $Request = $this->parsse_Params_match_to_Params_MVC($Request);
         $obController = $this->get_Object_Controller($Request, $Response);
         $obModel = $this->get_Object_Model();
-        $view = $obController->run($obModel);
+        
+        $view = $obController->run($obModel);/// core
+        
         $container =  $this->render($view);
           $Response->getBody()->write($container);
           return $Response;
@@ -96,7 +98,7 @@ class RunMvc
     private function get_Class(string $mvc): string
     {
         
-        $classMVC =  'app\\module_achat\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
+           $classMVC =  'app\\module_achat\\' . $mvc . '\\MANUAL\\'  . $mvc . '_' . $this->name;
         if (!class_exists($classMVC)) {
             $classMVC = 'app\\module_achat\\' .  $mvc . '\\' . $mvc . '_DEFAULT';
         }
